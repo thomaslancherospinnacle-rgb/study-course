@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Closing Coalition — Home</title>
+  <style>
+    :root{
+      --bg1:#071423;
+      --bg2:#0a1a2b;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.10);
+      --text:#eaf2ff;
+      --muted: rgba(234,242,255,.72);
+      --muted2: rgba(234,242,255,.52);
+      --accent:#4fd1c5;
+      --accent2:#2dd4bf;
+      --danger:#ff5a7a;
+      --ok:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 20%, rgba(79,209,197,.22), transparent 55%),
+        radial-gradient(1200px 700px at 80% 15%, rgba(45,212,191,.18), transparent 55%),
+        radial-gradient(900px 600px at 70% 80%, rgba(99,102,241,.16), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100%;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.18));
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 220px;
+    }
+    .dot{
+      width:38px; height:38px;
+      border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.06) 42%, rgba(79,209,197,.22) 100%),
+                  linear-gradient(180deg, rgba(79,209,197,.55), rgba(45,212,191,.12));
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .title{font-weight:900; letter-spacing:.2px; line-height:1.05}
+    .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .nav a, .nav button{
+      text-decoration:none;
+      color: var(--text);
+      font-weight:900;
+      letter-spacing:.2px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition: transform .05s ease, filter .15s ease, border-color .15s ease;
+    }
+    .nav a.primary{
+      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
+      border-color: rgba(79,209,197,.30);
+    }
+    .nav a:hover, .nav button:hover{filter:brightness(1.06)}
+    .nav a:active, .nav button:active{transform: translateY(1px)}
+    .pill{
+      font-family: var(--mono);
+      font-size:12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      max-width: 320px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    /* Page */
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px 18px 40px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:16px;
+    }
+    @media (min-width: 920px){
+      .wrap{grid-template-columns: 1.2fr .8fr;}
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .head{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card h2{margin:0; font-size:16px}
+    .card .body{padding:16px}
+    .muted{color:var(--muted); font-size:13px; line-height:1.55}
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    @media (min-width: 560px){
+      .grid{grid-template-columns: 1fr 1fr;}
+    }
+    .tile{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .tile .k{font-weight:900}
+    .tile .v{font-family:var(--mono); font-size:12px; color:var(--muted2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .ctaRow a{
+      text-decoration:none;
+      color:var(--text);
+      font-weight:900;
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(79,209,197,.28);
+      background: linear-gradient(180deg, rgba(79,209,197,.35), rgba(0,0,0,.18));
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .ctaRow a.secondary{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+    }
+
+    .msg{
+      display:none;
+      padding:12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      margin-top:10px;
+    }
+    .msg.show{display:block}
+    .msg.err{border-color: rgba(255,90,122,.35); color: rgba(255,220,228,.92)}
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>
+          <div class="title">Closing Coalition</div>
+          <div class="sub">Home</div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <span id="userEmail" class="pill">—</span>
+
+        <!-- TOP RIGHT BUTTONS -->
+        <a class="primary" href="exam.html" id="btnExam">Exam</a>
+        <a href="dictionary.html" id="btnDict">Life Dictionary</a>
+        <a href="caller.html" id="btnCaller">Caller</a>
+
+        <button id="btnLogout" title="Logout">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="card">
+      <div class="head">
+        <h2>Welcome</h2>
+        <div class="muted" id="statusText">Checking session…</div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div class="tile">
+            <div class="k">Account</div>
+            <div class="v" id="tileEmail">—</div>
+          </div>
+          <div class="tile">
+            <div class="k">Session expires</div>
+            <div class="v" id="tileExp">—</div>
+          </div>
+        </div>
+
+        <div class="ctaRow">
+          <a class="primary" href="exam.html">Start Exam</a>
+          <a class="secondary" href="dictionary.html">Open Dictionary</a>
+          <a class="secondary" href="caller.html">Open Caller</a>
+        </div>
+
+        <div id="msg" class="msg"></div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <div class="head">
+        <h2>Quick info</h2>
+        <div class="muted">Session is stored locally</div>
+      </div>
+      <div class="body">
+        <div class="muted">
+          If you get logged out, just sign in again on the login page. Your progress will be tied to your account in Sheets.
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+<script>
+  /**********************
+   * CONFIG
+   **********************/
+  const API_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev"; // <-- your worker
+  const LS_TOKEN = "cc_token";
+  const LS_EXPIRES = "cc_expires_at";
+
+  const $ = (id) => document.getElementById(id);
+
+  function setMsg(type, text){
+    const el = $("msg");
+    el.className = "msg show" + (type === "err" ? " err" : "");
+    el.textContent = text || "";
+  }
+  function clearMsg(){
+    const el = $("msg");
+    el.className = "msg";
+    el.textContent = "";
+  }
+
+  function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
+  function getExpires(){ return localStorage.getItem(LS_EXPIRES) || ""; }
+
+  async function api(action, payload){
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch { throw new Error(text || "Invalid response"); }
+
+    if (!data || data.ok !== true){
+      const err = (data && (data.error || data.detail)) ? (data.error + (data.detail ? ` — ${data.detail}` : "")) : "Request failed";
+      throw new Error(err);
+    }
+    return data;
+  }
+
+  function logoutLocal(){
+    localStorage.removeItem(LS_TOKEN);
+    localStorage.removeItem(LS_EXPIRES);
+  }
+
+  function goLogin(){
+    window.location.href = "index.html";
+  }
+
+  $("btnLogout").addEventListener("click", async () => {
+    clearMsg();
+    const token = getToken();
+    try{
+      if (token) { await api("logout", { token }).catch(()=>{}); }
+    } finally {
+      logoutLocal();
+      goLogin();
+    }
+  });
+
+  // Protect page: must have valid token
+  (async () => {
+    const token = getToken();
+    const exp = getExpires();
+
+    if (!token){
+      goLogin();
+      return;
+    }
+
+    try{
+      const me = await api("me", { token });
+      // success
+      $("statusText").textContent = "Session active";
+      $("userEmail").textContent = me.loginEmail || "—";
+      $("tileEmail").textContent = me.loginEmail || "—";
+      $("tileExp").textContent = me.expires_at || exp || "—";
+    } catch (e){
+      // token invalid/expired
+      logoutLocal();
+      setMsg("err", "Session expired. Please log in again.");
+      setTimeout(goLogin, 600);
+    }
+  })();
+</script>
+</body>
+</html>
