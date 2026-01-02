@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Closing Coalition — Login</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg2: #070b14;
+      --card: rgba(255,255,255,.06);
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --line: rgba(255,255,255,.14);
+      --brand: #5eead4;
+      --brand2: #60a5fa;
+      --good: #34d399;
+      --bad: #fb7185;
+      --warn: #fbbf24;
+      --shadow: 0 16px 60px rgba(0,0,0,.45);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --r: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(96,165,250,.22), transparent 55%),
+        radial-gradient(900px 600px at 85% 25%, rgba(94,234,212,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wrap{width:min(980px, 100%); display:grid; grid-template-columns: 1.1fr .9fr; gap:18px}
+    @media (max-width: 920px){ .wrap{grid-template-columns:1fr;} }
+    .card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.04));
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .top{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:18px; border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:42px; height:42px; border-radius:14px;
+      background: radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,0) 60%),
+                  linear-gradient(135deg, rgba(94,234,212,.95), rgba(96,165,250,.9));
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    }
+    h1{font-size:18px; margin:0; letter-spacing:.2px}
+    .sub{font-size:12px; color:var(--muted); margin-top:2px}
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(255,255,255,.86);
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      padding:8px 10px;
+      border-radius: 999px;
+      max-width: 56ch;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tabs{display:flex; gap:8px; padding:12px 18px; border-bottom:1px solid var(--line)}
+    .tab{
+      flex:1;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.85);
+      padding:10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .tab[aria-selected="true"]{
+      background: linear-gradient(135deg, rgba(94,234,212,.22), rgba(96,165,250,.18));
+      border-color: rgba(94,234,212,.35);
+      color: rgba(255,255,255,.95);
+    }
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width: 560px){ .grid{grid-template-columns:1fr;} }
+    label{display:block; font-size:12px; color:var(--muted); margin: 10px 0 6px}
+    input{
+      width:100%;
+      background: rgba(0,0,0,.22);
+      color: var(--ink);
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px 12px;
+      outline:none;
+      font-size:14px;
+    }
+    input:focus{border-color: rgba(94,234,212,.45); box-shadow: 0 0 0 4px rgba(94,234,212,.12)}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:12px}
+    button{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color: rgba(255,255,255,.92);
+      padding:11px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    button.primary{
+      border-color: rgba(94,234,212,.35);
+      background: linear-gradient(135deg, rgba(94,234,212,.28), rgba(96,165,250,.20));
+    }
+    button:disabled{opacity:.55; cursor:not-allowed}
+    .hint{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.35}
+    .status{
+      margin-top:14px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px 12px;
+      background: rgba(0,0,0,.18);
+      display:none;
+    }
+    .status.show{display:block}
+    .status.good{border-color: rgba(52,211,153,.35)}
+    .status.bad{border-color: rgba(251,113,133,.40)}
+    .status.warn{border-color: rgba(251,191,36,.38)}
+    .status .title{font-weight:900; margin-bottom:6px}
+    .status .msg{font-size:13px; color: rgba(255,255,255,.86)}
+    .small{font-size:12px; color:var(--muted)}
+    .mono{font-family:var(--mono)}
+    .right h2{margin:0 0 8px; font-size:16px}
+    .right ul{margin:10px 0 0 18px; padding:0; color:rgba(255,255,255,.85)}
+    .right li{margin:8px 0; color:rgba(255,255,255,.82); line-height:1.3}
+    .badge{
+      display:inline-block;
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.85);
+      margin-left:8px;
+    }
+    .sessionBox{
+      margin-top:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius: 14px;
+      padding:12px;
+      background: rgba(0,0,0,.14);
+    }
+    .copy{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .copy button{padding:8px 10px; border-radius:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <section class="card">
+      <div class="top">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>Closing Coalition</h1>
+            <div class="sub">Login / Signup (verification-first)</div>
+          </div>
+        </div>
+        <div class="pill" title="Apps Script URL">https://script.google.com/macros/s/AKfycbwjb9bNfCBQmSMNDIfRuOfbiID5ZVj3zaJk5MojYtV482pWPnmOX_4xKol5PiGo2A6EWQ/exec</div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Auth tabs">
+        <button class="tab" id="tab-login" aria-selected="true" onclick="uiShow('login')">Login</button>
+        <button class="tab" id="tab-signup" aria-selected="false" onclick="uiShow('signup')">First-time</button>
+        <button class="tab" id="tab-verify" aria-selected="false" onclick="uiShow('verify')">Verify</button>
+      </div>
+
+      <div class="pad">
+        <div class="grid">
+          <div>
+            <label for="username">Name (First Last)</label>
+            <input id="username" autocomplete="name" placeholder="First Last" />
+          </div>
+          <div>
+            <label>Derived login email</label>
+            <input id="derivedEmail" class="mono" readonly placeholder="firstlast.ail@gmail.com" />
+          </div>
+        </div>
+
+        <div id="panel-login" class="panel">
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="Password" />
+          <div class="row">
+            <button class="primary" id="btnLogin" onclick="doLogin()">Login</button>
+            <button id="btnLogout" onclick="doLogout()" style="display:none;">Logout</button>
+            <span class="small" id="sessionHint"></span>
+          </div>
+          <div class="hint">
+            After verification, login is <b>name + password</b> only.
+          </div>
+        </div>
+
+        <div id="panel-signup" class="panel" style="display:none;">
+          <label for="password2">Create password</label>
+          <input id="password2" type="password" autocomplete="new-password" placeholder="At least 6 characters" />
+          <div class="row">
+            <button class="primary" id="btnSignup" onclick="doSignup()">Send verification code</button>
+          </div>
+          <div class="hint">
+            First time only: you must have access to the derived Gmail inbox to get the code.
+          </div>
+        </div>
+
+        <div id="panel-verify" class="panel" style="display:none;">
+          <label for="code">Verification code</label>
+          <input id="code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="6-digit code" />
+          <div class="row">
+            <button class="primary" id="btnVerify" onclick="doVerify()">Verify code</button>
+            <button id="btnResend" onclick="doResend()">Resend code</button>
+          </div>
+          <div class="hint">
+            Code expires automatically (default 15 minutes).
+          </div>
+        </div>
+
+        <div id="status" class="status">
+          <div class="title" id="statusTitle">Status</div>
+          <div class="msg" id="statusMsg"></div>
+          <div class="small" id="statusMeta" style="margin-top:6px;"></div>
+        </div>
+
+        <div class="sessionBox">
+          <div class="small"><b>Session</b> (token stored locally)</div>
+          <div class="copy">
+            <input id="token" class="mono" readonly placeholder="No token" style="flex:1; min-width: 260px;" />
+            <button onclick="copyToken()">Copy</button>
+            <button onclick="checkMe()">Check</button>
+            <span class="small" id="meResult"></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <aside class="card right">
+      <div class="top">
+        <div>
+          <h2>How this works</h2>
+          <div class="sub">Strict format, simple flow</div>
+        </div>
+        <span class="badge">v1</span>
+      </div>
+      <div class="pad">
+        <ul>
+          <li><b>Username:</b> must be “First Last”. We strip punctuation and spaces to build the Gmail.</li>
+          <li><b>Derived email:</b> <span class="mono">firstlast.ail@gmail.com</span> (must exist + you must control it).</li>
+          <li><b>First time:</b> click <b>Send verification code</b> → check inbox → <b>Verify</b>.</li>
+          <li><b>After verified:</b> use <b>Login</b> (password only).</li>
+          <li><b>Security:</b> passwords are hashed in Sheets; token expires server-side.</li>
+        </ul>
+
+        <div class="hint" style="margin-top:14px;">
+          If anything fails, it’s usually: wrong name format, wrong inbox, or expired code.
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwjb9bNfCBQmSMNDIfRuOfbiID5ZVj3zaJk5MojYtV482pWPnmOX_4xKol5PiGo2A6EWQ/exec";
+
+const els = {
+  username: () => document.getElementById('username'),
+  derived: () => document.getElementById('derivedEmail'),
+  password: () => document.getElementById('password'),
+  password2: () => document.getElementById('password2'),
+  code: () => document.getElementById('code'),
+  status: () => document.getElementById('status'),
+  statusTitle: () => document.getElementById('statusTitle'),
+  statusMsg: () => document.getElementById('statusMsg'),
+  statusMeta: () => document.getElementById('statusMeta'),
+  token: () => document.getElementById('token'),
+  btnLogout: () => document.getElementById('btnLogout'),
+  sessionHint: () => document.getElementById('sessionHint'),
+  meResult: () => document.getElementById('meResult'),
+};
+
+function normalizeNameToEmail(username) {
+  const clean = String(username || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, "")
+    .replace(/\s+/g, "");
+  if (!clean) return "";
+  return `${clean}.ail@gmail.com`;
+}
+
+function showStatus(kind, title, msg, meta="") {
+  const box = els.status();
+  box.className = "status show " + (kind || "");
+  els.statusTitle().textContent = title || "Status";
+  els.statusMsg().textContent = msg || "";
+  els.statusMeta().textContent = meta || "";
+}
+
+function clearStatus() {
+  const box = els.status();
+  box.className = "status";
+  els.statusTitle().textContent = "Status";
+  els.statusMsg().textContent = "";
+  els.statusMeta().textContent = "";
+}
+
+function setBusy(isBusy) {
+  for (const id of ["btnLogin","btnSignup","btnVerify","btnResend"]) {
+    const b = document.getElementById(id);
+    if (b) b.disabled = !!isBusy;
+  }
+}
+
+async function api(action, payload={}) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action, ...payload })
+  });
+  return res.json();
+}
+
+function uiShow(which) {
+  const panels = {
+    login: document.getElementById("panel-login"),
+    signup: document.getElementById("panel-signup"),
+    verify: document.getElementById("panel-verify"),
+  };
+  for (const k in panels) panels[k].style.display = (k === which) ? "block" : "none";
+
+  const tabs = {
+    login: document.getElementById("tab-login"),
+    signup: document.getElementById("tab-signup"),
+    verify: document.getElementById("tab-verify"),
+  };
+  for (const k in tabs) tabs[k].setAttribute("aria-selected", k === which ? "true" : "false");
+
+  clearStatus();
+}
+
+function getUsername() {
+  return (els.username().value || "").trim();
+}
+
+function requireName() {
+  const u = getUsername();
+  if (!u) {
+    showStatus("bad","Missing name","Enter your name as First Last.");
+    return null;
+  }
+  const derived = normalizeNameToEmail(u);
+  if (!derived) {
+    showStatus("bad","Invalid name","Use letters and spaces only (First Last).");
+    return null;
+  }
+  return { username: u, derived };
+}
+
+async function doSignup() {
+  const r = requireName(); if (!r) return;
+  const password = (els.password2().value || "").trim();
+  if (password.length < 6) {
+    showStatus("bad","Password too short","Use at least 6 characters.");
+    return;
+  }
+  setBusy(true);
+  showStatus("warn","Sending code…",`Sending a verification code to ${r.derived}`);
+  try {
+    const out = await api("signup", { username: r.username, password });
+    if (out.ok) {
+      showStatus("good","Code sent", out.message || "Check your inbox for the code.", `To: ${out.loginEmail || r.derived}`);
+      uiShow("verify");
+      els.code().focus();
+    } else {
+      showStatus("bad","Signup failed", out.error || "Unknown error");
+    }
+  } catch (e) {
+    showStatus("bad","Network error", String(e && e.message ? e.message : e));
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function doResend() {
+  const r = requireName(); if (!r) return;
+  const p = (els.password2().value || "").trim();
+  if (p.length < 6) {
+    showStatus("warn","Need password","Enter your password in the First-time tab to resend a code.");
+    uiShow("signup");
+    els.password2().focus();
+    return;
+  }
+  await doSignup();
+}
+
+async function doVerify() {
+  const r = requireName(); if (!r) return;
+  const code = (els.code().value || "").trim();
+  if (!/^[0-9]{6}$/.test(code)) {
+    showStatus("bad","Invalid code","Enter the 6-digit code from your email.");
+    return;
+  }
+  setBusy(true);
+  showStatus("warn","Verifying…","Checking your code.");
+  try {
+    const out = await api("verify", { username: r.username, code });
+    if (out.ok) {
+      showStatus("good","Verified", out.message || "Account verified. You can now login.");
+      uiShow("login");
+      els.password().focus();
+    } else {
+      showStatus("bad","Verify failed", out.error || "Invalid or expired code");
+    }
+  } catch (e) {
+    showStatus("bad","Network error", String(e && e.message ? e.message : e));
+  } finally {
+    setBusy(false);
+  }
+}
+
+function setToken(token) {
+  if (token) {
+    localStorage.setItem("cc_token", token);
+    els.token().value = token;
+    els.btnLogout().style.display = "inline-block";
+    els.sessionHint().textContent = "Session active";
+  } else {
+    localStorage.removeItem("cc_token");
+    els.token().value = "";
+    els.btnLogout().style.display = "none";
+    els.sessionHint().textContent = "";
+  }
+}
+
+async function doLogin() {
+  const r = requireName(); if (!r) return;
+  const password = (els.password().value || "").trim();
+  if (!password) {
+    showStatus("bad","Missing password","Enter your password.");
+    return;
+  }
+  setBusy(true);
+  showStatus("warn","Logging in…","Checking credentials.");
+  try {
+    const out = await api("login", { username: r.username, password });
+    if (out.ok) {
+      setToken(out.token);
+      showStatus("good","Logged in", "Access granted.", `Email: ${out.loginEmail || r.derived} • Expires: ${out.expires_at || ""}`);
+    } else {
+      showStatus("bad","Login failed", out.error || "Invalid login");
+    }
+  } catch (e) {
+    showStatus("bad","Network error", String(e && e.message ? e.message : e));
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function checkMe() {
+  const token = localStorage.getItem("cc_token");
+  els.meResult().textContent = "";
+  if (!token) {
+    els.meResult().textContent = "No token";
+    return;
+  }
+  try {
+    const out = await api("me", { token });
+    if (out.ok) {
+      els.meResult().textContent = `OK • ${out.loginEmail || ""}`;
+      showStatus("good","Session valid","Token is valid.", `Expires: ${out.expires_at || ""}`);
+    } else {
+      els.meResult().textContent = "Invalid/expired";
+      showStatus("bad","Session invalid", out.error || "Invalid token");
+      setToken(null);
+    }
+  } catch (e) {
+    els.meResult().textContent = "Error";
+    showStatus("bad","Network error", String(e && e.message ? e.message : e));
+  }
+}
+
+async function doLogout() {
+  const token = localStorage.getItem("cc_token");
+  setToken(null);
+  if (token) {
+    try { await api("logout", { token }); } catch(_e) {}
+  }
+  showStatus("good","Logged out","Session cleared.");
+}
+
+function copyToken() {
+  const t = els.token().value || "";
+  if (!t) return;
+  navigator.clipboard.writeText(t).then(() => {
+    els.meResult().textContent = "Copied";
+    setTimeout(() => els.meResult().textContent = "", 1200);
+  });
+}
+
+function refreshDerived() {
+  const u = getUsername();
+  const d = normalizeNameToEmail(u);
+  els.derived().value = d || "";
+}
+
+els.username().addEventListener("input", refreshDerived);
+els.username().addEventListener("blur", refreshDerived);
+
+(function boot() {
+  refreshDerived();
+  const token = localStorage.getItem("cc_token");
+  if (token) {
+    els.token().value = token;
+    els.btnLogout().style.display = "inline-block";
+    els.sessionHint().textContent = "Session loaded";
+    checkMe();
+  }
+})();
+</script>
+</body>
+</html>
