@@ -663,17 +663,32 @@ finishBtn.addEventListener("click", () => finishExam());
 async function finishExam(){
   const time_sec = stopTimer();
   const total = deck.length || 0;
-  const pct = total ? Math.round((correct / total) * 1000) / 10 : 0; // 1 decimal
+
+  const score_pct = total ? Math.round((correct / total) * 100) : 0;
+  const pct = total ? Math.round((correct / total) * 1000) / 10 : 0;
+
+  // ✅ SAVE BEST RESULT (Sheets)
+  const token = localStorage.getItem("cc_token");
+  if (token) {
+    api("saveBestExam", {
+      token,
+      score_pct,
+      time_sec
+    }).catch(() => {});
+  }
 
   examArea.style.display = "none";
   doneArea.style.display = "";
-  const code = examSelect.value;
-  document.getElementById("doneText").innerHTML =
-    `<div style="font-weight:900;font-size:18px">Score: ${correct}/${total} (${pct}%)</div>
-     <div style="margin-top:6px">Time: ${fmtTime(time_sec)} (${time_sec}s)</div>
-     <div style="margin-top:10px;color:rgba(234,242,255,.72)">
-       Uploading result (only saves if better than your previous best)…
-     </div>`;
+
+  document.getElementById("doneText").innerHTML = `
+    <div style="font-weight:900;font-size:18px">Score: ${correct}/${total} (${pct}%)</div>
+    <div style="margin-top:6px">Time: ${fmtTime(time_sec)} (${time_sec}s)</div>
+    <div style="margin-top:10px;color:rgb(234,242,255,.72)">
+      Uploading result (only saves if better than your previous best)…
+    </div>
+    `;
+  }
+
 
   // re-enable setup UI
   startBtn.disabled = false;
