@@ -239,6 +239,7 @@
           <div class="actions">
             <button id="loadBtn" class="btn secondary">Load Exam Bank</button>
             <button id="startBtn" class="btn" disabled>Start Exam</button>
+            <button id="retakeMissedBtn" class="btn secondary" disabled>Retake Missed (0)</button>
             <button id="nextBtn" class="btn secondary" disabled>Next</button>
             <button id="finishBtn" class="btn secondary" disabled>Finish</button>
           </div>
@@ -249,6 +250,7 @@
             <div class="kpi"><div class="h">Timer</div><div class="v" id="timer">0:00</div></div>
             <div class="kpi"><div class="h">Progress</div><div class="v" id="progress">—</div></div>
             <div class="kpi"><div class="h">Score</div><div class="v" id="score">—</div></div>
+            <div class="kpi"><div class="h">Missed Queue</div><div class="v" id="missedCount">0</div></div>
           </div>
 
           <div id="examArea" class="qCard" style="display:none">
@@ -274,6 +276,9 @@
           <div id="doneArea" class="qCard" style="display:none">
             <div class="qTitle">Completed</div>
             <div class="muted" id="doneText" style="margin-top:10px"></div>
+            <div id="retakeMissedArea" style="margin-top:16px;display:none">
+              <button id="takeMissedBtn" class="btn accent">Take Missed?</button>
+            </div>
           </div>
 
         </div>
@@ -371,6 +376,10 @@ const uploadPill = document.getElementById("uploadPill");
 const timerEl = document.getElementById("timer");
 const progressEl = document.getElementById("progress");
 const scoreEl = document.getElementById("score");
+const missedCountEl = document.getElementById("missedCount");
+const retakeMissedBtn = document.getElementById("retakeMissedBtn");
+const takeMissedBtn = document.getElementById("takeMissedBtn");
+const retakeMissedArea = document.getElementById("retakeMissedArea");
 
 let bank = [];
 let deck = [];
@@ -381,6 +390,12 @@ let locked = false;
 
 let startTs = 0;
 let timerInt = null;
+
+// Missed questions tracking
+let missedThisSession = []; // questions missed in current exam
+let missedFromServer = [];  // loaded from server for retake
+let isRetakeMode = false;
+let missedForRetake = [];   // stored for "Take Missed?" immediate retake
 
 function fmtTime(sec){
   sec = Math.max(0, Math.floor(sec));
@@ -500,18 +515,6 @@ loadBtn.addEventListener("click", async () => {
   }
 });
 
-// Auto-load on exam change
-examSelect.addEventListener("change", async () => {
-  statusPill.textContent = "Switching exam…";
-  try{
-    await loadExamBank();
-  } catch(e){
-    loadedPill.textContent = "Loaded: 0";
-    startBtn.disabled = true;
-    statusPill.textContent = "Load failed";
-  }
-});
-
 /**********************
  * EXAM RUN
  **********************/
@@ -528,6 +531,7 @@ function resetExamState(){
   uploadPill.className = "badge";
   doneArea.style.display = "none";
   examArea.style.display = "none";
+  retakeMissedArea.style.display = "none";
   nextBtn.disabled = true;
   finishBtn.disabled = true;
   progressEl.textContent = "—";
@@ -614,6 +618,16 @@ function render(){
       });
       if (!isRight){
         c.classList.add("wrong");
+        
+        // Track this missed question
+        missedThisSession.push({
+          question_text: q.question,
+          correct_answer: q.correct,
+          user_answer: opt,
+          explanation: q.explanation || "",
+          difficulty: q.difficulty || "",
+          wrongs: q.wrongs || []
+        });
       }
 
       answered++;
@@ -654,6 +668,8 @@ startBtn.addEventListener("click", () => {
   }
 
   resetExamState();
+  missedThisSession = []; // Clear missed questions for new exam
+  isRetakeMode = false;
 
   deck = shuffle(bank).slice(0, n);
   idx = 0;
@@ -667,6 +683,7 @@ startBtn.addEventListener("click", () => {
   loadBtn.disabled = true;
   examSelect.disabled = true;
   qCountEl.disabled = true;
+  retakeMissedBtn.disabled = true;
 });
 
 nextBtn.addEventListener("click", () => {
@@ -680,6 +697,41 @@ nextBtn.addEventListener("click", () => {
 
 finishBtn.addEventListener("click", () => finishExam());
 
+// "Take Missed?" button - retake only missed questions
+takeMissedBtn.addEventListener("click", () => {
+  if (!missedForRetake.length) {
+    alert("No missed questions to retake!");
+    return;
+  }
+
+  // Reset exam state but keep the missed questions
+  resetExamState();
+  missedThisSession = [];
+  isRetakeMode = true;
+
+  // Set deck to the missed questions (shuffled)
+  deck = shuffle([...missedForRetake]);
+  idx = 0;
+  correct = 0;
+  answered = 0;
+
+  // Update question count display
+  qCountEl.value = String(deck.length);
+
+  // Start the exam
+  startTimer();
+  render();
+
+  // Disable setup UI during exam
+  startBtn.disabled = true;
+  loadBtn.disabled = true;
+  examSelect.disabled = true;
+  qCountEl.disabled = true;
+
+  // Hide the retake area
+  retakeMissedArea.style.display = "none";
+});
+
 async function finishExam(){
   const time_sec = stopTimer();
   const total = deck.length || 0;
@@ -689,13 +741,33 @@ async function finishExam(){
   examArea.style.display = "none";
   doneArea.style.display = "";
 
+  const missedCount = missedThisSession.length;
+  
+  // Store missed questions for immediate retake
+  missedForRetake = missedThisSession.map(q => ({
+    question: q.question_text,
+    correct: q.correct_answer,
+    explanation: q.explanation || "",
+    difficulty: q.difficulty || "",
+    wrongs: q.wrongs || []
+  }));
+  
   document.getElementById("doneText").innerHTML = `
     <div style="font-weight:900;font-size:18px">Score: ${correct}/${total} (${pct}%)</div>
     <div style="margin-top:6px">Time: ${fmtTime(time_sec)} (${time_sec}s)</div>
+    ${missedCount > 0 ? `<div style="margin-top:6px;color:var(--danger)">${missedCount} question${missedCount > 1 ? 's' : ''} missed</div>` : `<div style="margin-top:6px;color:var(--ok)">Perfect! No missed questions!</div>`}
     <div style="margin-top:10px;color:rgb(234,242,255,.72)">
-      Uploading result (only saves if better than your previous best)…
+      Uploading result…
     </div>
     `;
+
+  // Show/hide "Take Missed?" button
+  if (missedCount > 0) {
+    retakeMissedArea.style.display = "";
+    takeMissedBtn.textContent = `Take Missed? (${missedCount})`;
+  } else {
+    retakeMissedArea.style.display = "none";
+  }
 
   // re-enable setup UI
   startBtn.disabled = false;
@@ -705,7 +777,7 @@ async function finishExam(){
   nextBtn.disabled = true;
   finishBtn.disabled = true;
 
-  // Upload
+  // Upload score
   uploadPill.style.display = "";
   uploadPill.textContent = "Uploading…";
   uploadPill.className = "badge";
@@ -713,17 +785,125 @@ async function finishExam(){
   try{
     await api("saveBestExam", {
       token: getToken(),
-      exam: examSelect.value,   // MI or TN
+      exam: examSelect.value,
       score_pct,
       time_sec
     });
-    uploadPill.textContent = "Saved (if better than previous)";
+    uploadPill.textContent = "Score saved";
     uploadPill.className = "badge ok";
   } catch(e){
-    uploadPill.textContent = "Upload failed";
+    uploadPill.textContent = "Score upload failed";
     uploadPill.className = "badge err";
   }
+
+  // Upload missed questions (if any and not in retake mode)
+  if (missedThisSession.length > 0 && !isRetakeMode) {
+    try {
+      await api("saveMissedQuestions", {
+        token: getToken(),
+        exam: examSelect.value,
+        missed: missedThisSession
+      });
+      console.log("Missed questions saved:", missedThisSession.length);
+    } catch(e) {
+      console.error("Failed to save missed questions:", e);
+    }
+  }
+
+  // If in retake mode and got all correct, clear those questions
+  if (isRetakeMode && missedThisSession.length === 0 && deck.length > 0) {
+    try {
+      const questionTexts = deck.map(q => q.question);
+      await api("clearMissedQuestions", {
+        token: getToken(),
+        exam: examSelect.value,
+        questionTexts: questionTexts
+      });
+      console.log("Cleared mastered questions from review queue");
+    } catch(e) {
+      console.error("Failed to clear questions:", e);
+    }
+  }
+
+  // Refresh missed questions count
+  await loadMissedQuestions();
+  isRetakeMode = false;
 }
+
+/**********************
+ * MISSED QUESTIONS
+ **********************/
+async function loadMissedQuestions() {
+  try {
+    const exam = examSelect.value;
+    const result = await api("getMissedQuestions", {
+      token: getToken(),
+      exam: exam
+    });
+    
+    if (result.ok) {
+      missedFromServer = result.questions || [];
+      const count = missedFromServer.length;
+      missedCountEl.textContent = String(count);
+      retakeMissedBtn.textContent = `Retake Missed (${count})`;
+      retakeMissedBtn.disabled = count === 0;
+    }
+  } catch(e) {
+    console.error("Failed to load missed questions:", e);
+    missedFromServer = [];
+    missedCountEl.textContent = "?";
+    retakeMissedBtn.disabled = true;
+  }
+}
+
+retakeMissedBtn.addEventListener("click", async () => {
+  if (!missedFromServer.length) {
+    alert("No missed questions to review!");
+    return;
+  }
+
+  resetExamState();
+  missedThisSession = [];
+  isRetakeMode = true;
+
+  // Convert missed questions to exam format
+  deck = missedFromServer.map(q => ({
+    question: q.question_text,
+    correct: q.correct_answer,
+    explanation: q.explanation || "",
+    difficulty: q.difficulty || "",
+    wrongs: q.wrongs || []
+  }));
+
+  // Shuffle the deck
+  deck = shuffle(deck);
+  idx = 0;
+  correct = 0;
+  answered = 0;
+
+  qTitle.textContent = "Review Mode";
+  startTimer();
+  render();
+
+  startBtn.disabled = true;
+  loadBtn.disabled = true;
+  examSelect.disabled = true;
+  qCountEl.disabled = true;
+  retakeMissedBtn.disabled = true;
+});
+
+// Reload missed count when exam changes
+examSelect.addEventListener("change", async () => {
+  statusPill.textContent = "Switching exam…";
+  try{
+    await loadExamBank();
+    await loadMissedQuestions();
+  } catch(e){
+    loadedPill.textContent = "Loaded: 0";
+    startBtn.disabled = true;
+    statusPill.textContent = "Load failed";
+  }
+});
 
 /**********************
  * BOOT
@@ -733,6 +913,8 @@ async function boot() {
     await requireLogin();         // blocks if not logged in
     // auto-load initial exam bank
     await loadExamBank();
+    // load missed questions count
+    await loadMissedQuestions();
   } catch(e) {
     console.error("Auto-load failed:", e);
     statusPill.textContent = "Click 'Load Exam Bank' to start";
