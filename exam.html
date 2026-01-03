@@ -475,8 +475,9 @@ loadBtn.addEventListener("click", async () => {
   } catch(e){
     loadedPill.textContent = "Loaded: 0";
     startBtn.disabled = true;
-    statusPill.textContent = "Load failed";
-    alert(e.message || "Load failed");
+    statusPill.textContent = "Load failed: " + e.message;
+    console.error("Load error:", e);
+    alert("Failed to load exam: " + e.message + "\n\nMake sure the file exists at: ./exams/" + examSelect.value + "exam.js");
   }
 });
 
