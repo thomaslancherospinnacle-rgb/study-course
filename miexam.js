@@ -1,4 +1,4 @@
-window.MI_EXAM_QUESTIONS = [ [
+window.MI_EXAM_QUESTIONS = [
   {
     "question": "What type of risk has only two possible outcomes—loss or no loss—and is insurable?",
     "correct": "Pure risk",
