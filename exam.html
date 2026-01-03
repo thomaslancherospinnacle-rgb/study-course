@@ -214,7 +214,8 @@
       opacity: 0;
       transition: opacity .15s ease;
     }
-    .dict-term:hover .dict-tooltip{
+    .dict-term:hover .dict-tooltip,
+    .dict-tooltip.show{
       opacity: 1;
       pointer-events: auto;
     }
@@ -508,6 +509,55 @@ window.showDefinition = function(termKey) {
   document.getElementById('dictModalDefinition').textContent = termData.definition;
   document.getElementById('dictModal').classList.add('show');
 };
+
+// Tooltip hover delay management
+let tooltipTimers = new Map();
+
+function setupTooltipHover(termElement) {
+  const tooltip = termElement.querySelector('.dict-tooltip');
+  if (!tooltip) return;
+  
+  termElement.addEventListener('mouseenter', () => {
+    // Clear any existing timer for this tooltip
+    const timerId = tooltipTimers.get(tooltip);
+    if (timerId) {
+      clearTimeout(timerId);
+      tooltipTimers.delete(tooltip);
+    }
+    tooltip.classList.add('show');
+  });
+  
+  termElement.addEventListener('mouseleave', () => {
+    // Set timer to hide tooltip after 2 seconds
+    const timerId = setTimeout(() => {
+      tooltip.classList.remove('show');
+      tooltipTimers.delete(tooltip);
+    }, 2000);
+    tooltipTimers.set(tooltip, timerId);
+  });
+  
+  // Keep tooltip visible when hovering over it
+  tooltip.addEventListener('mouseenter', () => {
+    const timerId = tooltipTimers.get(tooltip);
+    if (timerId) {
+      clearTimeout(timerId);
+      tooltipTimers.delete(tooltip);
+    }
+  });
+  
+  tooltip.addEventListener('mouseleave', () => {
+    const timerId = setTimeout(() => {
+      tooltip.classList.remove('show');
+      tooltipTimers.delete(tooltip);
+    }, 2000);
+    tooltipTimers.set(tooltip, timerId);
+  });
+}
+
+// Apply tooltip hover behavior to all terms
+function initTooltips() {
+  document.querySelectorAll('.dict-term').forEach(setupTooltipHover);
+}
 
 // Close modal
 document.getElementById('dictModalClose').addEventListener('click', () => {
@@ -875,6 +925,9 @@ function render(){
 
     choicesEl.appendChild(c);
   }
+  
+  // Initialize tooltip hover behavior for all newly rendered terms
+  initTooltips();
 }
 
 startBtn.addEventListener("click", () => {
