@@ -491,7 +491,7 @@ function highlightTerms(text) {
     if (termData) {
       const before = result.substring(0, m.start);
       const after = result.substring(m.end);
-      const highlighted = `<span class="dict-term" data-term="${m.termKey.toLowerCase()}">${m.term}<span class="dict-tooltip"><button class="dict-tooltip-btn" onclick="showDefinition('${m.termKey.toLowerCase()}')">Define</button></span></span>`;
+      const highlighted = `<span class="dict-term" data-term="${m.termKey.toLowerCase()}">${m.term}<span class="dict-tooltip"><button class="dict-tooltip-btn" data-term-key="${m.termKey.toLowerCase()}">Define</button></span></span>`;
       result = before + highlighted + after;
     }
   });
@@ -500,7 +500,7 @@ function highlightTerms(text) {
 }
 
 // Show definition modal
-window.showDefinition = function(termKey) {
+function showDefinition(termKey) {
   const termData = termMap.get(termKey.toLowerCase());
   if (!termData) return;
   
@@ -508,7 +508,7 @@ window.showDefinition = function(termKey) {
   document.getElementById('dictModalCategory').textContent = termData.category;
   document.getElementById('dictModalDefinition').textContent = termData.definition;
   document.getElementById('dictModal').classList.add('show');
-};
+}
 
 // Tooltip hover delay management
 let tooltipTimers = new Map();
@@ -516,6 +516,11 @@ let tooltipTimers = new Map();
 function setupTooltipHover(termElement) {
   const tooltip = termElement.querySelector('.dict-tooltip');
   if (!tooltip) return;
+  
+  // Prevent clicks on tooltip from bubbling to parent elements
+  tooltip.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
   
   termElement.addEventListener('mouseenter', () => {
     // Clear any existing timer for this tooltip
@@ -557,6 +562,16 @@ function setupTooltipHover(termElement) {
 // Apply tooltip hover behavior to all terms
 function initTooltips() {
   document.querySelectorAll('.dict-term').forEach(setupTooltipHover);
+  
+  // Add click handlers to Define buttons with event stopping
+  document.querySelectorAll('.dict-tooltip-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent click from bubbling to answer choice
+      e.preventDefault();
+      const termKey = btn.getAttribute('data-term-key');
+      showDefinition(termKey);
+    });
+  });
 }
 
 // Close modal
