@@ -240,7 +240,6 @@
             <button id="loadBtn" class="btn secondary">Load Exam Bank</button>
             <button id="startBtn" class="btn" disabled>Start Exam</button>
             <button id="retakeMissedBtn" class="btn secondary" disabled>Retake Missed (0)</button>
-            <button id="nextBtn" class="btn secondary" disabled>Next</button>
             <button id="finishBtn" class="btn secondary" disabled>Finish</button>
           </div>
 
@@ -261,7 +260,11 @@
 
             <div class="question" id="qText">—</div>
             <div class="choices" id="choices"></div>
-
+            <div style="margin-top:14px">
+              <button id="nextBtn" class="btn secondary" disabled style="width:100%">
+                Next
+              </button>
+            </div>
             <div class="exp" id="explainBox">
               <b>Explanation:</b>
               <div id="explainText" style="margin-top:6px"></div>
