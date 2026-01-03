@@ -294,7 +294,7 @@ const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers
  **********************/
 const LS_TOKEN = "cc_token";
 const LS_EXPIRES = "cc_expires_at";
-const token = localStorage.getItem(LS_TOKEN) || "";
+function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
 
 const userBadge = document.getElementById("userBadge");
 const logoutBtn = document.getElementById("logoutBtn");
@@ -323,31 +323,25 @@ async function api(action, payload){
 let loginEmail = "";
 
 async function requireLogin(){
+  const token = getToken();
   if (!token){
     window.location.href = "index.html";
     return;
   }
-  try{
+
+  try {
     const me = await api("me", { token });
+
     loginEmail = me.loginEmail || "";
     setBadge("ok", loginEmail ? `Logged in: ${loginEmail}` : "Logged in");
-    logoutBtn.style.display = "";
-  } catch (e){
+  } catch (e) {
+    // token invalid or expired
     localStorage.removeItem(LS_TOKEN);
     localStorage.removeItem(LS_EXPIRES);
     window.location.href = "index.html";
   }
 }
 
-logoutBtn.addEventListener("click", async () => {
-  try{
-    await api("logout", { token }).catch(()=>{});
-  } finally {
-    localStorage.removeItem(LS_TOKEN);
-    localStorage.removeItem(LS_EXPIRES);
-    window.location.href = "index.html";
-  }
-});
 
 /**********************
  * EXAM BANK LOADING
@@ -697,13 +691,7 @@ async function finishExam(){
   try{
     // This action must exist in your backend:
     // handleSaveExamResult({token, pct, time_sec, exam_code})
-    await api("saveExamResult", {
-      token,
-      pct,
-      time_sec,
-      exam_code: code
-    });
-
+    await api("saveExamResult", { token: getToken(), pct, time_sec, exam_code: code });
     uploadPill.textContent = "Saved (if better than previous)";
     uploadPill.className = "badge ok";
   } catch(e){
