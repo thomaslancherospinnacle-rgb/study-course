@@ -796,17 +796,20 @@ async function finishExam(){
     uploadPill.className = "badge err";
   }
 
-  // Upload missed questions (if any and not in retake mode)
-  if (missedThisSession.length > 0 && !isRetakeMode) {
+  // Log missed questions to spreadsheet (appends forever for review)
+  if (missedThisSession.length > 0) {
     try {
-      await api("saveMissedQuestions", {
+      await api("logMissedQuestions", {
         token: getToken(),
         exam: examSelect.value,
-        missed: missedThisSession
+        missed: missedThisSession.map(q => ({
+          question: q.question_text,
+          answer: q.correct_answer
+        }))
       });
-      console.log("Missed questions saved:", missedThisSession.length);
+      console.log("Missed questions logged to sheet:", missedThisSession.length);
     } catch(e) {
-      console.error("Failed to save missed questions:", e);
+      console.error("Failed to log missed questions:", e);
     }
   }
 
