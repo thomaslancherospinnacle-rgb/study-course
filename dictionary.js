@@ -110,4 +110,12 @@ const TERMS = [
   { term: "Aleatory Contract", category: "Contract Law", definition: "A contract in which the exchange of value is unequal. The insured may pay relatively small premiums while the insurer may pay out a much larger benefit, depending on uncertain events." },
   { term: "Subrogation", category: "Legal / Claims Concept", definition: "The legal right of an insurer to seek reimbursement from a third party who caused a loss after the insurer has paid the claim to the insured." },
   { term: "Illegal Inducement", category: "Illegal Practice", definition: "Offering or providing anything of value not stated in the insurance contract to persuade someone to purchase, lapse, or replace an insurance policy. Illegal inducements are prohibited under insurance law." },
+  { term: "Risk Reduction", category: "Risk Management", definition: "Actions taken to lessen the likelihood or severity of a loss, such as installing smoke detectors or improving safety practices." },
+  { term: "Risk Retention", category: "Risk Management", definition: "The decision to accept the risk of loss and pay for it out of pocket rather than transferring it to an insurer." },
+  { term: "Risk Avoidance", category: "Risk Management", definition: "Eliminating exposure to a risk entirely by not engaging in the activity that creates the risk." },
+  { term: "Risk Transfer", category: "Risk Management", definition: "Shifting the financial burden of a potential loss from one party to another, most commonly through insurance." },
+  { term: "Principle of Indemnity", category: "Insurance Principle", definition: "The principle stating that insurance is designed to restore the insured to the same financial position they were in before a loss, without profit." },
+  { term: "Reimbursement Plan", category: "Health / Benefit Plan", definition: "A plan that reimburses insureds for covered medical expenses after they have paid providers, rather than paying providers directly." },
+  { term: "Rebating", category: "Illegal Practice", definition: "Offering or giving any premium reduction, gift, or valuable consideration not specified in the insurance contract as an inducement to purchase insurance." },
+  { term: "Contributory Life Plans", category: "Group Insurance", definition: "Group life insurance plans in which employees pay all or part of the premium, typically requiring a higher participation rate to be issued." },
 ];
