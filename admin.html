@@ -70,6 +70,9 @@
                     <button onclick="showTab('email')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100">
                         Send Emails
                     </button>
+                    <button onclick="showTab('sms')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100">
+                        Send SMS
+                    </button>
                     <button onclick="showTab('settings')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100">
                         Settings
                     </button>
@@ -210,6 +213,73 @@
                     </form>
 
                     <div id="emailStatus" class="mt-4"></div>
+                </div>
+            </div>
+
+            <!-- SMS Tab -->
+            <div id="smsTab" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- SMS Controls -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-xl font-bold mb-4">Send SMS via Google Voice</h2>
+                        
+                        <div id="smsSelectedUsersList" class="mb-4 p-4 bg-blue-50 rounded">
+                            <h3 class="font-semibold mb-2">Selected Recipients: <span id="smsRecipientCount">0</span></h3>
+                            <div id="smsRecipientDetails" class="text-sm text-gray-700"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-semibold mb-2">Message Template</label>
+                            <textarea id="smsMessage" rows="6"
+                                class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                                placeholder="Enter your message here... Use {name} for personalization"></textarea>
+                            <p class="text-xs text-gray-500 mt-1">💡 Use {name} to personalize each message</p>
+                        </div>
+
+                        <div class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                            <h4 class="font-semibold text-sm mb-1">⚠️ Important</h4>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Make sure Google Voice is loaded in the frame below</li>
+                                <li>• Login to Google Voice if needed</li>
+                                <li>• Messages will be sent with ~1 second delay between each</li>
+                                <li>• Don't send too many at once to avoid being flagged</li>
+                            </ul>
+                        </div>
+
+                        <button onclick="sendSmsMessages()" 
+                            class="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition font-semibold">
+                            📱 Send SMS to <span id="smsSendCount">0</span> Recipients
+                        </button>
+
+                        <div id="smsStatus" class="mt-4"></div>
+                    </div>
+
+                    <!-- Google Voice Frame -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Google Voice</h2>
+                            <button onclick="reloadGoogleVoice()" 
+                                class="text-sm px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                                🔄 Reload
+                            </button>
+                        </div>
+                        
+                        <div class="border-2 border-gray-300 rounded-lg overflow-hidden">
+                            <iframe id="gvFrame"
+                                src="https://voice.google.com/u/0/messages"
+                                style="width:100%;height:600px;border:0;"></iframe>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-blue-50 rounded">
+                            <h4 class="font-semibold text-sm mb-1">ℹ️ Setup Required</h4>
+                            <p class="text-xs text-gray-700">
+                                Install the Tampermonkey script to enable SMS automation.
+                                <a href="#" onclick="showTampermonkeyInstructions()" class="text-blue-600 hover:underline">View Instructions</a>
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -452,8 +522,11 @@
             // Add active styling to clicked button
             event.target.classList.add('font-semibold', 'text-blue-600', 'bg-blue-50');
             
+            // Update recipient lists based on tab
             if (tabName === 'email') {
                 updateRecipientList();
+            } else if (tabName === 'sms') {
+                updateSmsRecipientList();
             }
         }
 
@@ -472,6 +545,198 @@
                 updateStats();
                 alert('Email count reset!');
             }
+        }
+
+        // ============================================================
+        // SMS FUNCTIONS
+        // ============================================================
+
+        // Helper: Get selected users with phone numbers
+        function getSelectedUsers() {
+            return users.filter(u => selectedUserEmails.has(u.email));
+        }
+
+        // Helper: Normalize phone number (digits only)
+        function normalizePhone(phone) {
+            return String(phone || "").replace(/\D/g, "");
+        }
+
+        // Helper: Fill template with user data
+        function fillTemplate(template, user) {
+            return template
+                .replace(/{name}/g, user?.name || "")
+                .replace(/{email}/g, user?.email || "")
+                .replace(/{phone}/g, user?.phone || "");
+        }
+
+        // Build SMS jobs from selected users
+        function buildSmsJobs(template) {
+            const selected = getSelectedUsers();
+
+            const jobs = selected
+                .map(u => ({
+                    name: u.name,
+                    phone: normalizePhone(u.phone),
+                    message: fillTemplate(template, u)
+                }))
+                .filter(j => j.phone.length >= 10 && j.message.trim().length > 0);
+
+            return jobs;
+        }
+
+        // Update SMS recipient list display
+        function updateSmsRecipientList() {
+            const selected = getSelectedUsers();
+            const count = selected.length;
+            
+            document.getElementById('smsRecipientCount').textContent = count;
+            document.getElementById('smsSendCount').textContent = count;
+            
+            const detailsDiv = document.getElementById('smsRecipientDetails');
+            
+            if (count === 0) {
+                detailsDiv.innerHTML = '<p class="text-gray-500 italic">No users selected. Go to User List tab to select recipients.</p>';
+                return;
+            }
+            
+            // Show first 5 with phone numbers
+            const withPhone = selected.filter(u => normalizePhone(u.phone).length >= 10);
+            const withoutPhone = selected.filter(u => normalizePhone(u.phone).length < 10);
+            
+            let html = `<div class="space-y-1">`;
+            
+            if (withPhone.length > 0) {
+                html += `<p class="font-semibold text-green-600">✓ ${withPhone.length} with valid phone:</p>`;
+                withPhone.slice(0, 5).forEach(u => {
+                    html += `<p class="text-xs">• ${u.name} - ${u.phone}</p>`;
+                });
+                if (withPhone.length > 5) {
+                    html += `<p class="text-xs text-gray-500">... and ${withPhone.length - 5} more</p>`;
+                }
+            }
+            
+            if (withoutPhone.length > 0) {
+                html += `<p class="font-semibold text-red-600 mt-2">✗ ${withoutPhone.length} without phone:</p>`;
+                withoutPhone.slice(0, 3).forEach(u => {
+                    html += `<p class="text-xs">• ${u.name}</p>`;
+                });
+                if (withoutPhone.length > 3) {
+                    html += `<p class="text-xs text-gray-500">... and ${withoutPhone.length - 3} more</p>`;
+                }
+            }
+            
+            html += `</div>`;
+            detailsDiv.innerHTML = html;
+        }
+
+        // Send SMS via Google Voice iframe
+        function sendSmsMessages() {
+            if (selectedUserEmails.size === 0) {
+                alert('Please select at least one user to send SMS to');
+                return;
+            }
+
+            const template = document.getElementById('smsMessage').value.trim();
+            
+            if (!template) {
+                alert('Please enter a message');
+                return;
+            }
+
+            const jobs = buildSmsJobs(template);
+
+            if (jobs.length === 0) {
+                alert('No valid phone numbers found for selected users.\n\nMake sure your users have phone numbers in the Google Sheet.');
+                return;
+            }
+
+            // Check if frame is ready
+            const frame = document.getElementById('gvFrame');
+            if (!frame || !frame.contentWindow) {
+                alert('Google Voice frame not ready. Please wait for it to load.');
+                return;
+            }
+
+            // Show status
+            const statusDiv = document.getElementById('smsStatus');
+            statusDiv.innerHTML = `
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded">
+                    <p class="font-semibold">📱 Sending ${jobs.length} SMS messages...</p>
+                    <p class="text-sm mt-1">Check the Google Voice frame for progress</p>
+                    <div class="mt-2 bg-gray-200 rounded h-2">
+                        <div id="smsProgressBar" class="bg-blue-500 h-2 rounded transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            `;
+
+            // Send jobs to Tampermonkey script via postMessage
+            frame.contentWindow.postMessage({
+                type: "CC_SMS_JOBS",
+                jobs: jobs
+            }, "*");
+
+            console.log('[Admin] Sent SMS jobs to Google Voice:', jobs);
+        }
+
+        // Listen for responses from Tampermonkey script
+        window.addEventListener("message", (event) => {
+            const data = event.data;
+            if (!data) return;
+
+            // SMS job completion
+            if (data.type === "CC_SMS_DONE") {
+                const statusDiv = document.getElementById('smsStatus');
+                statusDiv.innerHTML = `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded">
+                        <p class="font-semibold text-green-800">✅ SMS Campaign Complete!</p>
+                        <p class="text-sm mt-1">Successfully sent: ${data.sent || 0}</p>
+                        ${data.failed ? `<p class="text-sm text-red-600">Failed: ${data.failed}</p>` : ''}
+                    </div>
+                `;
+                
+                // Clear message after success
+                document.getElementById('smsMessage').value = '';
+            }
+
+            // SMS progress update
+            if (data.type === "CC_SMS_PROGRESS") {
+                const progressBar = document.getElementById('smsProgressBar');
+                if (progressBar && data.progress) {
+                    progressBar.style.width = data.progress + '%';
+                }
+            }
+
+            // SMS error
+            if (data.type === "CC_SMS_ERROR") {
+                const statusDiv = document.getElementById('smsStatus');
+                statusDiv.innerHTML = `
+                    <div class="p-4 bg-red-50 border border-red-200 rounded">
+                        <p class="font-semibold text-red-800">❌ SMS Error</p>
+                        <p class="text-sm mt-1">${data.message || 'Unknown error'}</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Reload Google Voice iframe
+        function reloadGoogleVoice() {
+            const frame = document.getElementById('gvFrame');
+            if (frame) {
+                frame.src = frame.src;
+            }
+        }
+
+        // Show Tampermonkey instructions
+        function showTampermonkeyInstructions() {
+            alert(`Tampermonkey Setup Instructions:
+
+1. Install Tampermonkey extension in your browser
+2. Download the "google-voice-bot.user.js" script
+3. Click the Tampermonkey icon and choose "Create new script"
+4. Paste the script and save
+5. Reload the Google Voice iframe
+
+The script will automatically listen for SMS jobs from this admin panel.`);
         }
 
         async function loadUsersFromSheets() {
