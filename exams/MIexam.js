@@ -1,1991 +1,1102 @@
 window.MI_EXAM_QUESTIONS = [
   {
-    "question": "What type of risk has only two possible outcomes—loss or no loss—and is insurable?",
-    "correct": "Pure risk",
-    "explanation": "Only pure risk has potential for loss or no loss and is insurable.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Speculative risk",
-      "Investment risk",
-      "Moral hazard"
-    ]
-  },
-  {
-    "question": "The law of large numbers allows insurers to:",
-    "correct": "Predict loss by pooling similar risks",
-    "explanation": "With a large group of homogeneous exposures, insurers can predict loss experience.",
+    "question": "Gina the producer caused financial harm to an insured. Which of these actions may the Commissioner take?",
+    "correct": "Revoke Gina's license after a hearing concludes a violation has occurred",
+    "explanation": "Correct. A Commissioner may only revoke or suspend a producer's license after a hearing that concludes a violation has occurred.",
     "difficulty": "medium",
     "wrongs": [
-      "Eliminate risk entirely",
-      "Guarantee profit for policyholders",
-      "Invest premiums in stocks"
+      "Incarcerate Gina after a hearing",
+      "Revoke Gina's license immediately without a hearing",
+      "Increase the bond requirement for Gina's license"
     ]
   },
   {
-    "question": "What type of risk has only two possible outcomes—loss or no loss—and is insurable?",
-    "correct": "Pure risk",
-    "explanation": "Only pure risk has potential for loss or no loss and is insurable.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Speculative risk",
-      "Investment risk",
-      "Moral hazard"
-    ]
-  },
-  {
-    "question": "The law of large numbers allows insurers to:",
-    "correct": "Predict loss by pooling similar risks",
-    "explanation": "With a large group of homogeneous exposures, insurers can predict loss experience.",
+    "question": "Michigan requires that a licensee complete __ hours of continuing education on the subject of ethics every reporting period.",
+    "correct": "3",
+    "explanation": "Correct. A licensee is required to take 24 hours of continuing education every two years. Of the 24 hours, 3 must be in ethics.",
     "difficulty": "medium",
     "wrongs": [
-      "Eliminate risk entirely",
-      "Guarantee profit for policyholders",
-      "Invest premiums in stocks"
+      "4",
+      "2",
+      "1"
     ]
   },
   {
-    "question": "Insurable interest in life insurance must exist:",
-    "correct": "At policy inception",
-    "explanation": "Insurable interest is required when a policy is purchased; after issue, it is not necessary.",
-    "difficulty": "easy",
-    "wrongs": [
-      "At the time of claim only",
-      "Throughout the life of the policy",
-      "Only for term policies"
-    ]
-  },
-  {
-    "question": "Which of the following is an example of a moral hazard?",
-    "correct": "An applicant lies about their health history",
-    "explanation": "Moral hazards are associated with dishonesty or character defects that increase the chance of loss.",
-    "difficulty": "easy",
-    "wrongs": [
-      "A home is located in a flood zone",
-      "An insured forgets to lock their car",
-      "A factory stores flammable chemicals"
-    ]
-  },
-  {
-    "question": "Which need is best addressed by family income replacement life insurance?",
-    "correct": "Maintaining survivors’ standard of living",
-    "explanation": "Income replacement life insurance is designed to help survivors maintain their lifestyle after the insured’s death.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Funding a child’s vacation",
-      "Buying a new car next year",
-      "Paying small emergency bills only"
-    ]
-  },
-  {
-    "question": "Which type of business life insurance covers a key executive whose death would harm the company?",
-    "correct": "Key person insurance",
-    "explanation": "Key person insurance protects the business against the financial loss caused by the death of a key employee.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Group term insurance",
-      "Credit life insurance",
-      "Industrial life insurance"
-    ]
-  },
-  {
-    "question": "A buy-sell agreement funded by life insurance is primarily designed to:",
-    "correct": "Provide money for surviving owners to purchase a deceased owner’s interest",
-    "explanation": "Buy-sell agreements use life insurance to fund the purchase of a deceased owner’s share of the business.",
+    "question": "Producer commissions may NOT be paid to",
+    "correct": "licensed producers not appointed by an insurer",
+    "explanation": "Correct. Producer commissions may NOT be paid to licensed producers not appointed by an insurer.",
     "difficulty": "medium",
     "wrongs": [
-      "Pay the business’s utility bills",
-      "Fund employees’ retirement benefits",
-      "Pay off the key person’s mortgage"
+      "non-resident producers",
+      "licensed and appointed producers",
+      "licensed and appointed producers who are sharing commissions"
     ]
   },
   {
-    "question": "Term life insurance is best described as providing:",
-    "correct": "Pure death benefit protection for a specified period",
-    "explanation": "Term life offers temporary coverage with no cash value, providing pure death benefit protection.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Lifetime coverage with cash value",
-      "Guaranteed income for retirement",
-      "Coverage that builds equity in real estate"
-    ]
-  },
-  {
-    "question": "Which type of life insurance combines permanent protection with a guaranteed cash value?",
-    "correct": "Whole life insurance",
-    "explanation": "Whole life is permanent coverage that builds guaranteed cash value over time.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Level term insurance",
-      "Decreasing term insurance",
-      "Credit life insurance"
-    ]
-  },
-  {
-    "question": "A flexible-premium policy with an adjustable death benefit and cash value tied to insurer’s general account is:",
-    "correct": "Universal life insurance",
-    "explanation": "Universal life offers flexible premiums and an adjustable death benefit with interest-sensitive cash value.",
+    "question": "The act of _________ insurance does NOT require an individual to hold an insurance producer license.",
+    "correct": "underwriting",
+    "explanation": "Correct. Underwriting does not require an insurance license.",
     "difficulty": "medium",
     "wrongs": [
-      "Variable universal life",
-      "Renewable term life",
-      "Industrial life"
+      "negotiating",
+      "selling",
+      "soliciting"
     ]
   },
   {
-    "question": "Variable life insurance differs from whole life because its cash value:",
-    "correct": "Is invested in separate accounts with no guaranteed return",
-    "explanation": "Variable life invests in separate accounts such as stocks and bonds, so returns are not guaranteed.",
+    "question": "The act of using misrepresentation to induce an insured person to terminate an existing policy and purchase a new policy is referred to as",
+    "correct": "twisting",
+    "explanation": "Correct. The act of using misrepresentation to induce an insured person to terminate an existing policy and purchase a new policy is referred to as twisting.",
     "difficulty": "medium",
     "wrongs": [
-      "Is invested only in bonds",
-      "Is always guaranteed by the insurer",
-      "Cannot lose value"
+      "subrogation",
+      "intimidation",
+      "defamation"
     ]
   },
   {
-    "question": "Which policy type allows the policyowner to change the coverage and premium within certain limits?",
-    "correct": "Adjustable life",
-    "explanation": "Adjustable life allows changes to face amount, premium, and coverage period within policy limits.",
+    "question": "Under Michigan Insurance Code, Chapter 45, financial loss can be defined as",
+    "correct": "loss of income",
+    "explanation": "Correct. Under Michigan Insurance Code, Chapter 45, insurance fraud defines financial loss as loss of income.",
     "difficulty": "medium",
     "wrongs": [
-      "Straight whole life",
-      "Renewable term",
-      "Credit life"
+      "restrictive fees",
+      "additional fines",
+      "punitive penalties"
     ]
   },
   {
-    "question": "What is the primary feature of a decreasing term policy?",
-    "correct": "Death benefit decreases over the policy term while premium usually stays level",
-    "explanation": "Decreasing term has a declining death benefit, often used to match a decreasing debt such as a mortgage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Death benefit and premium both increase each year",
-      "Premium decreases while death benefit stays level",
-      "Cash value steadily increases"
-    ]
-  },
-  {
-    "question": "Which policy is most suitable to cover a mortgage that declines over time?",
-    "correct": "Decreasing term life insurance",
-    "explanation": "Decreasing term matches a declining obligation like a mortgage balance.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Increasing term life insurance",
-      "Single premium whole life",
-      "Level term life insurance"
-    ]
-  },
-  {
-    "question": "Which life insurance policy is characterized by a single, lump-sum premium payment?",
-    "correct": "Single premium whole life",
-    "explanation": "Single premium whole life is fully paid up with one lump-sum premium.",
+    "question": "Which of the following is considered to be an act of misrepresentation?",
+    "correct": "Falsifying the terms, benefits, advantages, or conditions of an insurance policy",
+    "explanation": "Correct. A licensee who informs an insured of inaccurate terms, benefits, or advantages of any policy is committing misrepresentation.",
     "difficulty": "medium",
     "wrongs": [
-      "Annual renewable term",
-      "Level premium term",
-      "Limited pay whole life"
+      "Giving back part of a producer's commission as an incentive for a sale",
+      "Sharing commissions with other licensed producers",
+      "Replacing an existing policy with a new one"
     ]
   },
   {
-    "question": "Limited-pay whole life policies are designed so that:",
-    "correct": "Premiums are paid for a limited time, but coverage lasts a lifetime",
-    "explanation": "Limited-pay whole life is fully paid up after a set period, yet remains in force for the insured’s lifetime.",
+    "question": "Which of these actions would NOT result in a producer's license revocation?",
+    "correct": "Not maintaining an adequate level of sales",
+    "explanation": "Correct. All of these may result in license revocation except for \"Not maintaining an adequate level of sales\".",
     "difficulty": "medium",
     "wrongs": [
-      "Coverage ends when premiums stop",
-      "Premiums are due for life but coverage is temporary",
-      "No cash value ever accumulates"
+      "Making material misrepresentations on the license application",
+      "Failing to pay state income tax",
+      "Felony conviction"
     ]
   },
   {
-    "question": "Which policy feature allows the insurer to assume that the insured’s statements are true without further investigation?",
-    "correct": "Doctrine of utmost good faith",
-    "explanation": "Utmost good faith means both parties rely on each other’s truthful representations.",
+    "question": "Which of these BEST describes the illegal act of twisting?",
+    "correct": "Replacing an insurance policy from one insurer to another based on misrepresentation",
+    "explanation": "Correct. The unfair trade practice of replacing an insurance policy from one insurer to another based on misrepresentation is called twisting.",
     "difficulty": "medium",
     "wrongs": [
-      "Law of large numbers",
-      "Doctrine of subrogation",
-      "Doctrine of indemnity"
+      "Unfairly discriminate against a person in any way on an insurance-related matter",
+      "Publishing any false financial statement regarding a person or entity",
+      "Using threat or force to restrict fair trade in the transaction of insurance"
     ]
   },
   {
-    "question": "In a life insurance policy, consideration is defined as:",
-    "correct": "The premium and statements in the application",
-    "explanation": "The insured’s consideration is the premium and application; the insurer’s is the promise to pay.",
-    "difficulty": "easy",
-    "wrongs": [
-      "The agent’s commission",
-      "The insurer’s investment income",
-      "The policy loan interest"
-    ]
-  },
-  {
-    "question": "A contract that is one-sided, where only the insurer is legally bound, is called:",
-    "correct": "Unilateral contract",
-    "explanation": "In a unilateral contract, only one party—the insurer—makes an enforceable promise.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Aleatory contract",
-      "Adhesion contract",
-      "Conditional contract"
-    ]
-  },
-  {
-    "question": "A conditional receipt given at application generally provides coverage:",
-    "correct": "Only if the applicant is found insurable as applied for",
-    "explanation": "Coverage under a conditional receipt begins when the applicant meets the company’s underwriting requirements.",
+    "question": "Which of these is the BEST example of misrepresentation?",
+    "correct": "Providing incorrect, misleading, incomplete, or materially untrue information in a license application",
+    "explanation": "Correct. Providing incorrect, misleading, incomplete, or materially untrue information in the license application is considered an act of misrepresentation.",
     "difficulty": "medium",
     "wrongs": [
-      "Immediately, regardless of insurability",
-      "Only after policy delivery",
-      "Only after first-year premiums are paid"
+      "Publishing a false financial statement regarding an entity",
+      "Unfairly discriminating against a person in any way on an insurance-related matter",
+      "Making a public advertisement that contains false or malicious information about an insurance company"
     ]
   },
   {
-    "question": "Which underwriting source provides the insurer with the most detailed information about the applicant’s health?",
-    "correct": "Attending Physician’s Statement (APS)",
-    "explanation": "An APS is obtained directly from the applicant’s doctor and includes detailed medical history.",
+    "question": "A foreign insurance company doing business in Michigan",
+    "correct": "is only authorized to write business outside the United States",
+    "explanation": "Correct. An insurer who is domiciled outside of Michigan, but within the United States is considered to be a foreign insurer in Michigan.",
     "difficulty": "medium",
     "wrongs": [
-      "MIB report",
-      "Consumer investigative report",
-      "Agent’s report"
+      "is a company that was formed under the laws of another country",
+      "is a company domiciled under the laws of another state",
+      "is not subject to Michigan insurance laws"
     ]
   },
   {
-    "question": "What is the purpose of the Medical Information Bureau (MIB)?",
-    "correct": "To share medical information among member insurers to prevent fraud",
-    "explanation": "The MIB helps insurers detect fraud and adverse selection by sharing coded medical information.",
+    "question": "A producer has allowed his/her license to lapse by failing to complete the required continuing education credits. The license may be reinstated by completing the requirement within ___ days of the renewal date.",
+    "correct": "90",
+    "explanation": "Correct. If the license has been suspended or inactive less than 90 days from the continuation education renewal date, the license will become active when the continuing education credits are reported to the DIFS. A new application is not required.",
     "difficulty": "medium",
     "wrongs": [
-      "To determine insurance premiums for each insurer",
-      "To pay claims on behalf of insurers",
-      "To provide medical treatment to insureds"
+      "120",
+      "60",
+      "45"
     ]
   },
   {
-    "question": "Which risk classification would typically be charged the lowest premiums?",
-    "correct": "Preferred",
-    "explanation": "Preferred risks have better-than-average health and lifestyle, qualifying for lower premiums.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Standard",
-      "Substandard",
-      "Rated"
-    ]
-  },
-  {
-    "question": "A backdated life insurance policy is primarily used to:",
-    "correct": "Save age and obtain a lower premium",
-    "explanation": "Backdating allows the applicant to be issued at a younger age for a lower premium, within legal limits.",
+    "question": "A producer may give an insurance applicant an article of merchandise having an invoice value of ____ or less.",
+    "correct": "$50",
+    "explanation": "Incorrect. The correct answer is \"$5\". A producer may give an insurance applicant an article of merchandise having an invoice value of $5.00 or less.",
     "difficulty": "medium",
     "wrongs": [
-      "Extend the contestable period",
-      "Increase the policy’s cash value immediately",
-      "Avoid evidence of insurability"
+      "$25",
+      "$15",
+      "$5"
     ]
   },
   {
-    "question": "The free-look provision allows the policyowner to:",
-    "correct": "Return the policy for a full refund within a specified period",
-    "explanation": "The free-look period gives the owner the right to examine and return the policy for a full refund.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Suspend premiums for one year",
-      "Change the insured without proof of insurability",
-      "Increase coverage automatically"
-    ]
-  },
-  {
-    "question": "The incontestability clause prevents the insurer from voiding coverage after:",
-    "correct": "The policy has been in force for a specified period, usually two years",
-    "explanation": "After the contestable period, the insurer cannot void the policy for misstatements, except fraud where allowed by law.",
+    "question": "A(n) ______ company is owned exclusively by shareholders.",
+    "correct": "stock",
+    "explanation": "Correct. Stock companies are owned by their shareholders.",
     "difficulty": "medium",
     "wrongs": [
-      "The first premium is paid",
-      "The insured reaches age 65",
-      "Any claim occurs"
+      "interactive",
+      "mixed",
+      "mutual"
     ]
   },
   {
-    "question": "The misstatement of age provision allows the insurer to:",
-    "correct": "Adjust benefits to what the premium would have purchased at the correct age",
-    "explanation": "If age is misstated, the insurer adjusts the death benefit to the correct amount based on actual age.",
+    "question": "ABC Insurance Agency is entering each applicant who purchases insurance through their agency into a drawing to win a free trip. This is an unlawful insurance practice known as",
+    "correct": "illegal inducement",
+    "explanation": "Correct. This is an example of the unlawful insurance practice known as illegal inducement.",
     "difficulty": "medium",
     "wrongs": [
-      "Cancel the policy and keep all premiums",
-      "Increase premiums retroactively with interest",
-      "Deny claims automatically"
+      "concealment",
+      "false advertising",
+      "fraud"
     ]
   },
   {
-    "question": "The grace period in a life insurance policy is designed to:",
-    "correct": "Prevent unintentional lapse by allowing late premium payment",
-    "explanation": "The grace period provides extra time to pay premiums before coverage lapses.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Guarantee dividends",
-      "Increase the policy loan value",
-      "Extend the incontestability period"
-    ]
-  },
-  {
-    "question": "A policy that has lapsed for nonpayment of premium can be reinstated if the owner:",
-    "correct": "Provides evidence of insurability and pays back premiums with interest",
-    "explanation": "Reinstatement usually requires proof of insurability and payment of back premiums plus interest.",
+    "question": "All of the following activities require an insurance producer's license EXCEPT",
+    "correct": "Underwriting",
+    "explanation": "Correct. Underwriting does not require an insurance license.",
     "difficulty": "medium",
     "wrongs": [
-      "Pays one current premium only",
-      "Signs a new application with no underwriting",
-      "Proves financial hardship"
+      "Soliciting",
+      "Selling",
+      "Negotiating"
     ]
   },
   {
-    "question": "Which nonforfeiture option provides coverage for the longest possible period?",
-    "correct": "Extended term insurance",
-    "explanation": "Extended term uses the full cash value to buy term coverage for the original face amount for as long as possible.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Cash surrender value",
-      "Reduced paid-up insurance",
-      "Automatic premium loan"
-    ]
-  },
-  {
-    "question": "Which nonforfeiture option uses the cash value to purchase a smaller, fully paid permanent policy?",
-    "correct": "Reduced paid-up insurance",
-    "explanation": "Reduced paid-up uses cash value to buy a lower face amount that is fully paid-up for life.",
+    "question": "An example of an unfair claims settlement practice is",
+    "correct": "failing to promptly provide a reasonable explanation for the denial of claims",
+    "explanation": "Correct. An insurer that fails to promptly provide a reasonable explanation for the denial of a claim is committing an unfair claim settlement practice.",
     "difficulty": "medium",
     "wrongs": [
-      "Extended term insurance",
-      "Cash surrender value",
-      "Automatic premium loan"
+      "requiring a time limit for submitting a claim",
+      "making it mandatory that proof of loss be provided for each claim",
+      "paying a claim in a timely matter"
     ]
   },
   {
-    "question": "Which dividend option allows policyowners to purchase small amounts of paid-up additional insurance?",
-    "correct": "Paid-up additions",
-    "explanation": "Paid-up additions use dividends to buy extra paid-up life insurance, increasing death benefit and cash value.",
+    "question": "An insurer would be committing Unfair Discrimination if coverage was denied based upon",
+    "correct": "marital status",
+    "explanation": "Correct. An insurer would be committing Unfair Discrimination if coverage was denied based upon marital status.",
     "difficulty": "medium",
     "wrongs": [
-      "Cash option",
-      "Reduced premium",
-      "One-year term"
+      "HIV positive result",
+      "diabetes",
+      "a mental disorder"
     ]
   },
   {
-    "question": "Under which dividend option does the insurer keep the dividend and credit it with interest?",
-    "correct": "Accumulation at interest",
-    "explanation": "Accumulation at interest leaves dividends on deposit with the insurer, earning interest for the policyowner.",
+    "question": "Andy the insured had made a deliberate lie to the insured in order to obtain a lower premium. This action is considered an act of",
+    "correct": "fraud",
+    "explanation": "Correct. A deliberate lie by an insured to the insurer to obtain a lower premium is an example of fraud.",
     "difficulty": "medium",
     "wrongs": [
-      "Cash option",
-      "Paid-up additions",
-      "Reduced paid-up"
+      "subrogation",
+      "malfeasance",
+      "misrepresentation"
     ]
   },
   {
-    "question": "Which dividend option immediately reduces the out-of-pocket premium the policyowner must pay?",
-    "correct": "Reduction of premium",
-    "explanation": "The reduction of premium option uses the dividend toward the next premium due.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Paid-up additions",
-      "One-year term",
-      "Cash surrender"
-    ]
-  },
-  {
-    "question": "The automatic premium loan provision, if elected, prevents a lapse by:",
-    "correct": "Using available cash value to pay overdue premiums",
-    "explanation": "Automatic premium loans draw from cash value to cover unpaid premiums before lapse occurs.",
+    "question": "Before operating under an assumed name, a producer MUST notify the",
+    "correct": "Commissioner",
+    "explanation": "Incorrect. The correct answer is \"Commissioner \". Prior to operating under an assumed name, a producer MUST notify the Commissioner.",
     "difficulty": "medium",
     "wrongs": [
-      "Extending the grace period indefinitely",
-      "Waiving all future premiums",
-      "Borrowing from the agent’s commission"
+      "Governor",
+      "insurer",
+      "NAIC"
     ]
   },
   {
-    "question": "The waiver of premium rider typically waives premiums when the insured:",
-    "correct": "Becomes totally disabled as defined in the policy",
-    "explanation": "Waiver of premium waives payments if the insured is totally disabled after a waiting period.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Reaches retirement age",
-      "Has any minor injury",
-      "Is unemployed for 30 days"
-    ]
-  },
-  {
-    "question": "The accidental death benefit rider pays an additional benefit if death:",
-    "correct": "Is caused by an accident within a specified time frame",
-    "explanation": "Accidental death riders pay an extra benefit if death is the direct result of accidental injury.",
+    "question": "A life insurance applicant in Michigan may backdate the application for up to ___ month(s).",
+    "correct": "6",
+    "explanation": "Correct. In order to save on premiums, a life Insurance policy can legally be backdated up to 6 months.",
     "difficulty": "medium",
     "wrongs": [
-      "Occurs from any cause after age 65",
-      "Is due to suicide within two years",
-      "Results from sickness only"
+      "7",
+      "4",
+      "5"
     ]
   },
   {
-    "question": "A guaranteed insurability rider allows the insured to:",
-    "correct": "Purchase additional coverage at specified ages without evidence of insurability",
-    "explanation": "Guaranteed insurability lets the insured buy more coverage at option dates without new medical evidence.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Increase coverage any time without cost",
-      "Change beneficiaries at will",
-      "Reduce premiums during disability"
-    ]
-  },
-  {
-    "question": "The cost-of-living rider typically adjusts the policy’s:",
-    "correct": "Death benefit based on changes in an inflation index",
-    "explanation": "Cost-of-living riders increase coverage periodically to help offset inflation.",
+    "question": "A life insurance application may be backdated to",
+    "correct": "save on premiums",
+    "explanation": "Incorrect. The correct answer is \"save on premiums\". Life insurance applications are backdated to reduce the premium.",
     "difficulty": "medium",
     "wrongs": [
-      "Premium based solely on age",
-      "Cash value to match stock returns",
-      "Interest rate on policy loans"
+      "reduce the policy's death benefit",
+      "ease the underwriting requirements",
+      "increase the producer's commission"
     ]
   },
   {
-    "question": "An accelerated death benefit rider allows the insured to:",
-    "correct": "Receive part of the death benefit while living under certain conditions",
-    "explanation": "Accelerated benefits pay out a portion of the death benefit if the insured is terminally or chronically ill, as defined in the rider.",
+    "question": "In Michigan, legal action may be taken against an insurer for up to ___ years for failing to pay a life insurance claim after proof of loss was submitted.",
+    "correct": "6",
+    "explanation": "Correct. In Michigan, legal action can be taken for up to 6 years against an insurer for failure to pay life insurance claims after proof of loss was submitted.",
     "difficulty": "medium",
     "wrongs": [
-      "Avoid all premium payments permanently",
-      "Increase the policy face amount without underwriting",
-      "Change the contract law in their state"
+      "7",
+      "4",
+      "5"
     ]
   },
   {
-    "question": "Under a return of premium rider on term life, if the insured outlives the term:",
-    "correct": "Some or all premiums paid may be returned",
-    "explanation": "Return of premium riders refund eligible premiums if the insured survives the term, subject to rider conditions.",
-    "difficulty": "hard",
-    "wrongs": [
-      "The policy automatically converts to whole life at no cost",
-      "Coverage continues with no new premiums ever",
-      "All premiums are forfeited"
-    ]
-  },
-  {
-    "question": "Which settlement option provides a series of payments for a specific number of years?",
-    "correct": "Fixed period",
-    "explanation": "The fixed-period option pays proceeds in equal installments over a chosen time period.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Lump sum",
-      "Life only",
-      "Joint and survivor"
-    ]
-  },
-  {
-    "question": "Which settlement option provides income for the beneficiary’s life, regardless of how long they live?",
-    "correct": "Life income",
-    "explanation": "Life income settlement options provide payments for as long as the beneficiary lives.",
+    "question": "Under which circumstance may a minor receive proceeds from a death benefit?",
+    "correct": "The minor must have an appointed guardian",
+    "explanation": "Incorrect. The correct answer is \"The minor must have an appointed guardian\". In the interest of protecting the assets of a minor, state law requires that a guardian be appointed to administer the proceeds payable to the minor child.",
     "difficulty": "medium",
     "wrongs": [
-      "Fixed amount",
-      "Interest only",
+      "The minor must be at least 13 years old",
+      "The minor must have been born in the United States",
+      "The minor must not have a criminal record"
+    ]
+  },
+  {
+    "question": "Which of the following actions is REQUIRED by a producer who is replacing an existing life insurance policy?",
+    "correct": "Submit to the replacing insurer a list of the policies to be replaced",
+    "explanation": "Correct. According to the Michigan Insurance Code, a producer must submit to the replacing insurer a list of all life Insurance policies or annuity contracts proposed to be replaced.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Notify the existing insurer of the proposed replacement",
+      "Offer the insured a 60-day free-look period",
+      "Keep replacement records on file for at least 10 years"
+    ]
+  },
+  {
+    "question": "Which of these is NOT considered to be a purpose of an annuity?",
+    "correct": "Annuities are intended to create an estate",
+    "explanation": "Incorrect. The correct answer is, \"Annuities are intended to create an estate\". All of these are purposes of an annuity except \"Annuities are intended to create an estate\".",
+    "difficulty": "medium",
+    "wrongs": [
+      "Annuities are intended to distribute accumulated principal",
+      "Annuities are intended to liquidate an estate",
+      "Annuities are intended for the tax-free growth of principal"
+    ]
+  },
+  {
+    "question": "An annuitant dies during the distribution period. What kind of annuity will return to a beneficiary the difference between the annuity value and the income payments already made?",
+    "correct": "Refund annuity",
+    "explanation": "Correct. An annuity that returns the difference between the annuity value and the income payments made to a beneficiary when the annuitant dies during the distribution period is a refund annuity.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Rebate annuity",
+      "Return annuity",
+      "Variable annuity"
+    ]
+  },
+  {
+    "question": "How do interest earnings accumulate in a deferred annuity?",
+    "correct": "On a tax-deferred basis",
+    "explanation": "Incorrect. The correct answer is, \"On a tax-deferred basis\". Deferred annuities accumulate interest earnings on a tax-deferred basis.",
+    "difficulty": "medium",
+    "wrongs": [
+      "On a taxable basis",
+      "On a tax-free basis",
+      "On a tax credit basis"
+    ]
+  },
+  {
+    "question": "Which of the following is NOT considered advertising?",
+    "correct": "A rating from a rating service company, such as A.M. Best",
+    "explanation": "Incorrect. The correct answer is, \"A rating from a rating service company, such as A.M. Best\". An A.M. Best company rating is not considered advertising.",
+    "difficulty": "medium",
+    "wrongs": [
+      "An illustration",
+      "Direct mailing from an agency",
+      "A sales presentation"
+    ]
+  },
+  {
+    "question": "Tim is covered under a group plan and would like to change his group coverage to an individual policy with the same insurer because of employment termination. Which of these describes the change that will take place?",
+    "correct": "Conversion",
+    "explanation": "Correct. Conversion is when an insured individual changes his or her group insurance to an individual policy with the same insurer at the termination of employment.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Rollover",
+      "Coordination of benefits",
+      "Extension of benefits"
+    ]
+  },
+  {
+    "question": "A nonparticipating policy will",
+    "correct": "not pay dividends",
+    "explanation": "Correct. When an insurer offers a policy that is nonparticipating, the insurer's policy does not pay dividends.",
+    "difficulty": "medium",
+    "wrongs": [
+      "provide tax advantages",
+      "provide a return of premium",
+      "give policyowners special privileges"
+    ]
+  },
+  {
+    "question": "How are annuities given favorable tax treatment?",
+    "correct": "Gains are taxed at distribution",
+    "explanation": "Incorrect. The correct answer is, \"Gains are taxed at distribution\". Annuity gains are typically tax deferred until distribution.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Gains are converted to tax credits",
+      "Gains are tax exempt at distribution",
+      "Gains are tax deductible"
+    ]
+  },
+  {
+    "question": "The Do Not Call Registry offers exemptions for calls placed from all of the following EXCEPT",
+    "correct": "insurance sales calls",
+    "explanation": "Correct. All of these types of calls are exempt from the Do Not Call Registry EXCEPT insurance sales calls.",
+    "difficulty": "medium",
+    "wrongs": [
+      "political organizations",
+      "charities",
+      "surveys"
+    ]
+  },
+  {
+    "question": "What does the word \"level\" in Level Term describe?",
+    "correct": "The face amount",
+    "explanation": "Incorrect. The correct answer is, \"The face amount\". The word \"level\" in Level Term refers to the face amount.",
+    "difficulty": "medium",
+    "wrongs": [
+      "The period of coverage",
+      "The premium payments",
+      "The cash value"
+    ]
+  },
+  {
+    "question": "Converting a group plan to permanent life insurance requires",
+    "correct": "the conversion being applied for within 31 days of termination",
+    "explanation": "Correct. When converting from group to permanent life insurance, the conversion must be applied for within 31 days of termination.",
+    "difficulty": "medium",
+    "wrongs": [
+      "submitting proof of insurability",
+      "converting to term life insurance",
+      "paying a lower premium"
+    ]
+  },
+  {
+    "question": "What is the primary purpose of a rating service company such as A.M Best?",
+    "correct": "Determine financial strength of an insurance company",
+    "explanation": "Incorrect. The correct answer is, \"Determine financial strength of an insurance company\". The primary purpose of a rating service company is to determine the financial strength of the company being rated.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Determine which insurer offers the best policies",
+      "Determine which insurer offers the best rates",
+      "Determine which agent to use locally"
+    ]
+  },
+  {
+    "question": "Where would policy proceeds be paid if both the insured and primary beneficiary were killed in the same accident?",
+    "correct": "contingent beneficiary",
+    "explanation": "Correct. If the insured and the primary beneficiary are killed in the same accident, the policy proceeds will be paid to the contingent beneficiary of the insured.",
+    "difficulty": "medium",
+    "wrongs": [
+      "children of the insured",
+      "primary beneficiary's estate",
+      "insured's estate"
+    ]
+  },
+  {
+    "question": "Which of the following enables a life policy to be replaced with another life policy and results in the postponement of the tax consequence?",
+    "correct": "Section 1035 exchange",
+    "explanation": "Correct. A Section 1035 Exchange enables a life policy to be replaced with another life policy and results in the postponement of the tax consequence.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Section 1040 exchange",
+      "Spendthrift Option",
+      "Nonforfeiture Option"
+    ]
+  },
+  {
+    "question": "An interest-sensitive life insurance policyowner may be able to withdraw the policy's cash value interest free. The provision that allows this is called",
+    "correct": "Partial Surrender",
+    "explanation": "Incorrect. The correct answer is, \"Partial Surrender\". A partial surrender allows the interest-sensitive life policyholder to withdraw the policy's cash value interest-free.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Accelerated Death Benefit",
+      "Subrogation",
+      "Automatic Premium Loan"
+    ]
+  },
+  {
+    "question": "What are an applicant's statements concerning occupation, hobbies, and personal health history regarded as?",
+    "correct": "representation",
+    "explanation": "Correct. Statements by an applicant concerning personal health history, family health history, occupation, and hobbies are referred to as representations.",
+    "difficulty": "medium",
+    "wrongs": [
+      "collateral",
+      "guarantee",
+      "warranty"
+    ]
+  },
+  {
+    "question": "Donald is the primary insured of a life insurance policy and adds a children's term rider. What is the advantage of adding this rider?",
+    "correct": "Can be converted to permanent coverage without evidence of insurability",
+    "explanation": "Correct. An advantage of a children's term rider is the ability to convert to permanent insurance without evidence of insurability.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Increases the policy's overall cash value",
+      "Coverage can be different for each child",
+      "Premiums on this rider are not required until the limiting age is reached"
+    ]
+  },
+  {
+    "question": "A tax-free Section 1035 Exchange of a life insurance policy to a different policy is permitted if it occurs",
+    "correct": "from insurer to insurer and no cash is received by the policyowner",
+    "explanation": "Correct. The Internal Revenue Code (IRC) enables a tax-free Section 1035 Exchange of a life insurance policy to a different policy if it occurs from insurer to insurer and the policyowner does not receive any cash.",
+    "difficulty": "medium",
+    "wrongs": [
+      "in the same state as the original transaction",
+      "from agent to agent as long as the agents are licensed in the same line",
+      "within a 12 month period"
+    ]
+  },
+  {
+    "question": "If the annuitant dies before the annuity start date,",
+    "correct": "the premiums paid plus interest earned will be given to the beneficiary",
+    "explanation": "Incorrect. The correct answer is, \"the premiums paid plus interest earned will be given to the beneficiary\". If the annuitant dies before the annuity start date, the beneficiary receives the premiums paid plus interest earned.",
+    "difficulty": "medium",
+    "wrongs": [
+      "the premiums paid will be given to the beneficiary",
+      "the benefits will be given tax-free only to a stated beneficiary",
+      "nothing is given to the beneficiary"
+    ]
+  },
+  {
+    "question": "Which of the following is present when an applicant stands to lose value if the insured dies?",
+    "correct": "Insurable interest",
+    "explanation": "Incorrect. The correct answer is, \"Insurable interest\". Insurable interest means that the person acquiring the contract (the applicant) must be subject to loss upon the death, illness, or disability of the person being insured.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Consideration",
+      "Offer and acceptance",
+      "Insurability"
+    ]
+  },
+  {
+    "question": "Which of the following annuity payout options makes no additional payments regardless of when the annuitant dies?",
+    "correct": "Life only",
+    "explanation": "Correct. The life only annuity payout option has no additional payouts regardless of when the annuitant dies.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Installment refund",
+      "Life with period certain",
       "Cash refund"
     ]
   },
   {
-    "question": "Under the interest-only settlement option, the insurer:",
-    "correct": "Pays interest periodically and holds the principal intact",
-    "explanation": "With interest-only, the insurer pays interest to the beneficiary while holding the principal for later distribution.",
+    "question": "Shirley has a $500,000 10-year non-renewable level term life policy. If she dies 15 years after the policy's inception date, how much will her beneficiary receive?",
+    "correct": "Nothing",
+    "explanation": "Correct. Her beneficiary will receive nothing because the policy is valid for only 10 years.",
     "difficulty": "medium",
     "wrongs": [
-      "Pays out principal and interest together as an annuity",
-      "Returns premiums only, with no interest",
-      "Guarantees the principal is never paid"
+      "$250,000",
+      "$100,000",
+      "$500,000"
     ]
   },
   {
-    "question": "The straight life annuity option provides payments:",
-    "correct": "For as long as the annuitant lives, then stops at death",
-    "explanation": "A straight life annuity pays for the annuitant’s lifetime, with no payments to beneficiaries after death.",
+    "question": "A life insurance claim which involves a per capita distribution of policy proceeds would be payable to the",
+    "correct": "estate of the deceased beneficiaries only",
+    "explanation": "Correct. \u201cPer capita\u201d is a method of life insurance distribution using total number of individuals. This means that all living members that are identified in the life insurance policy will receive an equal amount of the life insurance proceeds. Using per capita distribution means that if one of the beneficiaries becomes deceased before the insured, then the other beneficiaries will simply have their share increased accordingly.",
     "difficulty": "medium",
     "wrongs": [
-      "For a guaranteed minimum period only",
-      "To beneficiaries after the annuitant’s death regardless of option",
-      "Until the cash value is depleted, regardless of lifespan"
+      "named contingent beneficiaries only",
+      "estate of the insured only",
+      "named living primary beneficiaries"
     ]
   },
   {
-    "question": "In a fixed annuity, the insurer bears which risk?",
-    "correct": "Investment risk",
-    "explanation": "In a fixed annuity, the insurer guarantees a fixed rate and thus bears the investment risk.",
+    "question": "Which of the following is considered to be the period when the accumulated value in an annuity is paid out?",
+    "correct": "Annuitization phase",
+    "explanation": "Correct. The period when the annuitant starts to receive payments from the annuity is the annuitization phase.",
     "difficulty": "medium",
     "wrongs": [
-      "Mortality risk",
-      "Owner’s contribution risk",
-      "Insurable interest risk"
+      "Period certain phase",
+      "Principal phase",
+      "Accumulation phase"
     ]
   },
   {
-    "question": "Which annuity type offers payments that vary with the performance of underlying separate account investments?",
-    "correct": "Variable annuity",
-    "explanation": "Variable annuities invest in separate accounts, so payment amounts can fluctuate with investment performance.",
+    "question": "What is the automatic continuance of insurance coverage referred to as?",
+    "correct": "renewal",
+    "explanation": "Correct. The automatic continuance of insurance coverage is called renewal.",
     "difficulty": "medium",
     "wrongs": [
-      "Fixed annuity",
-      "Deferred income annuity",
-      "Immediate fixed annuity"
+      "reinstatement",
+      "resumption",
+      "renovation"
     ]
   },
   {
-    "question": "An immediate annuity begins income payments:",
-    "correct": "Within one year of purchase",
-    "explanation": "Immediate annuities are purchased with a single premium and start paying income within 12 months.",
-    "difficulty": "easy",
-    "wrongs": [
-      "After at least ten years",
-      "Only at the annuitant’s retirement age of 65",
-      "After the policy builds sufficient cash value"
-    ]
-  },
-  {
-    "question": "A deferred annuity is primarily used to:",
-    "correct": "Accumulate funds for future income",
-    "explanation": "Deferred annuities accumulate value over time, with income payments starting at a later date.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Provide immediate death benefits only",
-      "Guarantee life insurance coverage for children",
-      "Pay short-term medical expenses"
-    ]
-  },
-  {
-    "question": "Which party in an annuity receives income payments during the payout phase?",
-    "correct": "Annuitant",
-    "explanation": "The annuitant is the person whose life expectancy the payments are based on.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Beneficiary",
-      "Policyowner only",
-      "Producer"
-    ]
-  },
-  {
-    "question": "Life insurance death benefits paid as a lump sum to a named beneficiary are generally:",
-    "correct": "Received income tax free",
-    "explanation": "In most cases, life insurance death proceeds paid as a lump sum to an individual are not subject to federal income tax.",
+    "question": "In an insurance contract, the insurer is the only party legally obligated to perform. Because of this, an insurance contract is considered",
+    "correct": "unilateral",
+    "explanation": "Correct. A contract in which only the insurer would be legally obligated to perform is considered unilateral.",
     "difficulty": "medium",
     "wrongs": [
-      "Fully taxable as ordinary income",
-      "Subject to automatic capital gains tax",
-      "Taxable only if the insured is under age 59½"
+      "aleatory",
+      "voidable",
+      "conditional"
     ]
   },
   {
-    "question": "Interest paid on life insurance death proceeds left on deposit with the insurer is:",
-    "correct": "Taxable as ordinary income to the beneficiary",
-    "explanation": "While the death benefit itself is usually tax free, any interest earned is taxable income.",
+    "question": "Ambiguities in an insurance policy are always resolved in favor of the",
+    "correct": "insured",
+    "explanation": "Correct. Ambiguities in an insurance policy are always resolved in favor of the insured.",
     "difficulty": "medium",
     "wrongs": [
-      "Tax-free forever",
-      "Taxed only as capital gains",
-      "Taxed only at the corporate rate"
+      "underwriter",
+      "insurer",
+      "producer"
     ]
   },
   {
-    "question": "Premiums for personally owned individual life insurance are generally:",
+    "question": "In order for a contract to be valid, it must",
+    "correct": "contain an offer and acceptance",
+    "explanation": "Correct. For a contract to be valid it MUST include an offer and an acceptance.",
+    "difficulty": "medium",
+    "wrongs": [
+      "be in writing",
+      "be signed and witnessed by an attorney",
+      "be filed with the state"
+    ]
+  },
+  {
+    "question": "Which of these is NOT subject to income taxation under a Modified Endowment Contract (MEC)?",
+    "correct": "Death benefit",
+    "explanation": "Correct. The death benefit would NOT be subject to income tax under a Modified Endowment Contract (MEC).",
+    "difficulty": "medium",
+    "wrongs": [
+      "Policy withdrawal",
+      "Policy dividend",
+      "Loan against the cash value"
+    ]
+  },
+  {
+    "question": "A policyowner can receive a percentage payment of the death benefits prior to death by using what kind of contract?",
+    "correct": "Viatical settlement agreement",
+    "explanation": "Correct. Viatical settlement agreements typically include a percentage payment of the death benefits to the policyowner prior to the death of the insured.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Split dollar plan",
+      "Buy-sell plan",
+      "Funding medium agreement"
+    ]
+  },
+  {
+    "question": "A professional liability for which producers can be sued for mistakes of putting a policy into effect is called",
+    "correct": "errors and omissions",
+    "explanation": "Incorrect. The correct answer is, \"Errors and Omissions\". Errors and omissions is a professional liability for which producers can be sued for mistakes of putting a policy into effect.",
+    "difficulty": "medium",
+    "wrongs": [
+      "errors and oversights",
+      "fiduciary trust",
+      "fiduciary bond"
+    ]
+  },
+  {
+    "question": "Over the course of a year, which premium payment mode is most expensive?",
+    "correct": "Monthly",
+    "explanation": "Correct. The monthly payment mode is the most expensive over the course of a year.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Quarterly",
+      "Annually",
+      "Semi-Annually"
+    ]
+  },
+  {
+    "question": "The deeds and actions of a producer indicate what kind of authority?",
+    "correct": "Apparent",
+    "explanation": "Incorrect. The correct answer is, \"Apparent\". Apparent authority is the appearance or assumption of authority based on the actions, words, or deeds of the producer.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Express",
+      "Implied",
+      "Conditional"
+    ]
+  },
+  {
+    "question": "Term insurance is appropriate for someone who",
+    "correct": "seeks temporary protection and lower premiums",
+    "explanation": "Correct. Term insurance is appropriate for individuals seeking temporary protection and lower premiums.",
+    "difficulty": "medium",
+    "wrongs": [
+      "seeks a policy that builds cash value",
+      "seeks permanent protection and higher premiums",
+      "seeks living benefits for themselves"
+    ]
+  },
+  {
+    "question": "Which of these ensures that proceeds of a life insurance policy will be free from attachment or seizure by the beneficiary's creditors?",
+    "correct": "Spendthrift Clause",
+    "explanation": "Incorrect. The correct answer is, \"Spendthrift Clause\". A Spendthrift Clause is a statement in a settlement agreement that indicates that the proceeds of the policy will be free from attachment or seizure by the beneficiary's creditors.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Protection Clause",
+      "Settlement Clause",
+      "Viatical Clause"
+    ]
+  },
+  {
+    "question": "What is implied authority defined as?",
+    "correct": "Authority given in writing to an agent in the agency agreement",
+    "explanation": "Correct. Implied authority is defined as the authority that is not specifically granted to an agent in the agency agreement, but that an agent can reasonably assume to accomplish the day-to-day activities of the job.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Authority given to an agent to act outside the scope of the agency agreement",
+      "Authority given to handle claims and process payments",
+      "Authority that is not specifically given to an agent in the agency contract, but that an agent can reasonably assume to carry out his/her duties"
+    ]
+  },
+  {
+    "question": "Which of these premium payment frequencies is not typically available to a policyowner?",
+    "correct": "Bi-weekly",
+    "explanation": "Correct. A bi-weekly payment mode is normally not an option to policyowners.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Quarterly",
+      "Semi-annual",
+      "Monthly"
+    ]
+  },
+  {
+    "question": "According to the principle of Utmost Good Faith, the insured will answer questions on the application to the best of their knowledge and pay the required premium, while the insurer will deal fairly with the insured and it's",
+    "correct": "promises made",
+    "explanation": "Correct. Without good faith, it would be difficult to reach agreement. Without agreement, there would be no valid contract.",
+    "difficulty": "medium",
+    "wrongs": [
+      "issuance of the policy",
+      "underwriting",
+      "legal reserve"
+    ]
+  },
+  {
+    "question": "Which type of beneficiary should be named if the insured wants to give explicit directions on how the policy proceeds should be paid?",
+    "correct": "Individual",
+    "explanation": "Correct. An individual beneficiary designation would be most appropriate in this situation.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Estate",
+      "Group",
+      "Class"
+    ]
+  },
+  {
+    "question": "Which type of policy combines the flexibility of a universal life policy with investment choices?",
+    "correct": "Variable universal life policy",
+    "explanation": "Correct. When the structure and flexibility of a universal life policy are combined with investment choices, the result is a variable universal life policy.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Flexible universal life policy",
+      "Modified universal life policy",
+      "Adjustable universal life policy"
+    ]
+  },
+  {
+    "question": "In an insurance contract, the applicant's \"consideration\" is the",
+    "correct": "statements made in the application and the premium",
+    "explanation": "Correct. The statements made in the application and the premium constitute \"consideration\" for a life or health insurance policy.",
+    "difficulty": "medium",
+    "wrongs": [
+      "statements made in the application only",
+      "premium only",
+      "offer and acceptance"
+    ]
+  },
+  {
+    "question": "A life insurance policy normally contains a provision that restricts coverage in the event of death under all of the following situations EXCEPT",
+    "correct": "fare-paying passenger",
+    "explanation": "Correct. A policy may contain provisions excluding or restricting coverage as specified in the event of death under all of these situations EXCEPT a fare-paying passenger.",
+    "difficulty": "medium",
+    "wrongs": [
+      "suicide",
+      "pilot of personal airplane",
+      "war"
+    ]
+  },
+  {
+    "question": "Pat is insured with a life insurance policy and Karen is his primary beneficiary. They are both involved in an automobile accident where Pat dies instantly and Karen dies 5 days later. Which policy provision will protect the rights of the contingent beneficiary to receive the policy benefits?",
+    "correct": "Common disaster clause",
+    "explanation": "Correct. With a common disaster provision, a policyowner can be sure that if both the insured and the primary beneficiary die within a short period of time, the death benefits will be paid to the contingent beneficiary.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Accident indemnity clause",
+      "Spendthrift clause",
+      "Nonforfeiture clause"
+    ]
+  },
+  {
+    "question": "All of the following are considered appropriate uses of life insurance for business purposes EXCEPT",
+    "correct": "Protecting the business by covering entry level employees with life insurance",
+    "explanation": "Correct. Covering entry level employees with life insurance to protect the business is not an appropriate business use.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Protecting the business by covering key employees with life insurance",
+      "Funding an entity buy-sell agreement",
+      "Attracting quality employees by offering a group life plan"
+    ]
+  },
+  {
+    "question": "All of the following are examples of a Business Continuation Plan EXCEPT",
+    "correct": "Deferred Compensation",
+    "explanation": "Correct. Deferred Compensation is NOT an example of a Business Continuation Plan.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Key person insurance",
+      "Stock Redemption Plan",
+      "Cross-purchase agreement"
+    ]
+  },
+  {
+    "question": "All of the following are examples of pure risk EXCEPT",
+    "correct": "Losing money at a casino",
+    "explanation": "Correct. Pure risk is a category of risk in which loss is the only possible outcome, which is the opposite of speculative risk. Gambling is considered a speculative risk where there is a chance of either gain or loss.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Jewelry stolen during a home robbery",
+      "Injured while playing football",
+      "Falling at a casino and breaking a hip"
+    ]
+  },
+  {
+    "question": "Which of the following is considered to be an event or condition that increases the probability of an insured's loss?",
+    "correct": "Hazard",
+    "explanation": "Correct. Hazards are events or conditions that increase the likelihood of an insured's loss.",
+    "difficulty": "medium",
+    "wrongs": [
+      "Peril",
+      "Indemnity",
+      "Risk"
+    ]
+  },
+  {
+    "question": "How are contributions made to a Roth IRA handled for tax purposes?",
     "correct": "Not tax deductible",
-    "explanation": "Premiums for personal life insurance are considered a personal expense and are not tax deductible.",
-    "difficulty": "easy",
+    "explanation": "Correct. Contributions made to a Roth IRA are not tax deductible.",
+    "difficulty": "medium",
     "wrongs": [
+      "Conditionally tax deductible",
       "Fully tax deductible",
-      "Tax deductible up to a small limit",
-      "Tax deductible only if the owner itemizes"
+      "Partially tax deductible"
     ]
   },
   {
-    "question": "Policy loans from a life insurance policy are generally:",
-    "correct": "Not taxable as long as the policy remains in force",
-    "explanation": "Policy loans are not taxable distributions unless the policy lapses or is surrendered with an outstanding loan.",
+    "question": "An example of risk sharing would be",
+    "correct": "Doctors pooling their money to cover malpractice exposures",
+    "explanation": "Correct. Doctors pooling their money to cover malpractice exposures is an example of risk sharing.",
     "difficulty": "medium",
     "wrongs": [
-      "Always taxed as capital gains",
-      "Taxable as ordinary income immediately",
-      "Tax deductible for the policyowner"
+      "Adding more security to a high-risk building",
+      "Buying an insurance policy to cover potential liabilities",
+      "Choosing not to invest in the stock market"
     ]
   },
   {
-    "question": "If the owner surrenders a life insurance policy for its cash value, any amount received above total premiums paid is:",
-    "correct": "Taxable as ordinary income",
-    "explanation": "The gain upon surrender (cash value minus cost basis) is taxed as ordinary income.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Tax-free return of basis only",
-      "Taxable as capital gains only",
-      "Always tax-free if held over 10 years"
-    ]
-  },
-  {
-    "question": "A policy is considered a Modified Endowment Contract (MEC) primarily when:",
-    "correct": "It fails the 7-pay test by being overfunded",
-    "explanation": "If premiums exceed limits under the 7-pay test, the policy becomes a MEC with less favorable tax treatment.",
-    "difficulty": "hard",
-    "wrongs": [
-      "It has no cash value",
-      "It is a term policy only",
-      "The insured is over age 70"
-    ]
-  },
-  {
-    "question": "Distributions from a MEC are taxed on a:",
-    "correct": "Last-in, first-out (LIFO) basis",
-    "explanation": "MEC withdrawals are taxable to the extent of gain (LIFO), before returning basis.",
-    "difficulty": "hard",
-    "wrongs": [
-      "First-in, first-out (FIFO) basis",
-      "Tax-free basis",
-      "Capital gains basis only"
-    ]
-  },
-  {
-    "question": "Group life insurance is typically written as:",
-    "correct": "Annual renewable term insurance",
-    "explanation": "Most group life plans use annually renewable term coverage for simplicity and low cost.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Straight whole life",
-      "Variable universal life",
-      "Single premium whole life"
-    ]
-  },
-  {
-    "question": "Under contributory group life plans, what percentage of eligible employees typically must participate?",
-    "correct": "At least 75%",
-    "explanation": "Most contributory group plans require a high participation rate (commonly 75%) to reduce adverse selection.",
+    "question": "People with higher loss exposure have the tendency to purchase insurance more often than those at average risk. This is called",
+    "correct": "adverse selection",
+    "explanation": "Correct. Adverse selection is the tendency of persons with higher loss exposure to purchase insurance more often than those at average risk.",
     "difficulty": "medium",
     "wrongs": [
-      "At least 25%",
-      "Exactly 50%",
-      "100% of employees"
+      "law of large numbers",
+      "preexisting conditions",
+      "risk retention"
     ]
   },
   {
-    "question": "In group life insurance, the policy is owned by the:",
-    "correct": "Employer or sponsoring organization",
-    "explanation": "The employer or sponsor holds the master contract; employees receive certificates of coverage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Each individual employee",
-      "Insurance agent",
-      "Insured’s beneficiary"
-    ]
-  },
-  {
-    "question": "A qualified retirement plan must meet IRS requirements primarily to:",
-    "correct": "Receive favorable tax treatment",
-    "explanation": "Qualified plans follow IRS rules to allow tax-deductible contributions and tax-deferred growth.",
+    "question": "A rollover from a Traditional IRA to another IRA MUST be done within ___ days to avoid tax consequences.",
+    "correct": "60",
+    "explanation": "Incorrect. The correct answer is, \"60\". A distribution received from a Traditional IRA is eligible for a tax-free rollover if it is reinvested in another IRA within 60 days following receipt of the distribution and if the plan participant does not actually take physical receipt of the distribution.",
     "difficulty": "medium",
     "wrongs": [
-      "Guarantee investment returns",
-      "Eliminate all vesting requirements",
-      "Avoid all reporting obligations"
+      "30",
+      "15",
+      "90"
     ]
   },
   {
-    "question": "Contributions to a traditional qualified plan are generally:",
-    "correct": "Tax deductible to the employer and sometimes the employee",
-    "explanation": "Qualified plan contributions usually reduce taxable income when made, subject to limits.",
+    "question": "What guarantees that the statements supplied by an insurance applicant are true?",
+    "correct": "Warranty",
+    "explanation": "Incorrect. The correct answer is, \"Warranty\". A warranty is considered a statement of fact or something guaranteed to be true. Breach of warranties can be considered grounds for voiding the policy.",
     "difficulty": "medium",
     "wrongs": [
-      "Always after-tax only",
-      "Tax deductible only after retirement",
-      "Tax deductible for beneficiaries only"
+      "Assurance",
+      "Representation",
+      "Promise"
     ]
   },
   {
-    "question": "A Section 1035 exchange allows a policyowner to:",
-    "correct": "Exchange one life policy for another without immediate tax consequences",
-    "explanation": "1035 exchanges permit certain like-kind exchanges of life and annuity contracts on a tax-deferred basis.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Avoid all future taxes permanently",
-      "Transfer policies between unrelated owners tax free",
-      "Convert a policy into real estate"
-    ]
-  },
-  {
-    "question": "Which beneficiary designation takes precedence if no contingent beneficiary is named?",
-    "correct": "Primary beneficiary",
-    "explanation": "The primary beneficiary has first rights to the policy proceeds upon the insured’s death.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Insured’s estate automatically",
-      "Insurer’s choice",
-      "State insurance department"
-    ]
-  },
-  {
-    "question": "A revocable beneficiary designation means the policyowner may:",
-    "correct": "Change the beneficiary at any time, subject to policy rules",
-    "explanation": "Revocable beneficiaries can be changed without their consent.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Never change the beneficiary",
-      "Change only with the insurer’s CEO approval",
-      "Change only upon court order"
-    ]
-  },
-  {
-    "question": "If no beneficiary is living at the insured’s death, proceeds typically:",
-    "correct": "Are paid to the insured’s estate",
-    "explanation": "If no beneficiary survives, the policy usually defaults to the insured’s estate.",
+    "question": "Which of the following signatures is not required on an individual insurance application?",
+    "correct": "Insurer",
+    "explanation": "Incorrect. The correct answer is, \"Insurer\". On an individual insurance application, the insurer's signature is not required.",
     "difficulty": "medium",
     "wrongs": [
-      "Are forfeited to the insurer",
-      "Must be donated to charity",
-      "Are paid to the insurance agent"
-    ]
-  },
-  {
-    "question": "The spendthrift clause in a life insurance policy is designed to:",
-    "correct": "Protect proceeds from the beneficiary’s creditors",
-    "explanation": "Spendthrift provisions restrict the beneficiary’s ability to assign or otherwise pledge proceeds, protecting them from creditors.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Guarantee dividends",
-      "Increase the face amount automatically",
-      "Eliminate all income taxes on benefits"
-    ]
-  },
-  {
-    "question": "Stranger-originated life insurance (STOLI) arrangements are generally viewed as:",
-    "correct": "Against public policy and often prohibited",
-    "explanation": "STOLI policies are initiated for investors’ benefit rather than true insurable interest and are often disallowed.",
-    "difficulty": "hard",
-    "wrongs": [
-      "A standard underwriting practice",
-      "Fully encouraged by regulators",
-      "A form of preferred risk classification"
-    ]
-  },
-  {
-    "question": "Industrial (home service) life insurance is typically characterized by:",
-    "correct": "Small face amounts and frequent premium collection",
-    "explanation": "Industrial life policies usually have small death benefits and premiums collected weekly or monthly at the home.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Large face amounts only",
-      "Single premium payments",
-      "Employer-paid group coverage"
-    ]
-  },
-  {
-    "question": "Credit life insurance is most often used to:",
-    "correct": "Pay off a borrower’s loan balance if they die",
-    "explanation": "Credit life is written to cover an outstanding loan, paying the lender if the borrower dies.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Provide permanent protection with cash value",
-      "Fund retirement income",
-      "Provide key person coverage"
-    ]
-  },
-  {
-    "question": "Which of the following is a primary purpose of life insurance illustration regulations?",
-    "correct": "Prevent misleading projections about non-guaranteed elements",
-    "explanation": "Illustration rules aim to ensure that non-guaranteed values are presented fairly and clearly.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Set universal premium rates",
-      "Control agent commissions",
-      "Eliminate all policy riders"
-    ]
-  },
-  {
-    "question": "The replacement of an existing life insurance policy requires the producer to:",
-    "correct": "Provide disclosures and compare old and new coverage fairly",
-    "explanation": "Replacement regulations require specific notices and comparisons to protect the consumer.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Cancel the existing policy immediately without notice",
-      "Ignore existing coverage details",
-      "Refuse to discuss surrender charges"
-    ]
-  },
-  {
-    "question": "A producer primarily represents which party in a life insurance transaction?",
-    "correct": "The insurer",
-    "explanation": "Producers are usually agents of the insurer and act on its behalf.",
-    "difficulty": "easy",
-    "wrongs": [
-      "The applicant only",
-      "The Department of Insurance",
-      "The beneficiary only"
-    ]
-  },
-  {
-    "question": "Twisting in life insurance refers to:",
-    "correct": "Inducing a lapse or surrender of a policy through misrepresentation",
-    "explanation": "Twisting is an unethical practice where a producer misleads a client to replace coverage for the producer’s gain.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Changing the policy form due to age",
-      "Accurately replacing a policy",
-      "Sharing underwriting information lawfully"
-    ]
-  },
-  {
-    "question": "Rebating occurs when a producer:",
-    "correct": "Offers a portion of their commission or something of value as an inducement to buy",
-    "explanation": "Most states restrict or prohibit rebating to prevent unfair discrimination among policyowners.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Explains all policy provisions",
-      "Collects premiums on time",
-      "Provides a policy summary"
-    ]
-  },
-  {
-    "question": "Under the principle of indemnity, an insured should:",
-    "correct": "Not profit from a loss but be restored financially",
-    "explanation": "Indemnity aims to restore the insured to the financial position they had before the loss, without profit.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Profit substantially from insured events",
-      "Always receive more than the loss amount",
-      "Bear all risk personally"
-    ]
-  },
-  {
-    "question": "A contract of adhesion means that:",
-    "correct": "The insured must accept or reject the policy as written by the insurer",
-    "explanation": "In adhesion contracts, ambiguities are usually interpreted in favor of the insured, who did not draft the contract.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Both parties negotiate every term equally",
-      "The contract can be changed unilaterally by the insured",
-      "The insurer has no obligation to pay claims"
-    ]
-  },
-  {
-    "question": "In a life policy, the owner’s rights typically include all of the following EXCEPT:",
-    "correct": "Determining the mortality tables used by the insurer",
-    "explanation": "The owner controls many rights but does not set actuarial assumptions or mortality tables.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Naming or changing beneficiaries",
-      "Taking policy loans",
-      "Assigning the policy as collateral"
-    ]
-  },
-  {
-    "question": "Which of the following is TRUE about a collateral assignment of a life policy?",
-    "correct": "The policy is pledged to a creditor as security for a loan",
-    "explanation": "Collateral assignment gives the lender rights up to the loan amount, with remaining benefits payable to the owner or beneficiary.",
-    "difficulty": "medium",
-    "wrongs": [
-      "All ownership rights transfer permanently",
-      "Beneficiary must approve all claims",
-      "Policy cannot be surrendered"
-    ]
-  },
-  {
-    "question": "Level term life insurance provides a death benefit that:",
-    "correct": "Remains the same for the duration of the term",
-    "explanation": "Level term maintains a constant face amount during the policy term.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Automatically increases each year",
-      "Automatically decreases each year",
-      "Can never be renewed"
-    ]
-  },
-  {
-    "question": "Annually renewable term life insurance is characterized by:",
-    "correct": "Renewal each year with premiums that typically increase",
-    "explanation": "ART renews yearly and usually has increasing premiums due to the insured’s increasing age.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Level premiums for life",
-      "Decreasing premiums and decreasing coverage",
-      "Guaranteed cash values each year"
-    ]
-  },
-  {
-    "question": "Which of the following statements about whole life cash value is TRUE?",
-    "correct": "It grows tax-deferred and can be accessed via policy loans",
-    "explanation": "Whole life cash value accumulates on a tax-deferred basis and can be borrowed against, subject to policy terms.",
-    "difficulty": "medium",
-    "wrongs": [
-      "It is taxable each year as ordinary income",
-      "It declines over time",
-      "It can never be used as collateral"
-    ]
-  },
-  {
-    "question": "Which life policy combines term insurance on children with permanent coverage on the primary insured?",
-    "correct": "Family rider attached to a whole life policy",
-    "explanation": "Family riders provide term coverage for spouse and children on the base insured’s permanent policy.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Joint life policy only",
-      "Credit life policy",
-      "Industrial policy"
-    ]
-  },
-  {
-    "question": "Joint life policies generally pay the death benefit:",
-    "correct": "Upon the first insured’s death",
-    "explanation": "Joint life pays at the first death, often used for business buy-sell or income needs.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Only upon the last insured’s death",
-      "In equal installments during both lives",
-      "Only if both insureds die together"
-    ]
-  },
-  {
-    "question": "Survivorship life (second-to-die) policies pay the death benefit:",
-    "correct": "After the death of the last insured",
-    "explanation": "Survivorship life is frequently used for estate planning to pay taxes due at the second death.",
-    "difficulty": "hard",
-    "wrongs": [
-      "At the first insured’s death",
-      "On a monthly basis during both lives",
-      "Only if both insureds die simultaneously"
-    ]
-  },
-  {
-    "question": "Which of the following statements about variable universal life (VUL) is TRUE?",
-    "correct": "It combines flexible premiums with investment options in separate accounts",
-    "explanation": "VUL policies offer flexible premiums and death benefits with cash values invested in separate accounts, so the policyowner bears investment risk.",
-    "difficulty": "hard",
-    "wrongs": [
-      "It guarantees fixed interest on cash values",
-      "It cannot be used for retirement accumulation",
-      "It eliminates all investment risk for the policyowner"
-    ]
-  },
-  {
-    "question": "A policy illustration that shows values not guaranteed by the contract must:",
-    "correct": "Clearly distinguish between guaranteed and non-guaranteed elements",
-    "explanation": "Regulations require that non-guaranteed elements be clearly marked and not misleading.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Guarantee all projected values",
-      "Exclude any mention of interest rates",
-      "Be approved by the beneficiary"
-    ]
-  },
-  {
-    "question": "An example of an unfair claim settlement practice is:",
-    "correct": "Failing to promptly investigate a claim",
-    "explanation": "Unfair claims practices include unreasonable delays, misrepresentation, or failing to conduct a proper investigation.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Paying a valid claim quickly",
-      "Requesting reasonable documentation",
-      "Clarifying policy provisions for the insured"
-    ]
-  },
-  {
-    "question": "Which of the following is TRUE regarding participating whole life policies?",
-    "correct": "They may pay dividends to policyowners",
-    "explanation": "Participating policies may pay dividends if the insurer’s experience is favorable, but dividends are not guaranteed.",
-    "difficulty": "medium",
-    "wrongs": [
-      "They never build cash value",
-      "They are sold only as group policies",
-      "They always guarantee dividends"
-    ]
-  },
-  {
-    "question": "Which statement about non-participating whole life policies is CORRECT?",
-    "correct": "They do not pay dividends to policyowners",
-    "explanation": "Non-participating whole life does not pay dividends; benefits are limited to the guaranteed values in the contract.",
-    "difficulty": "medium",
-    "wrongs": [
-      "They always pay annual dividends",
-      "They have no guaranteed cash value",
-      "They are sold only as term riders"
-    ]
-  },
-  {
-    "question": "Which life policy type is MOST likely to lapse if premiums are not paid when due and there is no cash value?",
-    "correct": "Term life insurance",
-    "explanation": "Term policies provide no cash value and will lapse if premiums are not paid and no grace period or other protection applies.",
-    "difficulty": "hard",
-    "wrongs": [
-      "Whole life insurance",
-      "Universal life with high cash value",
-      "Single premium whole life"
-    ]
-  },
-  {
-    "question": "Which party listed is NOT a party to a life insurance contract?",
-    "correct": "Underwriter",
-    "explanation": "Underwriters are employees of the insurer who evaluate risk; they are not parties to the contract, whereas the insurer, owner and insured are parties.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Insurer",
-      "Owner",
+      "Producer",
+      "Applicant",
       "Insured"
     ]
   },
   {
-    "question": "What term refers to the period during which a policyholder can pay an overdue premium without losing the policy?",
-    "correct": "Grace period",
-    "explanation": "Most life policies include a grace period, giving the policyholder time to pay an overdue premium before the policy lapses.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Probation period",
-      "Evaluation period",
-      "Waiting period"
-    ]
-  },
-  {
-    "question": "After the birth of his daughter, what should James do to ensure his life insurance meets his family’s needs?",
-    "correct": "Increase his life insurance policy death benefit",
-    "explanation": "Life-changing events such as the birth of a child usually require more coverage; increasing the death benefit ensures sufficient protection.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Cancel his policy",
-      "Decrease his policy death benefit",
-      "Stop paying premiums"
-    ]
-  },
-  {
-    "question": "Mr. Smith has a whole life policy and needs funds for nursing home expenses. What part of his policy can he access?",
-    "correct": "The living benefits",
-    "explanation": "Permanent policies build cash value that can be used for living benefits, such as funding long-term care, while investment and death benefits aren’t accessible until maturity or death.",
-    "difficulty": "easy",
-    "wrongs": [
-      "The investment benefits",
-      "The death benefits",
-      "The annuity benefits"
-    ]
-  },
-  {
-    "question": "Jack has a temporary need for life insurance to cover his 15-year mortgage. Which policy best meets this need?",
-    "correct": "Term Life Insurance",
-    "explanation": "Term insurance provides coverage for a specified period and is ideal for temporary obligations like a mortgage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Whole Life Insurance",
-      "Variable Life Insurance",
-      "A Viatical Settlement"
-    ]
-  },
-  {
-    "question": "Which statement correctly describes a key characteristic of group life insurance?",
-    "correct": "It is often part of an employer or membership benefit package",
-    "explanation": "Group life is typically offered through employers or associations; premiums are based on the group, not individual underwriting.",
-    "difficulty": "easy",
-    "wrongs": [
-      "It is generally purchased individually",
-      "Coverage amount is based on individual health assessments",
-      "Premiums are significantly higher than individual policies"
-    ]
-  },
-  {
-    "question": "Which type of life insurance pays a benefit only if the insured dies within a specified period?",
-    "correct": "Term Life Insurance",
-    "explanation": "Term policies provide coverage for a fixed period and pay out only if death occurs during that term.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Variable Life Insurance",
-      "Whole Life Insurance",
-      "Universal Life Insurance"
-    ]
-  },
-  {
-    "question": "Which type of permanent life insurance offers both a death benefit and a cash value component?",
-    "correct": "Universal Life Insurance",
-    "explanation": "Universal life combines a death benefit with a cash accumulation account, unlike term policies.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Term Life Insurance",
-      "Decreasing Term Insurance",
-      "Renewable Term Insurance"
-    ]
-  },
-  {
-    "question": "Which life insurance policy type is considered riskier because of its investment component?",
-    "correct": "Variable Life Insurance",
-    "explanation": "Variable life invests premium dollars in separate accounts; returns depend on investment performance, so the risk is higher.",
+    "question": "Which of the following statements is CORRECT regarding an individual applying for life or health insurance?",
+    "correct": "The applicant's medical history may be analyzed and reported",
+    "explanation": "Correct. To apply for a life or health insurance policy, an applicant's medical history may be reviewed and reported.",
     "difficulty": "medium",
     "wrongs": [
-      "Level Term Life Insurance",
-      "Whole Life Insurance",
-      "Decreasing Term Life Insurance"
+      "The applicant's medical history is irrelevant",
+      "The applicant waives all privacy rights",
+      "The applicant's family medical history is always required"
     ]
   },
   {
-    "question": "Life insurance underwriters consider many factors when evaluating applicants. Which is true?",
-    "correct": "They consider health history, occupation and hobbies",
-    "explanation": "Underwriters assess overall risk by reviewing health, occupation, hobbies and other factors.",
+    "question": "Which type of rider will waive the premium on a child's life insurance policy if the parent paying the premium dies?",
+    "correct": "Payor benefit",
+    "explanation": "Correct. A payor benefit will waive the premium on a juvenile life insurance policy if the parent paying the premium dies.",
     "difficulty": "medium",
     "wrongs": [
-      "They consider only health history and occupation",
-      "They consider only hobbies",
-      "They do not consider hobbies"
+      "Guaranteed insurability",
+      "Juvenile waiver",
+      "Waiver of premium"
     ]
   },
   {
-    "question": "What does underwriting in life insurance primarily involve?",
-    "correct": "Evaluating the risk of insuring a person",
-    "explanation": "Underwriting assesses the applicant’s risk level to set appropriate premiums and policy terms.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Determining the policy type",
-      "Choosing the beneficiaries",
-      "Deciding the policy duration"
-    ]
-  },
-  {
-    "question": "In a life insurance contract, the principle of 'Utmost Good Faith' means:",
-    "correct": "The insured and insurer must disclose all relevant information",
-    "explanation": "Utmost good faith requires both parties to be honest and disclose material facts.",
+    "question": "An applicant's character and personal habits can be obtained for underwriting purposes from which source?",
+    "correct": "Investigative consumer report",
+    "explanation": "Correct. An investigative consumer report is a detailed report that contains information on a consumer's character, general reputation, personal characteristics, or mode of living and is obtained through personal interviews with neighbors, friends, or associates of the consumer.",
     "difficulty": "medium",
     "wrongs": [
-      "The insurer must cover all claims",
-      "The policy is guaranteed to be profitable",
-      "The premiums are fixed for life"
+      "Medical Information Bureau (MIB)",
+      "Attending physician's statement",
+      "Credit report"
     ]
   },
   {
-    "question": "Who must have an insurable interest for a life insurance policy to be issued?",
-    "correct": "The owner",
-    "explanation": "The policy owner must have a financial interest in the insured’s life when the policy is purchased.",
+    "question": "A waiver of premium rider allows an insured to waive premium payments if the insured is",
+    "correct": "completely and permanently disabled",
+    "explanation": "Incorrect. The correct answer is, \"completely and permanently disabled\". Under a waiver of premium rider, the company waives the right to receive a premium if the insured individual is permanently and completely disabled.",
     "difficulty": "medium",
     "wrongs": [
-      "The insurer",
-      "The beneficiary",
-      "The insured"
+      "unemployed",
+      "temporarily disabled",
+      "experiencing financial hardship"
     ]
   },
   {
-    "question": "The legal framework allowing someone to act on behalf of another party in creating a contract is called the:",
-    "correct": "Law of agency",
-    "explanation": "Insurance agents operate under the law of agency, allowing them to bind the insurer in contracts.",
+    "question": "An endorsement found in an insurance plan which modifies the provisions of the policy is called a(n)",
+    "correct": "rider",
+    "explanation": "Correct. An endorsement found in an insurance plan which modifies the provisions of the policy is called a rider.",
     "difficulty": "medium",
     "wrongs": [
-      "Law of principals",
-      "Law of third parties",
-      "None of the above"
+      "add-on",
+      "attachment",
+      "supplement"
     ]
   },
   {
-    "question": "Which event below is NOT typically considered a life-changing event that could alter life insurance needs?",
-    "correct": "Change in job title",
-    "explanation": "Life-changing events include births, marriages and divorces—not a change in job title.",
+    "question": "All of these are common exclusions to a life insurance policy EXCEPT",
+    "correct": "accidental death",
+    "explanation": "Incorrect. The correct answer is, \"accidental death\". Accidental death is not a common exclusion to a life insurance policy.",
     "difficulty": "medium",
     "wrongs": [
-      "Birth of a child",
-      "Divorce",
-      "Marriage"
+      "hazardous occupations",
+      "aviation",
+      "military service"
     ]
   },
   {
-    "question": "When conducting a life insurance needs analysis, which factors should be considered?",
-    "correct": "All of the above (age, hobbies/lifestyle, dependents and future obligations)",
-    "explanation": "A comprehensive needs analysis looks at age, lifestyle, dependents and future financial obligations.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Age of the policyholder only",
-      "Hobbies and lifestyle only",
-      "Number of dependents only"
-    ]
-  },
-  {
-    "question": "Term life insurance should always be used in buy-sell agreements. True or false?",
-    "correct": "False",
-    "explanation": "Term life may be used for some buy–sell agreements, but permanent insurance is often preferred; it is not always mandatory.",
+    "question": "An applicant intentionally lying to an insurance company on an application in order to obtain a cheaper premium is an example of",
+    "correct": "fraud",
+    "explanation": "Correct. A deliberate lie by an insured to the insurance company in order to obtain a lower premium is an example of fraud.",
     "difficulty": "medium",
     "wrongs": [
-      "True"
+      "twisting",
+      "coercion",
+      "rebating"
     ]
   },
   {
-    "question": "In estate planning, life insurance can help beneficiaries primarily by:",
-    "correct": "Covering estate taxes and final expenses",
-    "explanation": "Proceeds can pay estate taxes and final expenses, ensuring assets pass to heirs without liquidation.",
+    "question": "An insurance company needs to obtain personal information from a third party concerning an applicant. Which law do all insurers and their producers need to comply with?",
+    "correct": "Fair Credit Reporting Act",
+    "explanation": "Correct. To protect the rights of consumers for whom an inspection or credit report has been requested, Congress enacted the Fair Credit Reporting Act in 1970.",
     "difficulty": "medium",
     "wrongs": [
-      "Serving as collateral for loans",
-      "Acting as a primary investment vehicle",
-      "Directly transferring business ownership"
+      "Personal Information Act",
+      "McCarran-Ferguson Act",
+      "USA Patriot Act"
     ]
   },
   {
-    "question": "How can life insurance help a small business owner ensure business continuity?",
-    "correct": "All of the above (cover operational costs, buy out a deceased partner's share, pay creditors)",
-    "explanation": "Life insurance proceeds can fund buy-sell agreements, pay debts and keep operations running.",
+    "question": "If an insured dies during the grace period with no premiums paid",
+    "correct": "the policy would be payable, minus the premium amount",
+    "explanation": "Correct. If the insured dies during the grace period and premiums have NOT been paid, the policy would be payable, less the premium amount.",
     "difficulty": "medium",
     "wrongs": [
-      "Cover operational costs only",
-      "Provide funds to buy out a deceased partner’s share only",
-      "Pay creditors only"
+      "the claim would be denied",
+      "all past premiums will be refunded with interest",
+      "the policy would be payable only after the beneficiary makes past due premium payment"
     ]
   },
   {
-    "question": "Corporate-owned life insurance proceeds may be used to replace a deceased key employee, fund debt obligations and redeem the employee’s stock. What is the correct answer?",
-    "correct": "All of the above",
-    "explanation": "Key-person life insurance can fund recruitment/training, pay corporate debts and redeem the deceased’s shares.",
+    "question": "Matt is applying for life insurance and requests a double indemnity rider. A double indemnity benefit will be payable to Matt's beneficiary if Matt",
+    "correct": "dies instantly from a car accident",
+    "explanation": "Correct. Matt's beneficiary will be provided with the double indemnity rider if Matt dies instantly from a car accident.",
     "difficulty": "medium",
     "wrongs": [
-      "III only",
-      "I and III only",
-      "None of the above"
+      "dies of a stroke",
+      "is injured in a skiing accident and dies 18 months later",
+      "is killed while committing a felony"
     ]
   },
   {
-    "question": "What is the most common component of all life insurance policies?",
-    "correct": "Death benefit",
-    "explanation": "All life policies provide a death benefit payable upon the insured’s death.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Living benefits",
-      "Waiver of premium",
-      "Cost of living rider"
-    ]
-  },
-  {
-    "question": "Which of the following is a type of non-forfeiture option in life insurance?",
-    "correct": "An option to receive reduced paid-up insurance or cash surrender value",
-    "explanation": "Non-forfeiture options include reduced paid-up insurance and cash surrender; they allow the policy owner to keep some benefits.",
-    "difficulty": "easy",
-    "wrongs": [
-      "An option to terminate the policy with no benefits",
-      "None of the above",
-      "All options are forfeited"
-    ]
-  },
-  {
-    "question": "Permanent life insurance policies always have which two components?",
-    "correct": "Death benefit and cash value",
-    "explanation": "Permanent policies combine a death benefit with a cash value that grows over time.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Death benefit and conversion benefit",
-      "Cash value and living benefits",
-      "All of the above"
-    ]
-  },
-  {
-    "question": "What value does a beneficiary receive upon the death of the insured?",
-    "correct": "Death benefit",
-    "explanation": "Upon death, the insurer pays the death benefit, not the accumulated cash value or surrender value.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Cash value",
-      "Surrender value",
-      "Investment value"
-    ]
-  },
-  {
-    "question": "In a life insurance policy, what is a settlement option?",
-    "correct": "The way a beneficiary chooses to receive the death benefit",
-    "explanation": "Settlement options let the beneficiary decide how to receive the proceeds (lump sum, installments, etc.).",
-    "difficulty": "easy",
-    "wrongs": [
-      "The method chosen by the insurer",
-      "The process of disputing a claim",
-      "Options for investing the policy’s cash value"
-    ]
-  },
-  {
-    "question": "John’s wife filed a life insurance claim on September 5, and the claim was settled on October 30. Were any laws violated?",
-    "correct": "No, the agent filed the paperwork within 30 days of the claim",
-    "explanation": "Regulations typically require claims to be processed within a reasonable time frame (often 30 days); filing and settlement occurred within this period.",
+    "question": "In regards to a life insurance contract, which of the following statements is NOT true regarding the concept of insurable interest?",
+    "correct": "Insurable interest can be established sufficiently by sentimental attachment alone",
+    "explanation": "Correct. All of these statements on insurable interest in a life insurance contract are true EXCEPT \"Insurable interest can be established sufficiently by sentimental attachment alone\".",
     "difficulty": "medium",
     "wrongs": [
-      "Yes, the claim was not settled within 30 days",
-      "No, there are suspicions around the death",
-      "Yes, the claim was not settled within 15 days"
+      "Insurable interest is established by a court of law",
+      "Insurable interest must exist at the time of the application",
+      "Individuals are assumed to have insurable interest in themselves"
     ]
   },
   {
-    "question": "Which rider allows a terminally ill insured to access part of the death benefit before death?",
-    "correct": "Living benefit",
-    "explanation": "An accelerated or living benefit rider permits the insured to receive a portion of the death benefit when diagnosed with a terminal illness.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Waiver",
-      "Supplement",
-      "Addendum"
-    ]
-  },
-  {
-    "question": "What distinguishes a viatical settlement from a life settlement?",
-    "correct": "Viatical settlements involve terminally ill policyholders, while life settlements do not",
-    "explanation": "In a viatical settlement, a terminally ill insured sells their policy; life settlements are typically for seniors who are not terminally ill.",
+    "question": "The suicide clause of a life insurance policy states that if an insured commits suicide within a stated period from the policy's inception, the insurer will only be liable for a return of premiums paid",
+    "correct": "minus indebtedness and without interest",
+    "explanation": "Correct. The suicide clause of a life insurance policy states that if an insured commits suicide within a stated period from the policy's inception, the insurer will only be liable for a return of premiums paid minus indebtedness and without interest.",
     "difficulty": "medium",
     "wrongs": [
-      "Viatical settlements are for older policyholders, life settlements for younger ones",
-      "Life settlements always involve a lump-sum payment",
-      "Viatical settlements are tax-free"
+      "during the last 6 months",
+      "during the last 12 months",
+      "minus indebtedness and with interest"
     ]
   },
   {
-    "question": "How can living benefits on a life insurance policy typically be accessed?",
-    "correct": "All of the above (lump sum, regular installments, or loan)",
-    "explanation": "Policies often allow living benefits via a cash advance (lump sum), periodic payments or policy loans.",
+    "question": "Ownership of a life insurance policy may be temporarily transferred with a(n)",
+    "correct": "collateral assignment",
+    "explanation": "Incorrect. The correct answer is, \"collateral assignment\". An owner of a life insurance policy may transfer ownership temporarily with a collateral assignment.",
     "difficulty": "medium",
     "wrongs": [
-      "Lump sum only",
-      "Regular installments only",
-      "Loan only"
+      "beneficiary assignment",
+      "transferable assignment",
+      "absolute assignment"
     ]
   },
   {
-    "question": "Because the insured party has no role in drafting the wording, insurance contracts are considered:",
-    "correct": "Contracts of Adhesion",
-    "explanation": "In contracts of adhesion, one party (the insurer) drafts the terms, and the insured accepts or rejects them.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Contracts of Forbearance",
-      "Contracts by Regulation",
-      "Contracts by Law"
-    ]
-  },
-  {
-    "question": "What role does government regulation typically play in health insurance?",
-    "correct": "It establishes standards and guidelines for health insurance policies",
-    "explanation": "Governments set standards and enforce consumer protections but do not dictate every procedure or premium for private insurers.",
+    "question": "What is the name of the provision which states that a copy of the application must be attached to the policy when issued?",
+    "correct": "Entire Contract",
+    "explanation": "Incorrect. The correct answer is, \"Entire Contract\". The provision that the policy and a copy of an application is endorsed upon or attached to the policy when issued is the entire contract provision.",
     "difficulty": "medium",
     "wrongs": [
-      "It determines the medical procedures covered under all plans",
-      "It sets premium rates for private insurers",
-      "It directly provides health insurance to all citizens"
+      "Buyer's Guide",
+      "Entire Policy",
+      "Policy Summary"
     ]
   },
   {
-    "question": "What is the insuring clause in an insurance contract?",
-    "correct": "A statement by the insurer promising to pay for covered losses",
-    "explanation": "The insuring clause outlines the insurer’s promise to pay according to policy terms.",
-    "difficulty": "easy",
-    "wrongs": [
-      "The beneficiary designation",
-      "The premium amount",
-      "A rider"
-    ]
-  },
-  {
-    "question": "Which of the following is NOT a form of health insurance?",
-    "correct": "None of the above (all listed are forms of health insurance)",
-    "explanation": "Dental, vision, disability and long-term care are all forms of health-related coverage, so none is excluded.",
+    "question": "Which of the following is a reinstatement condition?",
+    "correct": "Proof of insurability",
+    "explanation": "Correct. One of the conditions required for an insurance policy reinstatement is proof of insurability.",
     "difficulty": "medium",
     "wrongs": [
-      "Dental insurance",
-      "Vision insurance",
-      "Long-term care insurance"
+      "Premium increase",
+      "Premium decrease",
+      "Changes in the insuring clause"
     ]
   },
   {
-    "question": "A key difference between a PPO and an HMO is that:",
-    "correct": "PPO plans offer more flexibility in choosing providers outside the network",
-    "explanation": "PPOs permit out-of-network care (usually at higher cost), while HMOs generally require staying within the network.",
-    "difficulty": "easy",
-    "wrongs": [
-      "PPOs cover only preventive services",
-      "HMOs have higher out-of-pocket costs",
-      "HMOs offer wider provider choice"
-    ]
-  },
-  {
-    "question": "A business client wants lower premiums and opts for a high-deductible health plan. What should the agent discuss?",
-    "correct": "Health Savings Account (HSA)",
-    "explanation": "High-deductible plans are often paired with HSAs, which let participants save pre-tax funds for healthcare expenses.",
+    "question": "Which of these is NOT considered to be a nonforfeiture option in a whole life insurance policy?",
+    "correct": "Interest only",
+    "explanation": "Correct. In a whole life insurance policy, all of these are nonforfeiture options EXCEPT interest only.",
     "difficulty": "medium",
     "wrongs": [
-      "HMO",
-      "PPO",
-      "POS"
+      "Cash surrender",
+      "Extended term insurance",
+      "Reduced paid-up insurance"
     ]
   },
   {
-    "question": "Which of the following is NOT a component of a long-term care insurance policy?",
-    "correct": "Own occupation",
-    "explanation": "Long-term care policies include an elimination period, benefit amount and duration; ‘own occupation’ relates to disability coverage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Elimination period",
-      "Benefit amount",
-      "Benefit duration"
-    ]
-  },
-  {
-    "question": "Which of the following is commonly excluded under most health insurance policies?",
-    "correct": "Cosmetic surgery",
-    "explanation": "Cosmetic and elective procedures are typically excluded from standard health coverage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Emergency room visits",
-      "Annual physical exams",
-      "Prescription medications"
-    ]
-  },
-  {
-    "question": "When constructing a major medical insurance policy, which criteria must be established?",
-    "correct": "All of the above (deductible, maximum out-of-pocket amount, elimination period)",
-    "explanation": "A major medical policy requires setting the deductible, out-of-pocket maximum and elimination period.",
+    "question": "All of the following riders can increase the death benefit amount EXCEPT",
+    "correct": "Waiver of Premium",
+    "explanation": "Incorrect. The correct answer is, \"Waiver of Premium\". All of the following riders can increase the death benefit amount EXCEPT the Waiver of Premium.",
     "difficulty": "medium",
     "wrongs": [
-      "Policy deductible only",
-      "Deductible and out-of-pocket only",
-      "Elimination period only"
+      "Cost of Living",
+      "Guaranteed Insurability",
+      "Accidental Death Rider"
     ]
   },
   {
-    "question": "An agent offers a vacation to induce an applicant to buy a policy. Is this allowed and what is it called?",
-    "correct": "No; it is considered rebating",
-    "explanation": "Offering an incentive unrelated to the policy is illegal rebating.",
-    "difficulty": "easy",
-    "wrongs": [
-      "No; misrepresentation",
-      "No; twisting",
-      "Yes; it is acceptable"
-    ]
-  },
-  {
-    "question": "An agent encourages a client to let his policy lapse so he can sell a new policy. What is this practice called?",
-    "correct": "Twisting",
-    "explanation": "Twisting involves inducing a policyholder to surrender existing coverage in favor of a similar policy for the agent’s benefit.",
+    "question": "All of these are valid policy dividend options for a life insurance policyowner EXCEPT",
+    "correct": "accumulate without interest",
+    "explanation": "Correct. Policyowner dividends normally accumulate WITH interest.",
     "difficulty": "medium",
     "wrongs": [
-      "Rebating",
-      "Bait and switch",
-      "Acceptable marketing"
+      "reduction in policy premium",
+      "cash outlay to the policyowner",
+      "buy additional insurance coverage"
     ]
   },
   {
-    "question": "During policy delivery, what additional step should the agent emphasize?",
-    "correct": "Thoroughly reviewing the policy with the client to ensure understanding",
-    "explanation": "Proper delivery includes reviewing the policy, confirming accuracy and ensuring the client understands their coverage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Immediately starting coverage",
-      "Advising the client to store it securely",
-      "Encouraging the client to shop for more coverage"
-    ]
-  },
-  {
-    "question": "A ______ is the amount an insured must pay at the time of service under a health insurance plan.",
-    "correct": "Copayment",
-    "explanation": "Copayments are fixed amounts paid for services; deductibles are the amounts paid before coverage starts.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Deductible",
-      "Reimbursement",
-      "Corridor"
-    ]
-  },
-  {
-    "question": "How does choosing a higher deductible typically affect health insurance premiums?",
-    "correct": "Higher deductibles typically result in lower premiums",
-    "explanation": "Premiums generally decrease when the insured assumes more upfront cost through a higher deductible.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Higher deductibles lead to higher premiums",
-      "Lower deductibles lower premiums",
-      "Deductibles have no impact"
-    ]
-  },
-  {
-    "question": "In long-term care insurance, the 'deductible' is referred to as the:",
-    "correct": "Elimination period",
-    "explanation": "The elimination period is the waiting period before benefits begin; it functions like a deductible in long-term care policies.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Deductible",
-      "Coinsurance",
-      "Copayment"
-    ]
-  },
-  {
-    "question": "What is the key difference between indemnity and reimbursement health insurance plans?",
-    "correct": "Indemnity plans pay a fixed benefit regardless of actual expenses; reimbursement plans pay back actual expenses",
-    "explanation": "Indemnity coverage provides set benefits, whereas reimbursement plans pay covered costs up to policy limits.",
+    "question": "An attending physician's statement would be appropriate for which life insurance purpose?",
+    "correct": "At the request of the applicant to assist in the underwriting decision",
+    "explanation": "Correct. An attending physician's statement is done at the request of the insurer when it could affect the underwriting decision, but with the consent of the applicant.",
     "difficulty": "medium",
     "wrongs": [
-      "Reimbursement plans offer wider networks",
-      "Indemnity plans require referrals",
-      "Reimbursement plans have higher premiums"
+      "At the request of the producer to assist in the underwriting decision",
+      "At the request of the insurer to assist in the underwriting decision",
+      "Attending physician's statements are mandatory during the application process"
     ]
   },
   {
-    "question": "Which type of disability coverage offers the broadest benefit triggers for a professional surgeon who breaks their hand?",
-    "correct": "Own occupation",
-    "explanation": "An own-occupation policy pays if the insured cannot perform the specific duties of their regular occupation.",
+    "question": "An error was made on Mary's life insurance application. Which of the following areas do errors commonly occur on applications and for which the incontestable clause does NOT apply?",
+    "correct": "Age",
+    "explanation": "Incorrect. The correct answer is, \"Age\". The incontestable clause does not apply to the misstatement of age provision.",
     "difficulty": "medium",
     "wrongs": [
-      "Employer provided",
-      "Social Security",
-      "Business overhead"
+      "Address",
+      "Marital status",
+      "Income"
     ]
   },
   {
-    "question": "Social Security should be considered one’s primary source of disability income coverage. True or false?",
-    "correct": "False",
-    "explanation": "Social Security disability benefits are difficult to qualify for and provide limited income, so they should not be the primary source.",
+    "question": "A life insurance policyowner does NOT have the right to",
+    "correct": "revoke an absolute assignment",
+    "explanation": "Correct. A policyowner may not revoke an absolute assignment.",
     "difficulty": "medium",
     "wrongs": [
-      "True"
+      "take out a policy loan",
+      "select a beneficiary",
+      "change a beneficiary"
     ]
   },
   {
-    "question": "What does \"own occupation\" mean in a disability insurance policy?",
-    "correct": "Benefits are paid if the policyholder cannot work in their specific occupation due to disability",
-    "explanation": "\"Own occupation\" policies pay benefits when the insured cannot perform the substantial duties of their current job.",
-    "difficulty": "easy",
-    "wrongs": [
-      "It covers only occupational hazards",
-      "It insures the policyholder against disability in any occupation they’re qualified for",
-      "It covers only short-term disabilities"
-    ]
-  },
-  {
-    "question": "Which risk management principle refers to spreading risk among multiple parties to minimize the financial impact on any one party?",
-    "correct": "Risk transfer",
-    "explanation": "Risk transfer shifts the financial burden to an insurer or another party, distributing losses across a pool.",
+    "question": "Of the following dividend options, which of these is taxable?",
+    "correct": "Accumulation at interest",
+    "explanation": "Incorrect. The correct answer is, \"Accumulation at interest\". The accumulation at interest is a taxable dividend option.",
     "difficulty": "medium",
     "wrongs": [
-      "Risk avoidance",
-      "Risk reduction",
-      "Risk retention"
+      "Paid-up additions",
+      "One year term",
+      "Reduction of premium"
     ]
   },
   {
-    "question": "If a licensed insurance producer submits an application missing required disclosures and with inaccurate coverage information, what is the likely consequence?",
-    "correct": "The application will be denied and the producer may face penalties",
-    "explanation": "Incomplete or inaccurate applications violate insurance regulations and can lead to denial and disciplinary action.",
+    "question": "What is an insurer required to do when faced with an error made under the Misstatement of Age provision?",
+    "correct": "Pay age-corrected benefits",
+    "explanation": "Correct. Under the Misstatement of Age Provision, when done in error, an insurer must pay age-corrected benefits.",
     "difficulty": "medium",
     "wrongs": [
-      "The policy will be issued with a penalty",
-      "The policy will be issued but coverage delayed",
-      "The insurer will issue a warning and proceed"
-    ]
-  },
-  {
-    "question": "Jessica has a claims-made liability policy; a lawsuit is filed during the policy period for an incident 18 months ago. What should she check?",
-    "correct": "Review the policy for a retroactive date provision",
-    "explanation": "Claims-made policies may cover incidents occurring before the policy’s start date only if a retroactive date applies.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Proceed because the claim was filed during the policy period",
-      "Deny the claim because it occurred before the policy",
-      "File the claim without regard to timing"
-    ]
-  },
-  {
-    "question": "When must insurable interest exist for a life insurance policy?",
-    "correct": "At policy purchase and at the time of loss",
-    "explanation": "Insurable interest must exist when the policy is purchased and at the time of loss; otherwise, there is no legal basis for payment.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Only at policy renewal",
-      "It is not required for health insurance claims",
-      "It is not required for life insurance"
-    ]
-  },
-  {
-    "question": "What is a primary function of an insurance underwriter?",
-    "correct": "Assess risk and determine premiums",
-    "explanation": "Underwriters evaluate applications to set premiums that reflect the applicant’s risk level.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Handle claims and payouts",
-      "Develop new products",
-      "Investigate fraud"
-    ]
-  },
-  {
-    "question": "If a client hides prior driving violations before filing an auto claim, what should the insurance agent do?",
-    "correct": "Inform the insurer of the misrepresentation",
-    "explanation": "Producers are obligated to report material misrepresentations; failing to do so could be fraudulent.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Advise the client to settle privately",
-      "Ignore the issue",
-      "Let the client handle it alone"
-    ]
-  },
-  {
-    "question": "Under Michigan’s no-fault insurance law, which statement is true?",
-    "correct": "A driver’s own insurance covers medical expenses regardless of fault",
-    "explanation": "No-fault law provides personal injury protection, so each driver’s insurer covers their own medical expenses.",
-    "difficulty": "medium",
-    "wrongs": [
-      "It covers only bodily injury",
-      "It requires $100,000 in property damage coverage",
-      "It applies only on highways"
-    ]
-  },
-  {
-    "question": "What does the free-look period in a life insurance policy allow?",
-    "correct": "Cancel the policy for a full refund within a specified period",
-    "explanation": "The free-look period permits new policyholders to cancel for a full refund, typically within 10–30 days.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Review the policy for 30 days before paying",
-      "Change the policy without penalty",
-      "Lock in the best interest rates"
-    ]
-  },
-  {
-    "question": "Which insurance covers a business owner if a customer is injured on the premises?",
-    "correct": "General liability",
-    "explanation": "General liability covers bodily injury or property damage to third parties on the business premises.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Commercial auto",
-      "Workers’ compensation",
-      "Professional liability"
-    ]
-  },
-  {
-    "question": "Which feature is unique to variable life insurance?",
-    "correct": "Ability to invest cash value in market options",
-    "explanation": "Variable life policies allow the cash value to be invested in separate accounts such as stocks or bonds.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Guaranteed fixed cash value",
-      "Fixed premiums regardless of age",
-      "Guaranteed refund of premiums"
-    ]
-  },
-  {
-    "question": "What consequence can a Michigan insurance producer face for misrepresentation?",
-    "correct": "Fines, suspension, or license revocation",
-    "explanation": "Michigan law authorizes disciplinary actions—including fines and license suspension—for misrepresentation.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Mandatory commission refund",
-      "Automatic permanent license loss",
-      "Paying damages only"
-    ]
-  },
-  {
-    "question": "What is Michigan’s continuing education (CE) requirement for insurance producers?",
-    "correct": "Minimum CE hours every two years",
-    "explanation": "Producers must complete a specified number of CE hours each licensing cycle to maintain their license.",
-    "difficulty": "medium",
-    "wrongs": [
-      "No CE after 20 years licensed",
-      "CE is optional",
-      "CE can be completed anytime"
-    ]
-  },
-  {
-    "question": "What best defines underinsurance?",
-    "correct": "Having coverage less than the property’s value",
-    "explanation": "Underinsurance occurs when policy limits are insufficient to fully cover a loss.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Having more coverage than needed",
-      "Full coverage of all risks",
-      "Coverage exceeding property value"
-    ]
-  },
-  {
-    "question": "Which statement accurately describes a claims-made liability policy?",
-    "correct": "It covers claims made during the policy period regardless of when the incident occurred (subject to retroactive date)",
-    "explanation": "Claims-made policies respond to claims filed during the policy period, even if the event occurred earlier, provided it is after the retroactive date.",
-    "difficulty": "medium",
-    "wrongs": [
-      "It covers incidents and claims within the policy period only",
-      "It covers incidents during the policy period regardless of claim date",
-      "It is effective only when the insurer files a claim"
-    ]
-  },
-  {
-    "question": "A customer slips and sues John’s retail store. Which section of his business owner’s policy covers this claim?",
-    "correct": "General liability",
-    "explanation": "A business owner’s policy includes general liability coverage for bodily injury to third parties.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Commercial auto",
-      "Workers’ compensation",
-      "Property insurance"
-    ]
-  },
-  {
-    "question": "What is the key difference between term and whole life insurance?",
-    "correct": "Term is temporary while whole life is permanent",
-    "explanation": "Term insurance provides coverage for a set period; whole life provides lifelong protection with cash value accumulation.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Term builds cash value",
-      "Whole life is cheaper",
-      "Term is for permanent needs"
-    ]
-  },
-  {
-    "question": "What is the primary purpose of a deductible?",
-    "correct": "It is the amount paid before the insurer pays",
-    "explanation": "The deductible is the portion of the loss the insured must pay before insurance benefits apply.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Lower premiums",
-      "Set coverage limits",
-      "Define maximum payout"
-    ]
-  },
-  {
-    "question": "Replacement cost coverage means:",
-    "correct": "Full replacement cost with no depreciation",
-    "explanation": "Replacement cost policies pay the cost of replacing damaged property with no deduction for depreciation.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Payment minus depreciation",
-      "Lower payout",
-      "Land value only"
-    ]
-  },
-  {
-    "question": "What does an exclusion in an insurance policy refer to?",
-    "correct": "Risks not covered",
-    "explanation": "Exclusions specify losses or situations the policy does not cover.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Covered events",
-      "Deductible amount",
-      "Claims process"
-    ]
-  },
-  {
-    "question": "Which is an example of moral hazard?",
-    "correct": "Risky or dishonest behavior by the insured",
-    "explanation": "Moral hazard arises when someone behaves recklessly or dishonestly because they are insured.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Natural disasters",
-      "Economic recession",
-      "Lower premiums due to health improvements"
-    ]
-  },
-  {
-    "question": "Which peril is covered under comprehensive auto insurance?",
-    "correct": "Vandalism",
-    "explanation": "Comprehensive coverage pays for non-collision damage such as theft, vandalism or weather-related losses.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Collision with another vehicle",
-      "DUI damage",
-      "Manufacturing defects"
-    ]
-  },
-  {
-    "question": "A medical bill is $4,000 with a $500 deductible that has been met and 20% coinsurance. How much does the insured pay under this plan?",
-    "correct": "$800",
-    "explanation": "After meeting the deductible, the insured pays 20% of the covered costs; the example yields an $800 out-of-pocket share.",
-    "difficulty": "hard",
-    "wrongs": [
-      "$500",
-      "$1,000",
-      "$1,500"
-    ]
-  },
-  {
-    "question": "Which of the following is a pure risk?",
-    "correct": "Car accident",
-    "explanation": "Pure risks involve only the possibility of loss (e.g., accidents), not gain.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Home appreciation",
-      "Investment profit",
-      "Lottery winnings"
-    ]
-  },
-  {
-    "question": "What is the purpose of the law of large numbers in insurance?",
-    "correct": "To reduce random variability",
-    "explanation": "Insurers pool a large number of similar risks to make losses more predictable and reduce variability.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Set exact premiums",
-      "Measure insurer stability",
-      "Limit claim volume"
-    ]
-  },
-  {
-    "question": "What is the purpose of an insurance endorsement?",
-    "correct": "To modify, add or exclude coverage",
-    "explanation": "An endorsement (rider) alters the terms of the policy, adding, limiting or deleting coverage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Increase coverage limits automatically",
-      "Renew a policy",
-      "Refund premiums"
-    ]
-  },
-  {
-    "question": "If a claim is $5,000 and the deductible is $1,000, how much will the insurer pay?",
-    "correct": "$4,000",
-    "explanation": "The insurer pays the amount of the loss minus the deductible: $5,000 − $1,000 = $4,000.",
-    "difficulty": "easy",
-    "wrongs": [
-      "$1,000",
-      "$5,000",
-      "$6,000"
-    ]
-  },
-  {
-    "question": "Which insurance provides income if you cannot work due to illness or injury?",
-    "correct": "Disability insurance",
-    "explanation": "Disability policies replace a portion of your income when illness or injury prevents you from working.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Life insurance",
-      "Health insurance",
-      "Auto insurance"
-    ]
-  },
-  {
-    "question": "Which peril is typically excluded from homeowners insurance coverage?",
-    "correct": "Flood",
-    "explanation": "Standard homeowners policies exclude flood damage; separate flood insurance is needed.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Fire",
-      "Falling tree",
-      "Theft"
-    ]
-  },
-  {
-    "question": "A medical expense totals $115,000 with a $5,000 deductible and 30% coinsurance. What is the insured’s out-of-pocket cost?",
-    "correct": "$8,500",
-    "explanation": "After the deductible, the insured is responsible for 30% of the remaining expenses; in this example the out-of-pocket cost is $8,500.",
-    "difficulty": "hard",
-    "wrongs": [
-      "$55,000",
-      "$7,500",
-      "$10,000"
-    ]
-  },
-  {
-    "question": "What does an 'Act of God' clause refer to in insurance?",
-    "correct": "Events beyond human control",
-    "explanation": "An Act of God clause addresses events such as natural disasters that are outside human control.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Excluding natural disasters",
-      "Higher premiums",
-      "Intentional acts"
-    ]
-  },
-  {
-    "question": "What term relates to the amount of money that an insured is entitled to withdraw from an annuity?",
-    "correct": "Vesting",
-    "explanation": "Vesting refers to the portion of annuity or pension benefits that an individual has a legal right to withdraw.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Build up",
-      "Defined benefit",
-      "SPDA"
-    ]
-  },
-  {
-    "question": "If a whole life policyholder commits suicide, what happens?",
-    "correct": "The policy will pay if the exclusionary period is over",
-    "explanation": "After the suicide exclusion period (often two years), the insurer will pay the death benefit on suicide.",
-    "difficulty": "medium",
-    "wrongs": [
-      "It is deemed null and void",
-      "It is always paid out in full",
-      "Premiums are returned"
-    ]
-  },
-  {
-    "question": "Ken wants to buy a life policy quickly but keep the option to change if he finds a better policy. Which provision helps?",
-    "correct": "Free look",
-    "explanation": "The free-look provision allows the policyholder to cancel within a specified period and seek different coverage.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Sample period",
-      "First look",
-      "Tryout clauses"
-    ]
-  },
-  {
-    "question": "Adjustable life policies are ______ compared to other policies.",
-    "correct": "Flexible",
-    "explanation": "Adjustable life policies allow the insured to modify premium payments, coverage amount and policy length, making them flexible.",
-    "difficulty": "easy",
-    "wrongs": [
-      "Strict",
-      "Risky",
-      "Illegal"
-    ]
-  },
-  {
-    "question": "What is the primary purpose of a Stranger-Originated Life Insurance (STOLI) arrangement?",
-    "correct": "An investment vehicle",
-    "explanation": "STOLI policies are often initiated for investors seeking to profit from life insurance, not for traditional protection.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Insurance for protecting loved ones",
-      "To help the elderly",
-      "To comply with federal law",
-      "To make an insurance product cocktail"
-    ]
-  },
-  {
-    "question": "Grant, who is terminally ill, wants to sell his life policy to a private individual for less than the death benefit. What is this called?",
-    "correct": "Viatical settlement",
-    "explanation": "A viatical settlement involves selling a life policy by a terminally ill policyholder to a third party for less than the face amount.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Conversion transfer",
-      "Cash out sale",
-      "Settlement of cash value"
-    ]
-  },
-  {
-    "question": "What is another name for the mathematician who calculates event probabilities and prices insurance policies?",
-    "correct": "Actuary",
-    "explanation": "Actuaries use statistical methods to assess risk and set premiums for insurance products.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Economist",
-      "Statistician",
-      "Computator"
-    ]
-  },
-  {
-    "question": "Elish owns a personal airplane and seeks life insurance. What should he know about his coverage?",
-    "correct": "His coverage may be limited",
-    "explanation": "Insurers may restrict or charge higher premiums for high-risk activities such as private aviation.",
-    "difficulty": "medium",
-    "wrongs": [
-      "It is illegal for an insurer to restrict his coverage",
-      "There should be no limitations on his coverage",
-      "All policies exclude losses due to aeronautical activities"
-    ]
-  },
-  {
-    "question": "Which policy document allows an insured to obtain term coverage for a spouse?",
-    "correct": "Spouse term insurance rider",
-    "explanation": "A spouse term rider adds term coverage for the insured’s spouse under the same policy.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Term life rider",
-      "Spouse convertible rider",
-      "All of the above"
-    ]
-  },
-  {
-    "question": "Your client Zhang plans to participate in a dangerous motorcycle race, but his life policy has a hazardous activity exclusion. What should you tell him?",
-    "correct": "An exclusion in the policy will prevent coverage for the race",
-    "explanation": "Hazardous activity exclusions explicitly exclude coverage for certain dangerous pursuits; Zhang’s race would not be covered.",
-    "difficulty": "medium",
-    "wrongs": [
-      "Coverage could be available by other means",
-      "His policy will provide coverage since it’s a one-time event",
-      "The exclusion is unenforceable",
-      "None of the above"
+      "Cancel the policy",
+      "Pay full benefits as stated in the policy",
+      "Bill the policyowner for back premiums"
     ]
   }
-];
+]
