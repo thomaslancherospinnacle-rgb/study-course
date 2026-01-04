@@ -670,10 +670,10 @@
   }
 
   // Event listeners
-  $("examSelect").addEventListener("change", loadReadinessData);
-  $("refreshBtn").addEventListener("click", loadReadinessData);
+
 
   // Protect page: must have valid token
+// Protect page: must have valid token
   (async () => {
     const token = getToken();
     const exp = getExpires();
@@ -690,6 +690,10 @@
       
       // Load readiness data
       await loadReadinessData();
+      
+      // Event listeners (MOVE THEM HERE)
+      $("examSelect").addEventListener("change", loadReadinessData);
+      $("refreshBtn").addEventListener("click", loadReadinessData);
     } catch (e){
       // token invalid/expired
       logoutLocal();
