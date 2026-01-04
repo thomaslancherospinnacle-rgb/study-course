@@ -255,28 +255,59 @@
                         <div id="smsStatus" class="mt-4"></div>
                     </div>
 
-                    <!-- Google Voice Frame -->
+                    <!-- Google Voice Window Control -->
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold">Google Voice</h2>
-                            <button onclick="reloadGoogleVoice()" 
-                                class="text-sm px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-                                🔄 Reload
+                            <h2 class="text-xl font-bold">Google Voice Window</h2>
+                            <button onclick="openGoogleVoice()" 
+                                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                                🔗 Open Google Voice
                             </button>
                         </div>
                         
-                        <div class="border-2 border-gray-300 rounded-lg overflow-hidden">
-                            <iframe id="gvFrame"
-                                src="https://voice.google.com/u/0/messages"
-                                style="width:100%;height:600px;border:0;"></iframe>
+                        <div id="gvWindowStatus" class="border-2 border-gray-300 rounded-lg p-6 text-center">
+                            <div class="mb-4">
+                                <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600 font-semibold mb-2">Google Voice Not Connected</p>
+                            <p class="text-sm text-gray-500 mb-4">Click "Open Google Voice" to launch the automation window</p>
+                            <button onclick="openGoogleVoice()" 
+                                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
+                                Open Google Voice Window
+                            </button>
                         </div>
 
                         <div class="mt-4 p-3 bg-blue-50 rounded">
-                            <h4 class="font-semibold text-sm mb-1">ℹ️ Setup Required</h4>
-                            <p class="text-xs text-gray-700">
+                            <h4 class="font-semibold text-sm mb-1">ℹ️ How It Works</h4>
+                            <ol class="text-xs text-gray-700 space-y-1 list-decimal list-inside">
+                                <li>Click "Open Google Voice" to launch popup</li>
+                                <li>Login to Google Voice if needed</li>
+                                <li>Keep that window open</li>
+                                <li>Send SMS from this dashboard</li>
+                                <li>Watch automation happen in popup</li>
+                            </ol>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                            <h4 class="font-semibold text-sm mb-1">⚠️ Important</h4>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Keep the Google Voice popup window open</li>
+                                <li>• Don't close it while sending messages</li>
+                                <li>• Install Tampermonkey script first (see below)</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-green-50 rounded">
+                            <h4 class="font-semibold text-sm mb-1">✅ Setup Required</h4>
+                            <p class="text-xs text-gray-700 mb-2">
                                 Install the Tampermonkey script to enable SMS automation.
-                                <a href="#" onclick="showTampermonkeyInstructions()" class="text-blue-600 hover:underline">View Instructions</a>
                             </p>
+                            <button onclick="showTampermonkeyInstructions()" 
+                                class="text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
+                                View Setup Instructions
+                            </button>
                         </div>
                     </div>
 
@@ -551,6 +582,9 @@
         // SMS FUNCTIONS
         // ============================================================
 
+        let googleVoiceWindow = null;
+        let isGVWindowConnected = false;
+
         // Helper: Get selected users with phone numbers
         function getSelectedUsers() {
             return users.filter(u => selectedUserEmails.has(u.email));
@@ -582,6 +616,77 @@
                 .filter(j => j.phone.length >= 10 && j.message.trim().length > 0);
 
             return jobs;
+        }
+
+        // Open Google Voice in popup window
+        function openGoogleVoice() {
+            // Close existing window if open
+            if (googleVoiceWindow && !googleVoiceWindow.closed) {
+                googleVoiceWindow.focus();
+                return;
+            }
+
+            // Open new popup window
+            const width = 800;
+            const height = 700;
+            const left = (screen.width - width) / 2;
+            const top = (screen.height - height) / 2;
+
+            googleVoiceWindow = window.open(
+                'https://voice.google.com/u/0/messages',
+                'GoogleVoiceWindow',
+                `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
+            );
+
+            if (googleVoiceWindow) {
+                updateGVWindowStatus('Opening Google Voice...');
+                
+                // Check for connection
+                setTimeout(() => {
+                    if (googleVoiceWindow && !googleVoiceWindow.closed) {
+                        updateGVWindowStatus('Connected! You can now send SMS.');
+                        isGVWindowConnected = true;
+                    }
+                }, 2000);
+            } else {
+                alert('Failed to open Google Voice window. Please allow popups for this site.');
+            }
+        }
+
+        // Update Google Voice window status display
+        function updateGVWindowStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('gvWindowStatus');
+            
+            const colors = {
+                info: 'bg-blue-50 border-blue-200',
+                success: 'bg-green-50 border-green-200',
+                error: 'bg-red-50 border-red-200',
+                warning: 'bg-yellow-50 border-yellow-200'
+            };
+
+            const icons = {
+                info: '📡',
+                success: '✅',
+                error: '❌',
+                warning: '⚠️'
+            };
+
+            statusDiv.innerHTML = `
+                <div class="p-4 ${colors[type]} border rounded-lg">
+                    <p class="text-lg mb-2">${icons[type]} ${message}</p>
+                    ${isGVWindowConnected ? `
+                        <button onclick="openGoogleVoice()" 
+                            class="text-sm px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            Show Google Voice Window
+                        </button>
+                    ` : `
+                        <button onclick="openGoogleVoice()" 
+                            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
+                            Open Google Voice Window
+                        </button>
+                    `}
+                </div>
+            `;
         }
 
         // Update SMS recipient list display
@@ -629,7 +734,7 @@
             detailsDiv.innerHTML = html;
         }
 
-        // Send SMS via Google Voice iframe
+        // Send SMS via Google Voice popup window
         function sendSmsMessages() {
             if (selectedUserEmails.size === 0) {
                 alert('Please select at least one user to send SMS to');
@@ -643,17 +748,17 @@
                 return;
             }
 
+            // Check if Google Voice window is open
+            if (!googleVoiceWindow || googleVoiceWindow.closed) {
+                alert('Google Voice window is not open.\n\nClick "Open Google Voice" first, then try again.');
+                openGoogleVoice();
+                return;
+            }
+
             const jobs = buildSmsJobs(template);
 
             if (jobs.length === 0) {
                 alert('No valid phone numbers found for selected users.\n\nMake sure your users have phone numbers in the Google Sheet.');
-                return;
-            }
-
-            // Check if frame is ready
-            const frame = document.getElementById('gvFrame');
-            if (!frame || !frame.contentWindow) {
-                alert('Google Voice frame not ready. Please wait for it to load.');
                 return;
             }
 
@@ -662,7 +767,7 @@
             statusDiv.innerHTML = `
                 <div class="p-4 bg-blue-50 border border-blue-200 rounded">
                     <p class="font-semibold">📱 Sending ${jobs.length} SMS messages...</p>
-                    <p class="text-sm mt-1">Check the Google Voice frame for progress</p>
+                    <p class="text-sm mt-1">Check the Google Voice window for progress</p>
                     <div class="mt-2 bg-gray-200 rounded h-2">
                         <div id="smsProgressBar" class="bg-blue-500 h-2 rounded transition-all duration-300" style="width: 0%"></div>
                     </div>
@@ -670,12 +775,25 @@
             `;
 
             // Send jobs to Tampermonkey script via postMessage
-            frame.contentWindow.postMessage({
-                type: "CC_SMS_JOBS",
-                jobs: jobs
-            }, "*");
+            try {
+                googleVoiceWindow.postMessage({
+                    type: "CC_SMS_JOBS",
+                    jobs: jobs
+                }, "*");
 
-            console.log('[Admin] Sent SMS jobs to Google Voice:', jobs);
+                console.log('[Admin] Sent SMS jobs to Google Voice window:', jobs);
+                
+                // Focus the Google Voice window so user can see it working
+                googleVoiceWindow.focus();
+            } catch (error) {
+                console.error('[Admin] Error sending to Google Voice window:', error);
+                statusDiv.innerHTML = `
+                    <div class="p-4 bg-red-50 border border-red-200 rounded">
+                        <p class="font-semibold text-red-800">❌ Error</p>
+                        <p class="text-sm mt-1">Could not communicate with Google Voice window. Make sure it's open and Tampermonkey is installed.</p>
+                    </div>
+                `;
+            }
         }
 
         // Listen for responses from Tampermonkey script
@@ -716,27 +834,56 @@
                     </div>
                 `;
             }
+
+            // Connection confirmation from Google Voice window
+            if (data.type === "CC_SMS_READY") {
+                isGVWindowConnected = true;
+                updateGVWindowStatus('Connected! Google Voice is ready.', 'success');
+            }
         });
 
-        // Reload Google Voice iframe
-        function reloadGoogleVoice() {
-            const frame = document.getElementById('gvFrame');
-            if (frame) {
-                frame.src = frame.src;
+        // Check if Google Voice window is still open periodically
+        setInterval(() => {
+            if (googleVoiceWindow && googleVoiceWindow.closed) {
+                isGVWindowConnected = false;
+                googleVoiceWindow = null;
             }
+        }, 2000);
+
+        // Reload Google Voice iframe (deprecated - kept for compatibility)
+        function reloadGoogleVoice() {
+            openGoogleVoice();
         }
 
         // Show Tampermonkey instructions
         function showTampermonkeyInstructions() {
-            alert(`Tampermonkey Setup Instructions:
+            const instructions = `
+📱 Tampermonkey Setup Instructions
 
-1. Install Tampermonkey extension in your browser
-2. Download the "google-voice-bot.user.js" script
-3. Click the Tampermonkey icon and choose "Create new script"
-4. Paste the script and save
-5. Reload the Google Voice iframe
+STEP 1: Install Tampermonkey
+• Chrome: chrome.google.com/webstore (search "Tampermonkey")
+• Firefox: addons.mozilla.org (search "Tampermonkey")
+• Edge: microsoftedge.microsoft.com/addons (search "Tampermonkey")
 
-The script will automatically listen for SMS jobs from this admin panel.`);
+STEP 2: Install SMS Bot Script
+1. Click Tampermonkey icon in browser toolbar
+2. Click "Create a new script"
+3. Delete all the template code
+4. Copy the entire "google-voice-bot.user.js" file
+5. Paste it in
+6. File > Save (or Ctrl+S)
+7. Close the tab
+
+STEP 3: Test It
+1. Click "Open Google Voice" button above
+2. Login to Google Voice in the popup
+3. Come back to this page
+4. Select users and send a test SMS!
+
+Need the script file? Contact support or check the documentation.
+            `;
+            
+            alert(instructions);
         }
 
         async function loadUsersFromSheets() {
