@@ -726,20 +726,29 @@
                 return;
             }
 
-            // Find all UNIQUE SPONSOR NAMES - these are the root boxes
-            const sponsorNames = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))];
+            // Get all sponsors - includes both:
+            // 1. Names that appear in SPONSOR NAME column (sponsors with referrals)
+            const sponsorsWithReferrals = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))];
+            
+            // 2. People with blank SPONSOR NAME (root sponsors without referrals yet)
+            const rootSponsors = referralData
+                .filter(r => !r.sponsorName || r.sponsorName.trim() === '')
+                .map(r => r.refName);
+            
+            // Combine and remove duplicates
+            const allSponsors = [...new Set([...sponsorsWithReferrals, ...rootSponsors])];
 
-            if (sponsorNames.length === 0) {
+            if (allSponsors.length === 0) {
                 treeDiv.innerHTML = '<div class="alert alert-info">ℹ️ No sponsors found in data. Add a sponsor to organize your tree!</div>';
                 return;
             }
 
             let html = '';
-            sponsorNames.forEach(sponsorName => {
+            allSponsors.forEach(sponsorName => {
                 // Find all referrals who have this sponsor
                 const referrals = referralData.filter(r => r.sponsorName === sponsorName);
                 
-                // Get sponsor info (might be in the data or might not)
+                // Get sponsor info - might be the person themselves if they're a root sponsor
                 const sponsorInfo = referralData.find(r => r.refName === sponsorName);
                 
                 html += buildSponsorGroup(sponsorName, sponsorInfo, referrals);
@@ -750,11 +759,11 @@
 
         // Build a sponsor group with their referrals
         function buildSponsorGroup(sponsorName, sponsorInfo, referrals) {
-            // If we have sponsor info, use it; otherwise create basic info
+            // Use actual sponsor info if available, otherwise create basic info from referrals
             const sponsor = sponsorInfo || {
                 refName: sponsorName,
-                refNumber: referrals[0]?.sponsorNumber || 'N/A',
-                leadType: referrals[0]?.leadType || 'Unknown',
+                refNumber: referrals[0]?.sponsorNumber || '',
+                leadType: referrals[0]?.leadType || '',
                 sponsorPos: referrals[0]?.sponsorPos || 'NO',
                 extension: ''
             };
@@ -766,7 +775,7 @@
                     <div class="sponsor-card">
                         <div class="sponsor-name">⭐ ${sponsorName}</div>
                         <div class="sponsor-info">
-                            ${cleanPhone && cleanPhone !== 'N/A' ? `📞 <a href="tel:${cleanPhone}">${cleanPhone}</a><br>` : ''}
+                            ${cleanPhone ? `📞 <a href="tel:${cleanPhone}">${cleanPhone}</a><br>` : ''}
                             ${sponsor.leadType ? `<span class="sponsor-badge ${sponsor.leadType === 'Hardcard' ? 'hardcard' : ''}">${sponsor.leadType}</span>` : ''}
                             ${sponsor.sponsorPos === 'YES' ? '<span class="sponsor-badge">SPONSOR POS</span>' : ''}
                             ${sponsor.extension ? `<br><br><strong>📝 Why:</strong> ${sponsor.extension}` : ''}
@@ -781,7 +790,7 @@
                 });
                 html += '</div>';
             } else {
-                html += '<div class="alert alert-info">No referrals yet for this sponsor</div>';
+                html += '<div class="alert alert-info">No referrals yet for this sponsor. Add referrals in the "➕ Add Referral" tab.</div>';
             }
 
             html += '</div>';
@@ -838,17 +847,26 @@
             const select = document.getElementById('refSponsorName');
             select.innerHTML = '<option value="">Choose a sponsor...</option>';
             
-            // Get all unique SPONSOR NAMES
-            const sponsorNames = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))];
+            // Get all potential sponsors:
+            // 1. People who appear in the SPONSOR NAME column (existing sponsors)
+            const sponsorsFromColumn = [...new Set(referralData.map(r => r.sponsorName).filter(s => s))];
             
-            sponsorNames.sort().forEach(sponsorName => {
-                // Try to find phone number for this sponsor
-                const sponsorData = referralData.find(r => r.refName === sponsorName || r.sponsorName === sponsorName);
-                const phone = sponsorData ? sponsorData.sponsorNumber || sponsorData.refNumber : '';
+            // 2. People with blank SPONSOR NAME (root sponsors like David Brannon)
+            const rootSponsors = referralData
+                .filter(r => !r.sponsorName || r.sponsorName.trim() === '')
+                .map(r => r.refName);
+            
+            // Combine both lists and remove duplicates
+            const allSponsors = [...new Set([...sponsorsFromColumn, ...rootSponsors])];
+            
+            allSponsors.sort().forEach(sponsorName => {
+                // Find this person's data to get their phone number
+                const sponsorData = referralData.find(r => r.refName === sponsorName);
+                const phone = sponsorData ? sponsorData.refNumber.replace(/\D/g, '') : '';
                 
                 const option = document.createElement('option');
                 option.value = sponsorName;
-                option.textContent = phone ? `${sponsorName} (${phone.replace(/\D/g, '')})` : sponsorName;
+                option.textContent = phone ? `${sponsorName} (${phone})` : sponsorName;
                 select.appendChild(option);
             });
         }
