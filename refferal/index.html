@@ -550,8 +550,18 @@
   // ============================================
   // AUTHENTICATION
   // ============================================
+  const LS_EXPIRES = "cc_expires_at"; // Add this for compatibility
+  
   function getToken() {
-    return localStorage.getItem(LS_TOKEN) || "";
+    try {
+      const token = localStorage.getItem(LS_TOKEN) || "";
+      console.log("Token check:", token ? `Found (${token.substring(0, 10)}...)` : "NOT FOUND");
+      return token;
+    } catch (e) {
+      console.error("localStorage error (iOS Safari?):", e);
+      alert("Storage access blocked. Please check Safari settings:\nSettings → Safari → Disable 'Prevent Cross-Site Tracking'");
+      return "";
+    }
   }
 
   // Get stored username from localStorage
@@ -566,13 +576,31 @@
   }
 
   async function getCurrentUser() {
+    console.log("=== getCurrentUser() called ===");
+    console.log("User-Agent:", navigator.userAgent);
+    console.log("Is iOS?", /iPhone|iPad|iPod/.test(navigator.userAgent));
+    
     const token = getToken();
     if (!token) {
-      console.log("No token found");
-      alert("Please login first at the main page (index.html)");
-      window.location.href = "index.html";
+      console.log("❌ No token found - checking if localStorage is blocked");
+      
+      // iOS Safari test - check if localStorage actually works
+      try {
+        localStorage.setItem('ios_test', '1');
+        localStorage.removeItem('ios_test');
+        console.log("localStorage works - user just not logged in");
+      } catch (e) {
+        console.error("❌ localStorage BLOCKED on iOS!", e);
+        alert("Storage is blocked.\n\nOn iPhone/iPad:\n• Settings → Safari\n• Turn OFF 'Prevent Cross-Site Tracking'\n• Turn OFF 'Block All Cookies'\n• Reload page");
+        return null;
+      }
+      
+      alert("Please login first");
+      window.location.href = "./index.html"; // Relative path for iOS
       return null;
     }
+
+    console.log("✅ Token found, length:", token.length);
 
     // ✅ PRIORITY 1: Check if username was stored at login or from previous entry
     const storedName = localStorage.getItem('cc_username') || localStorage.getItem('referral_username');
@@ -626,9 +654,15 @@
           const username = profileData.username;
           console.log("✅ Got username from profile:", username);
           
-          // Store it!
-          localStorage.setItem('cc_username', username);
-          localStorage.setItem('referral_username', username);
+          // Store it (with iOS error handling)
+          try {
+            localStorage.setItem('cc_username', username);
+            localStorage.setItem('referral_username', username);
+            console.log("✅ Username stored in localStorage");
+          } catch (e) {
+            console.warn("Could not store username (iOS storage limit?):", e);
+            // Continue anyway - we have the username for this session
+          }
           
           return {
             username: username,
@@ -658,10 +692,17 @@
     
     if (username && username.trim()) {
       console.log("✅ Using manually entered username:", username.trim());
-      // Store for future use - won't ask again on next visit!
-      storeUsername(username.trim());
-      // Also store in cc_username for consistency
-      localStorage.setItem('cc_username', username.trim());
+      
+      // Store for future use (with iOS error handling)
+      try {
+        storeUsername(username.trim());
+        localStorage.setItem('cc_username', username.trim());
+        console.log("✅ Username stored");
+      } catch (e) {
+        console.warn("Could not store username (iOS storage?):", e);
+        // Continue anyway
+      }
+      
       return {
         username: username.trim(),
         email: "",
@@ -670,7 +711,7 @@
     }
     
     alert("Username is required. Redirecting to login page.");
-    window.location.href = "index.html";
+    window.location.href = "./index.html"; // Relative path
     return null;
   }
 
