@@ -573,7 +573,7 @@
   }
 
   let loginEmail = "";
-  let username = "";
+  let currentUser = ""; // This will be the EXACT display name
 
   // EXACTLY like exam.html's requireLogin
   async function requireLogin() {
@@ -585,7 +585,6 @@
     if (!token) {
       console.error("No token - redirecting to login");
       document.getElementById('userDisplay').textContent = "Not logged in - redirecting...";
-      // Prevent infinite loop - check if we're already on index.html
       if (!window.location.href.includes('index.html')) {
         setTimeout(() => {
           window.location.href = "index.html";
@@ -604,14 +603,21 @@
       loginEmail = me.loginEmail || "";
       console.log("Login email:", loginEmail);
       
-      // Convert email to proper name
-      username = emailToUsername(loginEmail);
-      console.log("Username:", username);
+      // ✅ EXACT DISPLAY NAME - this is what exam.html shows
+      // Convert: thomaslancheros.ail@gmail.com → Thomas Lancheros
+      currentUser = loginEmail.replace('.ail@gmail.com', '') // Remove domain
+                              .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase to spaces
+                              .split(' ')
+                              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                              .join(' ');
       
-      document.getElementById('userDisplay').textContent = username;
+      console.log("✅ Display Name (EXACT):", currentUser);
+      console.log("This EXACT name will be the Google Sheet tab name");
+      
+      // Display it EXACTLY
+      document.getElementById('userDisplay').textContent = currentUser;
       console.log("✅ Login successful!");
     } catch (e) {
-      // token invalid or expired
       console.error("Auth failed:", e);
       console.error("Error details:", e.message);
       
@@ -620,7 +626,6 @@
       localStorage.removeItem(LS_TOKEN);
       localStorage.removeItem(LS_EXPIRES);
       
-      // Prevent infinite loop
       if (!window.location.href.includes('index.html')) {
         setTimeout(() => {
           window.location.href = "index.html";
@@ -630,43 +635,11 @@
     }
   }
 
-  // Convert email to username
-  function emailToUsername(email) {
-    // Check stored username first
-    const stored = localStorage.getItem('cc_username') || localStorage.getItem('referral_username');
-    if (stored && stored !== email) {
-      return stored;
-    }
-    
-    // Convert: thomaslancheros.ail@gmail.com → Thomas Lancheros
-    let name = email.replace('.ail@gmail.com', '');
-    
-    // Handle camelCase: thomasLancheros → thomas lancheros
-    name = name.replace(/([a-z])([A-Z])/g, '$1 $2');
-    
-    // Capitalize: thomas lancheros → Thomas Lancheros
-    name = name.split(' ').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    ).join(' ');
-    
-    // Store it
-    try {
-      localStorage.setItem('cc_username', name);
-      localStorage.setItem('referral_username', name);
-    } catch (e) {
-      console.warn("Could not store username:", e);
-    }
-    
-    return name;
-  }
-
-  let referralData = [];
-
   // ============================================
   // DATA LOADING
   // ============================================
   async function loadData() {
-    if (!username) {
+    if (!currentUser) {
       showAlert('familyTree', 'Loading user info...', 'info');
       return;
     }
@@ -675,12 +648,20 @@
     treeDiv.innerHTML = '<div class="alert alert-info">⏳ Loading your network...</div>';
 
     try {
-      const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(username)}`;
+      // ✅ Pass EXACT display name to Google Sheets
+      // Google Apps Script will look for/create tab with this EXACT name
+      console.log("=== LOADING DATA ===");
+      console.log("User (EXACT display name):", currentUser);
+      console.log("Google Sheet tab name:", currentUser);
+      console.log("If tab doesn't exist, it will be created automatically");
+      
+      const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(currentUser)}`;
       const response = await fetch(url);
       const data = await response.json();
 
       if (Array.isArray(data)) {
         referralData = data;
+        console.log(`✅ Loaded ${data.length} referrals from sheet tab: "${currentUser}"`);
         buildFamilyTree();
         updateSponsorDropdowns();
         updateStats();
@@ -815,7 +796,7 @@
   // ============================================
   async function addReferral() {
     const refData = {
-      user: username,
+      user: currentUser,  // ✅ EXACT display name - this is the sheet tab name
       refName: document.getElementById('refName').value.trim(),
       refNumber: document.getElementById('refNumber').value.replace(/\D/g, ''),
       refRelation: document.getElementById('refRelation').value.trim(),
@@ -838,6 +819,10 @@
 
     const sponsor = referralData.find(r => r.refName === refData.sponsorName);
     if (sponsor) refData.sponsorNumber = sponsor.refNumber;
+
+    console.log("=== ADDING REFERRAL ===");
+    console.log("Will be added to sheet tab:", currentUser);
+    console.log("Referral data:", refData);
 
     showAlert('addRefStatus', '⏳ Adding...', 'info');
 
@@ -870,7 +855,7 @@
   // ============================================
   async function addSponsor() {
     const sponsorData = {
-      user: username,
+      user: currentUser,  // ✅ EXACT display name - this is the sheet tab name
       refName: document.getElementById('sponsorName').value.trim(),
       refNumber: document.getElementById('sponsorNumber').value.replace(/\D/g, ''),
       refRelation: 'Root/Sponsor',
@@ -890,6 +875,10 @@
       showAlert('addSponsorStatus', '❌ Phone must be 10 digits', 'error');
       return;
     }
+
+    console.log("=== ADDING SPONSOR ===");
+    console.log("Will be added to sheet tab:", currentUser);
+    console.log("Sponsor data:", sponsorData);
 
     showAlert('addSponsorStatus', '⏳ Adding...', 'info');
 
