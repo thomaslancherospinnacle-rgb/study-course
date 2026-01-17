@@ -557,31 +557,70 @@
   async function getCurrentUser() {
     const token = getToken();
     if (!token) {
+      console.log("No token found");
+      alert("Please login first at the main page (index.html)");
       window.location.href = "index.html";
       return null;
     }
 
+    console.log("Token found, verifying with API...");
+
     try {
+      // Add timeout to prevent hanging (5 seconds)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
       const res = await fetch(CC_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "me", token })
+        body: JSON.stringify({ action: "me", token }),
+        signal: controller.signal
       });
 
+      clearTimeout(timeoutId);
+
       const data = await res.json();
+      console.log("API Response:", data);
       
       if (data.ok && data.username) {
+        console.log("User verified:", data.username);
         return {
           username: data.username,
           email: data.loginEmail || data.email || "",
           token: token
         };
+      } else {
+        console.error("API returned error:", data);
+        throw new Error(data.error || "Invalid response from API");
       }
     } catch (e) {
       console.error("Failed to get user info:", e);
+      
+      // If timeout or network error, offer manual entry
+      if (e.name === 'AbortError') {
+        console.error("API call timed out after 5 seconds");
+        return await promptForUsername();
+      }
+      
+      // For other errors, try manual entry
+      return await promptForUsername();
     }
+  }
 
-    // If token invalid, redirect to login
+  // Fallback: Prompt user to enter their name manually
+  async function promptForUsername() {
+    const username = prompt("The authentication system is not responding.\n\nPlease enter your full name exactly as it appears in the system\n(Example: Thomas Lancheros):");
+    
+    if (username && username.trim()) {
+      console.log("Using manually entered username:", username.trim());
+      return {
+        username: username.trim(),
+        email: "",
+        token: getToken()
+      };
+    }
+    
+    alert("Username is required. Redirecting to login page.");
     window.location.href = "index.html";
     return null;
   }
@@ -590,6 +629,10 @@
   // DATA LOADING
   // ============================================
   async function loadData() {
+    console.log("=== loadData() called ===");
+    console.log("GOOGLE_SCRIPT_URL:", GOOGLE_SCRIPT_URL);
+    console.log("currentUser:", currentUser);
+    
     if (GOOGLE_SCRIPT_URL === "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE") {
       showAlert('familyTree', '⚠️ Please configure GOOGLE_SCRIPT_URL at the top of this HTML file', 'error');
       return;
@@ -605,18 +648,27 @@
 
     try {
       // Request data for this specific user
-      const response = await fetch(`${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(currentUser.username)}`);
+      const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(currentUser.username)}`;
+      console.log("Fetching data from:", url);
+      
+      const response = await fetch(url);
+      console.log("Response status:", response.status);
+      
       const data = await response.json();
+      console.log("Data received:", data);
 
       if (Array.isArray(data)) {
+        console.log("Data is array with", data.length, "items");
         referralData = data;
         buildFamilyTree();
         updateSponsorDropdowns();
         updateStats();
       } else {
+        console.error("Data is not an array:", data);
         throw new Error('Invalid data format');
       }
     } catch (error) {
+      console.error("Error in loadData:", error);
       treeDiv.innerHTML = `<div class="alert alert-error">❌ Error: ${error.message}<br><br>Make sure your Google Apps Script is deployed correctly.</div>`;
     }
   }
@@ -908,10 +960,18 @@
   // INITIALIZATION
   // ============================================
   window.onload = async function() {
+    console.log("=== Page loaded, starting initialization ===");
+    console.log("Token in localStorage:", getToken() ? "EXISTS" : "MISSING");
+    
     currentUser = await getCurrentUser();
+    console.log("getCurrentUser returned:", currentUser);
+    
     if (currentUser) {
+      console.log("User authenticated:", currentUser.username);
       document.getElementById('userDisplay').textContent = currentUser.username;
       await loadData();
+    } else {
+      console.error("No user returned from getCurrentUser");
     }
   };
 </script>
