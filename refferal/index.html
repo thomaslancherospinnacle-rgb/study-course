@@ -601,14 +601,14 @@
     console.log("No stored username found, verifying with API...");
 
     try {
-      // Add timeout to prevent hanging (5 seconds)
+      // ✅ FIXED: Use getUserProfile instead of me - it returns username!
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       const res = await fetch(CC_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "me", token }),
+        body: JSON.stringify({ action: "getUserProfile", token }),
         signal: controller.signal
       });
 
@@ -625,12 +625,12 @@
         localStorage.setItem('cc_username', data.username);
         return {
           username: data.username,
-          email: data.loginEmail || data.email || "",
+          email: data.email || "",
           token: token
         };
       } else {
         console.error("API returned error:", data);
-        throw new Error(data.error || "Invalid response from API");
+        throw new Error(data.error || data.message || "Invalid response from API");
       }
     } catch (e) {
       console.error("Failed to get user info:", e);
