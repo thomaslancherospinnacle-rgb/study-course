@@ -445,13 +445,24 @@
     </footer>
 
     <script>
-        // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT  ⚠️
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbz-dH0IjPN8yErHfNCMAWYblsZA8WGs0AJaGa9F5wn51_TX3j-Rh3uuFZFb1YgbokbY/exec';
+        // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
+        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbyRIIB2G8JO_lAk80wg8dUiaxBnj85-vJvYLjlUsPKHajL2rQkOj9eZKPHpIqeXroIc/exec';
         
         // Capture referral code from URL
+        // Supports both formats:
+        // 1. closingcoalition.space/apply?ref=thomaslancheros
+        // 2. closingcoalition.space/apply?thomaslancheros
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const ref = window.location.search.substring(1);
+            let ref = urlParams.get('ref');
+            
+            // If no 'ref' parameter, check if the entire query string is just the name
+            if (!ref) {
+                const queryString = window.location.search.substring(1); // Remove '?'
+                if (queryString && !queryString.includes('=')) {
+                    ref = queryString;
+                }
+            }
             
             if (ref) {
                 document.getElementById('referralCode').value = ref;
