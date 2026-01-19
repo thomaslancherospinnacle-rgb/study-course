@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pipeline - Closing Coalition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .stage-column {
+            min-width: 260px;
+            max-width: 300px;
+        }
+        .lead-card {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lead-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 shadow-lg sticky top-0 z-10">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-2xl font-bold">📊 My Recruiting Pipeline</h1>
+                <p class="text-sm opacity-90">Recruiter: <span id="recruiterName" class="font-semibold"></span></p>
+            </div>
+            <div class="flex gap-4 items-center flex-wrap justify-center">
+                <div class="text-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
+                    <div class="text-xs opacity-75">My Referral Link</div>
+                    <div class="font-mono font-bold text-sm" id="myReferralUrl"></div>
+                    <button onclick="copyReferralLink()" class="text-xs underline mt-1 hover:text-yellow-300">
+                        📋 Copy Link
+                    </button>
+                </div>
+                <button onclick="goHome()" class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/20 transition">
+                    🏠 Home
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="bg-white border-b shadow-sm">
+        <div class="container mx-auto p-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="text-center p-3 bg-blue-50 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-600" id="countProspects">0</div>
+                    <div class="text-xs text-gray-600 font-medium">Prospects</div>
+                </div>
+                <div class="text-center p-3 bg-purple-50 rounded-lg">
+                    <div class="text-2xl font-bold text-purple-600" id="countOnCourse">0</div>
+                    <div class="text-xs text-gray-600 font-medium">On Course</div>
+                </div>
+                <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                    <div class="text-2xl font-bold text-yellow-600" id="countStudying">0</div>
+                    <div class="text-xs text-gray-600 font-medium">Studying</div>
+                </div>
+                <div class="text-center p-3 bg-orange-50 rounded-lg">
+                    <div class="text-2xl font-bold text-orange-600" id="countTesting">0</div>
+                    <div class="text-xs text-gray-600 font-medium">Testing</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg">
+                    <div class="text-2xl font-bold text-green-600" id="countLicensed">0</div>
+                    <div class="text-xs text-gray-600 font-medium">Licensed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pipeline Board -->
+    <div class="container mx-auto p-6">
+        <div class="flex gap-4 overflow-x-auto pb-4" id="pipelineBoard">
+            <!-- Columns will be populated here -->
+        </div>
+    </div>
+
+    <!-- Edit Lead Modal -->
+    <div id="editLeadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 class="text-xl font-bold mb-4">Edit Lead</h3>
+            <form id="editLeadForm" onsubmit="submitEditLead(event)">
+                <input type="hidden" id="editRowIndex">
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Name *</label>
+                    <input type="text" id="editName" required 
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Phone Number *</label>
+                    <input type="tel" id="editPhone" required 
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Stage</label>
+                    <select id="editStage" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="prospects">Prospects</option>
+                        <option value="on_course">On Course</option>
+                        <option value="studying">Studying</option>
+                        <option value="testing">Testing</option>
+                        <option value="licensed">Licensed</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-2">Course Number</label>
+                    <input type="text" id="editCourse" 
+                           placeholder="TN-2024"
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                
+                <div class="flex gap-2">
+                    <button type="submit" 
+                            class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                        Save Changes
+                    </button>
+                    <button type="button" onclick="deleteLead()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition">
+                        Delete
+                    </button>
+                    <button type="button" onclick="closeEditLeadModal()" 
+                            class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL ⚠️
+        const RECRUITING_API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        
+        let currentRecruiter = null;
+        let recruiterTabName = null;
+        let allLeads = [];
+
+        // Check authentication on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            await loadPipeline();
+        });
+
+        async function checkAuth() {
+            // Get current user from localStorage
+            const userEmail = localStorage.getItem('userEmail');
+            
+            if (!userEmail) {
+                alert('Please log in first');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Get recruiter full name from localStorage
+            // This would be set when admin promotes them to recruiter
+            const recruiterFullName = localStorage.getItem('recruiterFullName');
+            
+            if (!recruiterFullName) {
+                alert('Recruiter access required. Please contact admin to set up your recruiter account.');
+                window.location.href = 'home.html';
+                return;
+            }
+            
+            currentRecruiter = recruiterFullName;
+            recruiterTabName = recruiterFullName.toLowerCase().trim();
+            
+            // Display recruiter info
+            document.getElementById('recruiterName').textContent = capitalizeWords(recruiterFullName);
+            
+            // Generate referral URL (remove spaces from name)
+            const referralCode = recruiterFullName.replace(/\s+/g, '').toLowerCase();
+            const referralUrl = window.location.origin + '/apply?ref=' + referralCode;
+            document.getElementById('myReferralUrl').textContent = referralUrl;
+        }
+
+        async function loadPipeline() {
+            if (!recruiterTabName) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(RECRUITING_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'getMyLeads',
+                        recruiterTab: recruiterTabName
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    allLeads = data.leads || [];
+                    renderPipeline();
+                    updateStats();
+                } else {
+                    console.error('API Error:', data.message);
+                    alert('Error loading pipeline: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error loading pipeline:', error);
+                alert('Error loading leads. Make sure you updated RECRUITING_API_URL and have been promoted to recruiter!');
+            }
+        }
+
+        function renderPipeline() {
+            const stages = [
+                { id: 'prospects', name: 'Prospects', color: 'blue' },
+                { id: 'on_course', name: 'On Course', color: 'purple' },
+                { id: 'studying', name: 'Studying', color: 'yellow' },
+                { id: 'testing', name: 'Testing', color: 'orange' },
+                { id: 'licensed', name: 'Licensed', color: 'green' }
+            ];
+            
+            const board = document.getElementById('pipelineBoard');
+            board.innerHTML = '';
+            
+            stages.forEach(stage => {
+                const leads = allLeads.filter(l => l.stage === stage.id);
+                board.appendChild(createStageColumn(stage, leads));
+            });
+        }
+
+        function createStageColumn(stage, leads) {
+            const column = document.createElement('div');
+            column.className = 'stage-column bg-gray-100 rounded-lg p-4';
+            
+            column.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold uppercase text-sm text-gray-700">${stage.name}</h3>
+                    <span class="bg-${stage.color}-600 text-white text-xs px-2 py-1 rounded-full font-bold">${leads.length}</span>
+                </div>
+                <div class="space-y-3">
+                    ${leads.length > 0 ? leads.map(lead => createLeadCard(lead, stage.color)).join('') : '<div class="text-center text-gray-400 text-sm py-8">No leads yet<br><small>Share your referral link!</small></div>'}
+                </div>
+            `;
+            
+            return column;
+        }
+
+        function createLeadCard(lead, color) {
+            return `
+                <div class="lead-card bg-white rounded-lg shadow-sm p-4 border-l-4 border-${color}-500"
+                     onclick="openEditLeadModal(${lead.row})">
+                    <div class="font-bold text-gray-800 mb-2">${lead.name}</div>
+                    <div class="text-sm text-gray-600 mb-2">
+                        📞 <a href="tel:${lead.phone}" onclick="event.stopPropagation()" class="text-blue-600 hover:underline">${lead.phone}</a>
+                    </div>
+                    ${lead.course ? `
+                        <div class="text-xs bg-${color}-100 text-${color}-700 px-2 py-1 rounded inline-block">
+                            ${lead.course}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function updateStats() {
+            document.getElementById('countProspects').textContent = allLeads.filter(l => l.stage === 'prospects').length;
+            document.getElementById('countOnCourse').textContent = allLeads.filter(l => l.stage === 'on_course').length;
+            document.getElementById('countStudying').textContent = allLeads.filter(l => l.stage === 'studying').length;
+            document.getElementById('countTesting').textContent = allLeads.filter(l => l.stage === 'testing').length;
+            document.getElementById('countLicensed').textContent = allLeads.filter(l => l.stage === 'licensed').length;
+        }
+
+        // Edit Lead Modal
+        function openEditLeadModal(rowIndex) {
+            const lead = allLeads.find(l => l.row === rowIndex);
+            if (!lead) return;
+            
+            document.getElementById('editRowIndex').value = rowIndex;
+            document.getElementById('editName').value = lead.name;
+            document.getElementById('editPhone').value = lead.phone;
+            document.getElementById('editStage').value = lead.stage;
+            document.getElementById('editCourse').value = lead.course || '';
+            
+            document.getElementById('editLeadModal').classList.remove('hidden');
+        }
+
+        function closeEditLeadModal() {
+            document.getElementById('editLeadModal').classList.add('hidden');
+            document.getElementById('editLeadForm').reset();
+        }
+
+        async function submitEditLead(event) {
+            event.preventDefault();
+            
+            const updateData = {
+                action: 'updateLead',
+                recruiterTab: recruiterTabName,
+                row: parseInt(document.getElementById('editRowIndex').value),
+                name: document.getElementById('editName').value,
+                phone: document.getElementById('editPhone').value,
+                stage: document.getElementById('editStage').value,
+                course: document.getElementById('editCourse').value
+            };
+            
+            try {
+                const response = await fetch(RECRUITING_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    closeEditLeadModal();
+                    await loadPipeline();
+                } else {
+                    alert('Error updating lead: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error updating lead. Check console for details.');
+            }
+        }
+
+        async function deleteLead() {
+            if (!confirm('Are you sure you want to delete this lead?')) {
+                return;
+            }
+            
+            const rowIndex = parseInt(document.getElementById('editRowIndex').value);
+            
+            try {
+                const response = await fetch(RECRUITING_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'deleteLead',
+                        recruiterTab: recruiterTabName,
+                        row: rowIndex
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    closeEditLeadModal();
+                    await loadPipeline();
+                } else {
+                    alert('Error deleting lead: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting lead. Check console for details.');
+            }
+        }
+
+        function copyReferralLink() {
+            const url = document.getElementById('myReferralUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Referral link copied to clipboard!\n\n' + url);
+            }).catch(err => {
+                console.error('Error copying:', err);
+                alert('URL: ' + url);
+            });
+        }
+
+        function goHome() {
+            window.location.href = 'home.html';
+        }
+
+        function capitalizeWords(str) {
+            return str.replace(/\b\w/g, l => l.toUpperCase());
+        }
+    </script>
+</body>
+</html>
