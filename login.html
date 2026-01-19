@@ -244,7 +244,7 @@
               <button id="btnSignup">Send verification code</button>
             </div>
             <div class="hint">
-              The verification code is sent to your derived inbox: <span style="font-family:var(--mono); color:rgba(234,242,255,.85)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="98fef1eaebecf4f9ebecb6f9f1f4d8fff5f9f1f4b6fbf7f5">[email&#160;protected]</a></span>
+              The verification code is sent to your derived inbox: <span style="font-family:var(--mono); color:rgba(234,242,255,.85)">firstname.ail@gmail.com</span>
             </div>
           </div>
 
@@ -264,7 +264,7 @@
     </div>
   </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   /**********************
    * CONFIG
    **********************/
@@ -278,7 +278,6 @@
   const tabs = Array.from(document.querySelectorAll(".tab"));
   const nameEl = $("name");
   const derivedEl = $("derived");
-  const derivedMini = $("derivedMini");
 
   const loginBlock = $("loginBlock");
   const firstBlock = $("firstBlock");
@@ -404,11 +403,11 @@
 
   function updateSessionUI(){
     const token = getToken();
-    if (token){
+    if (token && sessBadge){
       sessBadge.textContent = "Logged in";
       sessBadge.classList.add("ok");
       btnLogout.style.display = "";
-    } else {
+    } else if (sessBadge) {
       sessBadge.textContent = "Not logged in";
       sessBadge.classList.remove("ok");
       btnLogout.style.display = "none";
@@ -418,7 +417,6 @@
   function updateDerived(){
     const email = derivedEmailFromName(nameEl.value);
     derivedEl.textContent = email || "—";
-    derivedMini.textContent = email ? email.split("@")[0] : "—";
   }
 
   nameEl.addEventListener("input", updateDerived);
@@ -561,12 +559,12 @@
       const out = await api("login", { username, password, email });
       setSession(out.token, out.expires_at);
       updateSessionUI();
-      setMsg("ok", "Logged in.");
+      setMsg("ok", "Logged in successfully!");
       
+      // Give session time to save before redirect
+      await new Promise(resolve => setTimeout(resolve, 500));
       window.location.href = "home.html";
 
-      // Optional redirect:
-      // window.location.href = "app.html";
     } catch(e){
       setMsg("err", e.message || "Login failed.");
     } finally {
