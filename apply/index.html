@@ -8,6 +8,33 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* Apply Now Button */
+        .apply-now-btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, #003087 0%, #0047AB 100%);
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 48, 135, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .apply-now-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 48, 135, 0.5);
+            background: linear-gradient(135deg, #0047AB 0%, #003087 100%);
+        }
+        
+        .apply-now-btn:active {
+            transform: translateY(-1px);
+        }
         * {
             margin: 0;
             padding: 0;
@@ -608,6 +635,10 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
+            
+            <button onclick="scrollToApplication()" class="apply-now-btn">
+                🚀 APPLY NOW
+            </button>
         </div>
     </section>
     
@@ -804,6 +835,13 @@
     </footer>
 
     <script>
+        // Smooth scroll to application form
+        function scrollToApplication() {
+            document.getElementById('formSection').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
         // Get recruiter reference from URL
         const urlParams = new URLSearchParams(window.location.search);
         const recruiterRef = urlParams.get('ref') || 'direct';
