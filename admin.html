@@ -9,6 +9,30 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .user-row:hover { background-color: #f3f4f6; }
+        
+        /* RECRUITS TAB STYLES */
+        .recruiter-card {
+            transition: all 0.3s ease;
+        }
+        .recruiter-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .prospects-list {
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 2000px;
+            }
+        }
+        .prospect-row {
+            transition: background-color 0.2s;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -69,6 +93,9 @@
                     </button>
                     <button onclick="showTab('recruiters')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         👥 Recruiters
+                    </button>
+                    <button onclick="showTab('recruits')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
+                        📊 Recruits
                     </button>
                     <button onclick="showTab('email')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         Send Emails
@@ -255,6 +282,65 @@
                 </div>
             </div>
 
+            <!-- RECRUITS TAB -->
+            <div id="recruitsTab" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Recruits Overview</h2>
+                            <p class="text-sm text-gray-600 mt-1">View all recruiters and their prospects</p>
+                        </div>
+                        <button onclick="loadAllRecruits()" 
+                                class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition font-semibold">
+                            🔄 Refresh All
+                        </button>
+                    </div>
+
+                    <!-- Summary Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                            <div class="text-sm text-blue-600 font-semibold mb-1">Total Recruiters</div>
+                            <div id="recruitsStatsRecruiters" class="text-3xl font-bold text-blue-700">0</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+                            <div class="text-sm text-green-600 font-semibold mb-1">Total Prospects</div>
+                            <div id="recruitsStatsProspects" class="text-3xl font-bold text-green-700">0</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+                            <div class="text-sm text-purple-600 font-semibold mb-1">In Course</div>
+                            <div id="recruitsStatsInCourse" class="text-3xl font-bold text-purple-700">0</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200">
+                            <div class="text-sm text-orange-600 font-semibold mb-1">Licensed</div>
+                            <div id="recruitsStatsLicensed" class="text-3xl font-bold text-orange-700">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="mb-4 flex gap-4">
+                        <input type="text" id="searchRecruits" 
+                               placeholder="Search recruiters or prospects..." 
+                               onkeyup="filterRecruits()"
+                               class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <select id="filterRecruitsStatus" onchange="filterRecruits()"
+                                class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            <option value="">All Statuses</option>
+                            <option value="Prospect">Prospect</option>
+                            <option value="In Course">In Course</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Licensed">Licensed</option>
+                        </select>
+                    </div>
+
+                    <!-- Recruiters List -->
+                    <div id="recruitsListContainer">
+                        <div class="text-center py-12 text-gray-500">
+                            Click "Refresh All" to load recruiters and their prospects
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Email Tab -->
             <div id="emailTab" class="tab-content">
                 <div class="bg-white p-6 rounded-lg shadow">
@@ -388,8 +474,8 @@
                     
                     <div class="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded">
                         <h3 class="font-semibold mb-2 text-yellow-800">⚠️ UPDATE RECRUITING API URL</h3>
-                        <p class="text-sm text-yellow-700 mb-2">Search for: <code class="bg-white px-2 py-1 rounded">PASTE_YOUR_RECRUITING_APPS_SCRIPT_URL_HERE</code></p>
-                        <p class="text-xs text-yellow-600">Press Ctrl+F (or Cmd+F) and paste your deployed Google Apps Script URL</p>
+                        <p class="text-sm text-yellow-700 mb-2">Search for: <code class="bg-white px-2 py-1 rounded">RECRUITING_API_URL</code></p>
+                        <p class="text-xs text-yellow-600">Update with your deployed Google Apps Script URL</p>
                     </div>
 
                     <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
@@ -462,8 +548,8 @@
         const API_URL = 'https://closing-coalition-api.thomaslancheros06.workers.dev/';
         
         // ⚠️ UPDATE THIS - Recruiting API (Google Apps Script)
-        // Deploy recruiting-script.gs and paste URL here:
-        const RECRUITING_API_URL = 'https://script.google.com/macros/s/AKfycbydU_8O0FFMVGataWlIcchIOt-5QPmWPpcetXLMZvF7r9yUJ_vRgn54HMqPeXqWm891/exec';
+        // Deploy CompleteTracker.gs and paste URL here:
+        const RECRUITING_API_URL = 'YOUR_DEPLOYMENT_URL_HERE';
         
         const ADMIN_EMAIL = 'thomaslancheros.ail@gmail.com';
         
@@ -473,6 +559,7 @@
         let users = [];
         let recruiters = [];
         let selectedUserEmails = new Set();
+        let allRecruitsData = [];
 
         // ============================================================
         // INITIALIZATION
@@ -637,6 +724,11 @@
             
             if (tabName === 'recruiters') {
                 loadRecruiters();
+            }
+            
+            // Auto-load recruits data when tab is shown
+            if (tabName === 'recruits' && allRecruitsData.length === 0) {
+                loadAllRecruits();
             }
         }
 
@@ -1030,8 +1122,8 @@
                 return;
             }
 
-            if (RECRUITING_API_URL === 'PASTE_YOUR_RECRUITING_APPS_SCRIPT_URL_HERE') {
-                alert('⚠️ Recruiting API not configured!\n\nPlease update RECRUITING_API_URL in this file.\nSearch for: PASTE_YOUR_RECRUITING');
+            if (RECRUITING_API_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
+                alert('⚠️ Recruiting API not configured!\n\nPlease update RECRUITING_API_URL at the top of this file.');
                 return;
             }
             
@@ -1046,7 +1138,7 @@
             try {
                 const response = await fetch(RECRUITING_API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({
                         action: 'promoteToRecruiter',
                         fullName: fullName,
@@ -1113,7 +1205,7 @@
         }
 
         async function loadRecruiters() {
-            if (RECRUITING_API_URL === 'PASTE_YOUR_RECRUITING_APPS_SCRIPT_URL_HERE') {
+            if (RECRUITING_API_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
                 const tbody = document.getElementById('recruitersTableBody');
                 tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-yellow-600">⚠️ Update RECRUITING_API_URL first</td></tr>';
                 return;
@@ -1125,7 +1217,7 @@
             try {
                 const response = await fetch(RECRUITING_API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({
                         action: 'getAllRecruiters'
                     })
@@ -1175,6 +1267,260 @@
             }
         }
 
+        // ============================================================
+        // RECRUITS TAB FUNCTIONS
+        // ============================================================
+        async function loadAllRecruits() {
+            if (RECRUITING_API_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
+                alert('⚠️ Recruiting API not configured!\n\nPlease update RECRUITING_API_URL at the top of this file.');
+                return;
+            }
+
+            const container = document.getElementById('recruitsListContainer');
+            container.innerHTML = '<div class="text-center py-12"><div class="text-xl font-semibold text-gray-600">Loading recruiters...</div></div>';
+
+            try {
+                // First get all recruiters
+                const recruitersResponse = await fetch(RECRUITING_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: 'getAllRecruiters'
+                    })
+                });
+
+                const recruitersResult = await recruitersResponse.json();
+
+                if (!recruitersResult.success || !recruitersResult.recruiters || recruitersResult.recruiters.length === 0) {
+                    container.innerHTML = '<div class="text-center py-12 text-gray-500">No recruiters found. Create recruiters first.</div>';
+                    return;
+                }
+
+                // Now fetch prospects for each recruiter
+                const recruiterDataPromises = recruitersResult.recruiters.map(async (recruiter) => {
+                    try {
+                        const prospectsResponse = await fetch(RECRUITING_API_URL + '?action=getProspects&recruiterRef=' + recruiter.tabName);
+                        const prospectsResult = await prospectsResponse.json();
+                        
+                        return {
+                            ...recruiter,
+                            prospects: prospectsResult.success ? (prospectsResult.prospects || []) : []
+                        };
+                    } catch (error) {
+                        console.error('Error loading prospects for ' + recruiter.tabName, error);
+                        return {
+                            ...recruiter,
+                            prospects: []
+                        };
+                    }
+                });
+
+                allRecruitsData = await Promise.all(recruiterDataPromises);
+                displayRecruits(allRecruitsData);
+                updateRecruitsStats(allRecruitsData);
+
+            } catch (error) {
+                console.error('Error loading recruits:', error);
+                container.innerHTML = '<div class="text-center py-12 text-red-500">Error loading data. Check console for details.</div>';
+            }
+        }
+
+        function displayRecruits(recruitsData) {
+            const container = document.getElementById('recruitsListContainer');
+            
+            if (recruitsData.length === 0) {
+                container.innerHTML = '<div class="text-center py-12 text-gray-500">No recruiters found matching your search.</div>';
+                return;
+            }
+
+            container.innerHTML = recruitsData.map((recruiter, index) => {
+                const prospectsByStatus = {
+                    'Prospect': recruiter.prospects.filter(p => p.status === 'Prospect').length,
+                    'In Course': recruiter.prospects.filter(p => p.status === 'In Course').length,
+                    'Testing': recruiter.prospects.filter(p => p.status === 'Testing').length,
+                    'Licensed': recruiter.prospects.filter(p => p.status === 'Licensed').length
+                };
+
+                return `
+                    <div class="recruiter-card mb-4 border-2 border-gray-200 rounded-lg overflow-hidden" data-recruiter="${recruiter.tabName}">
+                        <div class="recruiter-header bg-gradient-to-r from-blue-50 to-purple-50 p-4 cursor-pointer hover:from-blue-100 hover:to-purple-100 transition"
+                             onclick="toggleRecruiterProspects('recruiter-${index}')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4 flex-1">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl">
+                                        ${recruiter.fullName.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg text-gray-800">${capitalizeWords(recruiter.fullName)}</div>
+                                        <div class="text-sm text-gray-600">
+                                            <code class="bg-white px-2 py-1 rounded text-xs">${recruiter.tabName}</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-6 mr-4">
+                                    <div class="flex gap-2">
+                                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                            ${prospectsByStatus['Prospect']} Prospects
+                                        </span>
+                                        <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                            ${prospectsByStatus['In Course']} In Course
+                                        </span>
+                                        <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                            ${prospectsByStatus['Testing']} Testing
+                                        </span>
+                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                            ${prospectsByStatus['Licensed']} Licensed
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-2xl font-bold text-gray-700">
+                                        ${recruiter.prospects.length}
+                                        <span class="text-sm font-normal text-gray-500">total</span>
+                                    </div>
+                                </div>
+                                
+                                <div id="arrow-recruiter-${index}" class="text-2xl text-gray-500 transition-transform">
+                                    ▼
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="recruiter-${index}" class="prospects-list hidden">
+                            ${recruiter.prospects.length === 0 ? 
+                                '<div class="p-8 text-center text-gray-500">No prospects yet. Share this recruiter\'s referral link to get started!</div>' 
+                                : 
+                                `<div class="overflow-x-auto">
+                                    <table class="w-full">
+                                        <thead class="bg-gray-50 border-y border-gray-200">
+                                            <tr>
+                                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Name</th>
+                                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Phone</th>
+                                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Date Added</th>
+                                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            ${recruiter.prospects.map(prospect => `
+                                                <tr class="prospect-row hover:bg-gray-50" data-status="${prospect.status}">
+                                                    <td class="px-6 py-4">
+                                                        <div class="font-medium text-gray-800">${prospect.name}</div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="text-gray-600">${prospect.phone}</div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="text-sm text-gray-500">
+                                                            ${new Date(prospect.datetime).toLocaleDateString('en-US', { 
+                                                                month: 'short', 
+                                                                day: 'numeric',
+                                                                year: 'numeric',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit'
+                                                            })}
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${getStatusBadge(prospect.status)}
+                                                    </td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>`
+                            }
+                            
+                            <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600">
+                                        Referral URL: <code class="bg-white px-2 py-1 rounded text-xs">${recruiter.referralUrl}</code>
+                                    </span>
+                                    <button onclick="copyText('${recruiter.referralUrl}')" 
+                                            class="text-blue-600 hover:underline font-semibold">
+                                        📋 Copy Link
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleRecruiterProspects(id) {
+            const prospectsDiv = document.getElementById(id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (prospectsDiv.classList.contains('hidden')) {
+                prospectsDiv.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                prospectsDiv.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function getStatusBadge(status) {
+            const badges = {
+                'Prospect': '<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">Prospect</span>',
+                'In Course': '<span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">In Course</span>',
+                'Testing': '<span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold">Testing</span>',
+                'Licensed': '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Licensed</span>'
+            };
+            return badges[status] || '<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold">' + status + '</span>';
+        }
+
+        function updateRecruitsStats(recruitsData) {
+            const totalRecruiters = recruitsData.length;
+            const totalProspects = recruitsData.reduce((sum, r) => sum + r.prospects.length, 0);
+            const totalInCourse = recruitsData.reduce((sum, r) => sum + r.prospects.filter(p => p.status === 'In Course').length, 0);
+            const totalLicensed = recruitsData.reduce((sum, r) => sum + r.prospects.filter(p => p.status === 'Licensed').length, 0);
+
+            document.getElementById('recruitsStatsRecruiters').textContent = totalRecruiters;
+            document.getElementById('recruitsStatsProspects').textContent = totalProspects;
+            document.getElementById('recruitsStatsInCourse').textContent = totalInCourse;
+            document.getElementById('recruitsStatsLicensed').textContent = totalLicensed;
+        }
+
+        function filterRecruits() {
+            const searchTerm = document.getElementById('searchRecruits').value.toLowerCase();
+            const statusFilter = document.getElementById('filterRecruitsStatus').value;
+
+            let filteredData = allRecruitsData;
+
+            if (searchTerm) {
+                filteredData = filteredData.map(recruiter => {
+                    const recruiterMatches = recruiter.fullName.toLowerCase().includes(searchTerm) || 
+                                             recruiter.tabName.toLowerCase().includes(searchTerm);
+                    
+                    const filteredProspects = recruiter.prospects.filter(p => 
+                        p.name.toLowerCase().includes(searchTerm) || 
+                        p.phone.includes(searchTerm)
+                    );
+
+                    if (recruiterMatches || filteredProspects.length > 0) {
+                        return {
+                            ...recruiter,
+                            prospects: recruiterMatches ? recruiter.prospects : filteredProspects
+                        };
+                    }
+                    return null;
+                }).filter(r => r !== null);
+            }
+
+            if (statusFilter) {
+                filteredData = filteredData.map(recruiter => ({
+                    ...recruiter,
+                    prospects: recruiter.prospects.filter(p => p.status === statusFilter)
+                })).filter(r => r.prospects.length > 0);
+            }
+
+            displayRecruits(filteredData);
+        }
+
+        // ============================================================
+        // UTILITY FUNCTIONS
+        // ============================================================
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 alert('✅ Copied to clipboard:\n\n' + text);
