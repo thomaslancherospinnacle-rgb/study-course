@@ -3,392 +3,654 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Child Safety Kit | ThomasLife</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Non-Forfeiture Financial | Affordable Life Insurance Protection</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --panel:#0f1b33;
-      --panel2:#0c172e;
-      --text:#eaf0ff;
-      --muted:#b9c6e6;
-      --accent:#22c55e;
-      --accent2:#16a34a;
-      --border:rgba(255,255,255,.12);
-      --shadow: 0 20px 60px rgba(0,0,0,.35);
-      --radius:18px;
+      --white:#ffffff;
+      --off-white:#f8f9fb;
+      --light-gray:#e8eef5;
+      --text-dark:#1a2332;
+      --text-mid:#4a5568;
+      --text-light:#718096;
+      --globe-blue:#003da5;
+      --globe-blue-light:#0052d9;
+      --globe-green:#00a651;
+      --globe-green-light:#00c964;
+      --border:#d4dce8;
+      --shadow: 0 2px 12px rgba(0,61,165,.08);
+      --shadow-lg: 0 8px 32px rgba(0,61,165,.12);
+      --radius:8px;
     }
-    *{box-sizing:border-box}
+    *{box-sizing:border-box; margin:0; padding:0}
     body{
-      margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 10% 10%, #172a52 0%, rgba(23,42,82,0) 55%),
-                  radial-gradient(900px 700px at 90% 20%, #123a2a 0%, rgba(18,58,42,0) 60%),
-                  linear-gradient(180deg, #050a14 0%, var(--bg) 65%, #050a14 100%);
-      color:var(--text);
-      min-height:100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--white);
+      color:var(--text-dark);
+      line-height:1.6;
     }
     a{color:inherit; text-decoration:none}
-    .container{max-width:1100px; margin:0 auto; padding:22px}
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: rgba(5,10,20,.65);
+    
+    /* HEADER */
+    .header{
+      background: var(--white);
       border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position:sticky;
+      top:0;
+      z-index:100;
     }
-    .topbar-inner{
-      max-width:1100px; margin:0 auto; padding:14px 22px;
-      display:flex; align-items:center; justify-content:space-between; gap:14px;
+    .header-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:20px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
     }
     .brand{
-      display:flex; align-items:center; gap:10px; min-width:220px;
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
     .logo{
-      width:40px; height:40px; border-radius:12px;
-      background: linear-gradient(135deg, rgba(34,197,94,.35), rgba(34,197,94,.05));
-      border:1px solid rgba(34,197,94,.35);
-      box-shadow: 0 10px 30px rgba(34,197,94,.12);
-      display:grid; place-items:center;
+      width:48px;
+      height:48px;
+      background: linear-gradient(135deg, var(--globe-blue), var(--globe-blue-light));
+      border-radius:var(--radius);
+      display:grid;
+      place-items:center;
+      color:var(--white);
+      font-weight:900;
+      font-size:20px;
+      letter-spacing:-0.5px;
+    }
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+    }
+    .brand-name{
+      font-size:18px;
       font-weight:800;
+      color:var(--text-dark);
+      letter-spacing:-0.3px;
     }
-    .brand .t1{font-weight:800; letter-spacing:.2px}
-    .brand .t2{color:var(--muted); font-size:12.5px; margin-top:2px}
+    .brand-tagline{
+      font-size:12px;
+      color:var(--text-light);
+      font-weight:500;
+    }
     .nav{
-      display:flex; align-items:center; justify-content:center;
-      gap:10px; flex-wrap:wrap;
+      display:flex;
+      gap:8px;
+      align-items:center;
     }
-    .nav a{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid transparent;
-      color:var(--muted);
+    .nav-link{
+      padding:10px 16px;
+      border-radius:var(--radius);
       font-weight:600;
       font-size:14px;
-      transition: .18s ease;
+      color:var(--text-mid);
+      transition: all .2s ease;
     }
-    .nav a:hover{
-      color:var(--text);
-      border-color:var(--border);
-      background: rgba(255,255,255,.04);
+    .nav-link:hover{
+      background:var(--off-white);
+      color:var(--globe-blue);
     }
-    .nav a.primary{
-      color:#05210f;
-      background: linear-gradient(135deg, var(--accent) 0%, #7bf0a2 100%);
-      border-color: rgba(34,197,94,.35);
-      font-weight:800;
+    .btn-primary{
+      background: linear-gradient(135deg, var(--globe-blue), var(--globe-blue-light));
+      color:var(--white);
+      padding:12px 24px;
+      border-radius:var(--radius);
+      font-weight:700;
+      font-size:14px;
+      border:none;
+      cursor:pointer;
+      transition: all .2s ease;
+      box-shadow: var(--shadow);
     }
-    .nav a.primary:hover{filter:brightness(.98)}
-    .right{
-      display:flex; align-items:center; gap:10px; min-width:220px; justify-content:flex-end;
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow: var(--shadow-lg);
     }
-    .login{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color:var(--text);
-      font-weight:800;
-      font-size:13.5px;
-      transition:.18s ease;
-      text-transform:uppercase;
-      letter-spacing:.5px;
+    .btn-secondary{
+      background:var(--white);
+      color:var(--globe-green);
+      border:2px solid var(--globe-green);
+      padding:10px 22px;
+      border-radius:var(--radius);
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      transition: all .2s ease;
     }
-    .login:hover{background: rgba(255,255,255,.06)}
+    .btn-secondary:hover{
+      background:var(--globe-green);
+      color:var(--white);
+    }
+
+    /* CONTAINER */
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 24px;
+    }
+
+    /* HERO */
     .hero{
-      padding: 34px 0 18px;
+      padding:80px 0;
+      background: linear-gradient(180deg, var(--white) 0%, var(--off-white) 100%);
     }
-    .hero-grid{
+    .hero-content{
+      max-width:800px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .hero h1{
+      font-size:clamp(32px, 5vw, 56px);
+      font-weight:900;
+      color:var(--text-dark);
+      line-height:1.1;
+      letter-spacing:-1px;
+      margin-bottom:24px;
+    }
+    .hero-subtitle{
+      font-size:20px;
+      color:var(--text-mid);
+      line-height:1.6;
+      margin-bottom:40px;
+      font-weight:500;
+    }
+    .hero-ctas{
+      display:flex;
+      gap:16px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    /* STATS BAR */
+    .stats{
+      background:var(--globe-blue);
+      color:var(--white);
+      padding:48px 0;
+    }
+    .stats-grid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:18px;
-      align-items:stretch;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:40px;
+      text-align:center;
+    }
+    .stat-number{
+      font-size:42px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:var(--globe-green-light);
+    }
+    .stat-label{
+      font-size:14px;
+      color:rgba(255,255,255,.85);
+      font-weight:500;
+    }
+
+    /* SECTIONS */
+    .section{
+      padding:80px 0;
+    }
+    .section-alt{
+      background:var(--off-white);
+    }
+    .section-header{
+      text-align:center;
+      max-width:700px;
+      margin:0 auto 60px;
+    }
+    .section-title{
+      font-size:clamp(28px, 4vw, 42px);
+      font-weight:900;
+      color:var(--text-dark);
+      margin-bottom:16px;
+      letter-spacing:-0.8px;
+    }
+    .section-subtitle{
+      font-size:18px;
+      color:var(--text-mid);
+      line-height:1.7;
+      font-weight:500;
+    }
+
+    /* CARDS */
+    .card-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:24px;
+      margin-top:48px;
     }
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background:var(--white);
       border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      border-radius:var(--radius);
+      padding:32px;
+      box-shadow:var(--shadow);
+      transition: all .3s ease;
     }
-    .card-inner{padding:20px}
-    h1{
-      margin:0 0 10px;
-      font-size: clamp(28px, 3.2vw, 40px);
-      line-height:1.06;
-      letter-spacing:-.6px;
+    .card:hover{
+      box-shadow:var(--shadow-lg);
+      transform:translateY(-4px);
     }
-    .lead{
-      color:var(--muted);
-      font-size: 15.5px;
-      line-height:1.55;
-      margin:0 0 18px;
+    .card-icon{
+      width:56px;
+      height:56px;
+      background: linear-gradient(135deg, var(--globe-green), var(--globe-green-light));
+      border-radius:var(--radius);
+      display:grid;
+      place-items:center;
+      color:var(--white);
+      font-size:28px;
+      margin-bottom:20px;
     }
-    .pill-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-    .pill{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-weight:700;
-      font-size:12.5px;
+    .card-title{
+      font-size:22px;
+      font-weight:800;
+      color:var(--text-dark);
+      margin-bottom:12px;
     }
-    .cta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:8px;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid var(--border);
+    .card-text{
+      color:var(--text-mid);
+      line-height:1.7;
+      font-size:15px;
+    }
+    .card-list{
+      list-style:none;
+      margin-top:16px;
+    }
+    .card-list li{
+      padding:8px 0;
+      padding-left:24px;
+      position:relative;
+      color:var(--text-mid);
+      font-size:15px;
+    }
+    .card-list li:before{
+      content:'✓';
+      position:absolute;
+      left:0;
+      color:var(--globe-green);
       font-weight:900;
-      font-size:14.5px;
+    }
+
+    /* TRUST BOX */
+    .trust-box{
+      background: linear-gradient(135deg, var(--globe-blue), var(--globe-blue-light));
+      color:var(--white);
+      padding:48px;
+      border-radius:var(--radius);
+      text-align:center;
+      margin:60px 0;
+      box-shadow:var(--shadow-lg);
+    }
+    .trust-box p{
+      font-size:18px;
+      line-height:1.8;
+      font-weight:500;
+      max-width:800px;
+      margin:0 auto;
+    }
+
+    /* CTA SECTION */
+    .cta-section{
+      background: linear-gradient(135deg, var(--globe-green), var(--globe-green-light));
+      color:var(--white);
+      padding:80px 0;
+      text-align:center;
+    }
+    .cta-section h2{
+      font-size:clamp(28px, 4vw, 42px);
+      font-weight:900;
+      margin-bottom:24px;
+    }
+    .cta-section p{
+      font-size:18px;
+      margin-bottom:32px;
+      opacity:.95;
+    }
+    .cta-buttons{
+      display:flex;
+      gap:16px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .btn-white{
+      background:var(--white);
+      color:var(--globe-green);
+      padding:14px 32px;
+      border-radius:var(--radius);
+      font-weight:700;
+      font-size:16px;
+      border:none;
       cursor:pointer;
-      transition:.18s ease;
-      user-select:none;
+      transition: all .2s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
     }
-    .btn-accent{
-      color:#05210f;
-      background: linear-gradient(135deg, var(--accent) 0%, #7bf0a2 100%);
-      border-color: rgba(34,197,94,.35);
+    .btn-white:hover{
+      transform:translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,.2);
     }
-    .btn-accent:hover{filter:brightness(.98)}
-    .btn-ghost{
-      color:var(--text);
-      background: rgba(255,255,255,.04);
+
+    /* CHILD SAFETY KIT SECTION */
+    .child-safety-section{
+      padding:80px 0;
+      background:var(--white);
     }
-    .btn-ghost:hover{background: rgba(255,255,255,.07)}
-    .section{
-      padding: 18px 0 0;
-    }
-    .section h2{
-      margin:0 0 8px;
-      font-size: 22px;
-      letter-spacing:-.2px;
-    }
-    .section p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.65;
-      font-size:15.25px;
-    }
-    .split{
+    .csk-grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:18px;
+      gap:32px;
       align-items:start;
-      margin-top:18px;
+      margin-top:48px;
     }
-    .video-wrap{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    .video-container{
+      background:var(--white);
       border:1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius:var(--radius);
       overflow:hidden;
-      box-shadow: var(--shadow);
+      box-shadow:var(--shadow-lg);
     }
-    video{
+    .video-container video{
       width:100%;
       height:auto;
       display:block;
-      background:#000;
     }
-    .form-card{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    .csk-form-card{
+      background:var(--white);
       border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-lg);
       overflow:hidden;
     }
-    .form-head{
-      padding:18px 18px 10px;
-      border-bottom:1px solid var(--border);
-      background: rgba(0,0,0,.12);
-    }
-    .form-head .title{font-weight:950; font-size:18px}
-    .form-head .sub{color:var(--muted); font-size:12.5px; margin-top:4px}
-    form{padding:16px 18px 18px}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
-    .field{display:flex; flex-direction:column; gap:6px}
-    label{font-size:12.5px; color:var(--muted); font-weight:700}
-    input, select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      outline:none;
-      transition:.15s ease;
-    }
-    input::placeholder{color:rgba(234,240,255,.35)}
-    input:focus, select:focus{
-      border-color: rgba(34,197,94,.45);
-      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
-    }
-    .full{grid-column: 1 / -1}
-    .submit{
-      margin-top:12px;
-      width:100%;
-      padding:14px 14px;
-      border-radius:14px;
-      border:1px solid rgba(34,197,94,.45);
-      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
-      color:#05210f;
-      font-weight:950;
-      letter-spacing:.2px;
-      cursor:pointer;
-      transition:.18s ease;
-    }
-    .submit:hover{filter:brightness(.98)}
-    .status{
-      margin-top:12px;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-weight:700;
-      font-size:13.5px;
-      display:none;
-    }
-    .status.ok{
-      display:block;
-      border-color: rgba(34,197,94,.35);
-      background: rgba(34,197,94,.08);
-      color: #bff3d2;
-    }
-    .status.err{
-      display:block;
-      border-color: rgba(239,68,68,.35);
-      background: rgba(239,68,68,.08);
-      color: #ffd1d1;
-    }
-    .footer{
-      padding:26px 0 44px;
-      color:rgba(234,240,255,.45);
-      font-size:12.5px;
+    .csk-form-header{
+      background: linear-gradient(135deg, var(--globe-blue), var(--globe-blue-light));
+      color:var(--white);
+      padding:24px;
       text-align:center;
     }
-
-    @media (max-width: 980px){
-      .hero-grid{grid-template-columns:1fr}
-      .right{min-width:auto}
-      .brand{min-width:auto}
-      .split{grid-template-columns:1fr}
+    .csk-form-header h3{
+      font-size:24px;
+      font-weight:800;
+      margin-bottom:8px;
     }
-    @media (max-width: 520px){
-      .grid{grid-template-columns:1fr}
-      .topbar-inner{padding:12px 14px}
-      .container{padding:18px 14px}
+    .csk-form-header p{
+      font-size:14px;
+      opacity:.9;
+    }
+    .csk-form-body{
+      padding:32px;
+    }
+
+    /* FOOTER */
+    .footer{
+      background:var(--text-dark);
+      color:rgba(255,255,255,.7);
+      padding:48px 0;
+      text-align:center;
+    }
+    .footer-content{
+      max-width:600px;
+      margin:0 auto;
+    }
+    .footer p{
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    /* FORM */
+    .form-section{
+      background:var(--white);
+      padding:60px 0;
+    }
+    .form-container{
+      max-width:600px;
+      margin:0 auto;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:40px;
+      box-shadow:var(--shadow-lg);
+    }
+    .form-title{
+      font-size:28px;
+      font-weight:800;
+      color:var(--text-dark);
+      margin-bottom:8px;
+    }
+    .form-subtitle{
+      color:var(--text-mid);
+      margin-bottom:32px;
+      font-size:15px;
+    }
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+    .form-field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .form-field.full{
+      grid-column:1 / -1;
+    }
+    .form-label{
+      font-size:14px;
+      font-weight:700;
+      color:var(--text-dark);
+    }
+    .form-input, .form-select{
+      padding:12px 16px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      font-size:15px;
+      color:var(--text-dark);
+      transition: all .2s ease;
+      background:var(--white);
+    }
+    .form-input:focus, .form-select:focus{
+      outline:none;
+      border-color:var(--globe-blue);
+      box-shadow: 0 0 0 3px rgba(0,61,165,.1);
+    }
+    .form-submit{
+      margin-top:24px;
+      width:100%;
+      background: linear-gradient(135deg, var(--globe-blue), var(--globe-blue-light));
+      color:var(--white);
+      padding:16px;
+      border-radius:var(--radius);
+      font-weight:800;
+      font-size:16px;
+      border:none;
+      cursor:pointer;
+      transition: all .2s ease;
+    }
+    .form-submit:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-lg);
+    }
+    .form-status{
+      margin-top:16px;
+      padding:12px 16px;
+      border-radius:var(--radius);
+      font-weight:600;
+      font-size:14px;
+      display:none;
+    }
+    .form-status.ok{
+      display:block;
+      background:#d4edda;
+      color:#155724;
+      border:1px solid #c3e6cb;
+    }
+    .form-status.err{
+      display:block;
+      background:#f8d7da;
+      color:#721c24;
+      border:1px solid #f5c6cb;
+    }
+
+    @media (max-width: 968px){
+      .csk-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 768px){
+      .header-inner{
+        flex-direction:column;
+        gap:16px;
+      }
+      .nav{
+        flex-direction:column;
+        width:100%;
+      }
+      .nav-link{
+        width:100%;
+        text-align:center;
+      }
+      .hero{
+        padding:48px 0;
+      }
+      .stats{
+        padding:32px 0;
+      }
+      .section{
+        padding:48px 0;
+      }
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+      .card-grid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-inner">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
       <div class="brand">
-        <div class="logo">TL</div>
-        <div>
-          <div class="t1">ThomasLife</div>
-          <div class="t2">Protection • Preparedness • Family First</div>
+        <div class="logo">NF</div>
+        <div class="brand-text">
+          <div class="brand-name">Non-Forfeiture Financial</div>
+          <div class="brand-tagline">Affordable Life Insurance Protection</div>
         </div>
       </div>
-
-      <nav class="nav" aria-label="Primary Navigation">
-        <a class="primary" href="https://thomaslife.space">Get Protected</a>
-        <a href="#about" id="aboutLink">About Us</a>
-        <a href="#child-safety" id="cskLink">Child Safety Kit</a>
+      <nav class="nav">
+        <a href="#coverage" class="nav-link">Coverage</a>
+        <a href="#child-safety" class="nav-link">Child Safety Kit</a>
+        <a href="#why-us" class="nav-link">Why Us</a>
+        <a href="https://thomaslife.space" class="nav-link">Apply Now</a>
+        <button class="btn-primary" onclick="document.getElementById('first_name').focus()">Get Protected Now</button>
       </nav>
+    </div>
+  </header>
 
-      <div class="right">
-        <a class="login" href="/login.html">AGENT LOGIN</a>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Most Americans Are Financially Exposed — Even When They Think They're Covered</h1>
+        <p class="hero-subtitle">Millions of working-class and middle-class families are one unexpected loss away from financial crisis. We help families close that gap with clarity, affordability, and real protection.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="document.getElementById('quote').scrollIntoView({behavior:'smooth'})">Check What I Have</button>
+          <button class="btn-secondary" onclick="document.getElementById('coverage').scrollIntoView({behavior:'smooth'})">See If I'm Under-Covered</button>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <main class="container">
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-grid">
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">1 in 3</div>
+          <div class="stat-label">Workers unaware they have employer life insurance</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">47%</div>
+          <div class="stat-label">Overestimate life insurance costs</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">51%</div>
+          <div class="stat-label">Of U.S. adults have some life insurance</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">49%</div>
+          <div class="stat-label">Would struggle financially within 6 months</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section class="section" id="coverage">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">The Hidden Financial Risk Facing American Families</h2>
+        <p class="section-subtitle">According to LIMRA's 2025 Life Insurance Workplace Benefits report, more than 1 in 3 workers are not fully aware they even have employer-provided life insurance. Even among those who do, many don't understand their coverage or have enough of it.</p>
+      </div>
+
+      <div class="card-grid">
         <div class="card">
-          <div class="card-inner">
-            <h1>Preparedness that protects what matters most.</h1>
-            <p class="lead">
-              We help families get protected and stay ready — because when life happens fast, having the right
-              plan and the right information makes all the difference.
-            </p>
-
-            <div class="pill-row">
-              <span class="pill">Fast response</span>
-              <span class="pill">Family-first mission</span>
-              <span class="pill">Real-world preparedness</span>
-            </div>
-
-            <div class="cta-row">
-              <a class="btn btn-accent" href="#child-safety">Get your Child safety kit NOW</a>
-              <a class="btn btn-ghost" href="https://thomaslife.space">Go to ThomasLife.space</a>
-            </div>
-          </div>
+          <div class="card-icon">❓</div>
+          <h3 class="card-title">Americans Don't Know What They Have</h3>
+          <p class="card-text">A national consumer study found that about half of U.S. adults say they own life insurance — meaning millions of Americans still go without coverage.</p>
+          <ul class="card-list">
+            <li>Don't know if they have coverage</li>
+            <li>Don't understand their policy</li>
+            <li>Assume employer coverage is "enough"</li>
+          </ul>
         </div>
 
         <div class="card">
-          <div class="card-inner">
-            <h2 style="margin:0 0 8px;">Quick Access</h2>
-            <p class="lead" style="margin:0 0 14px;">
-              Use the Child Safety Kit form to send the essentials directly to our system so we can get it out to you.
-            </p>
-            <div class="pill-row">
-              <span class="pill">Only 4 fields</span>
-              <span class="pill">Takes 30 seconds</span>
-              <span class="pill">No clutter</span>
-            </div>
-            <div class="cta-row">
-              <button class="btn btn-accent" type="button" onclick="document.getElementById('first_name').focus()">Start Form</button>
-              <a class="btn btn-ghost" href="#about">Read our mission</a>
-            </div>
-          </div>
+          <div class="card-icon">💰</div>
+          <h3 class="card-title">The Financial Burden</h3>
+          <p class="card-text">According to LIMRA, nearly half of families relying only on workplace life insurance say they would struggle financially within six months if the primary wage earner died.</p>
+          <ul class="card-list">
+            <li>Immediate income loss</li>
+            <li>Ongoing mortgage payments</li>
+            <li>Average funeral: $7,000–$10,000+</li>
+            <li>Credit cards and debt</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⚠️</div>
+          <h3 class="card-title">The #1 Myth: Cost</h3>
+          <p class="card-text">Corebridge Financial research shows that nearly half of Americans overestimate the cost of life insurance or aren't sure how much it costs.</p>
+          <ul class="card-list">
+            <li>Young adults overestimate by 7–12×</li>
+            <li>Often less than a streaming subscription</li>
+            <li>Families delay due to misinformation</li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ABOUT US (scroll target) -->
-    <section class="section card" id="about" style="margin-top:10px;">
-      <div class="card-inner">
-        <h2>About Us</h2>
-        <p>
-          Our mission is simple: protect families and improve preparedness. We believe real protection is more than
-          a policy — it’s also having the right information ready when seconds matter.
-        </p>
-      </div>
-    </section>
-
-    <!-- CHILD SAFETY KIT SECTION -->
-    <section class="section" id="child-safety" style="margin-top:18px;">
-      <div class="card" style="margin-bottom:18px;">
-        <div class="card-inner">
-          <h2>Child Safety Kit</h2>
-          <p>
-            Child safety isn’t only about accidents — it’s about preparedness when seconds matter.
-            A Child Safety Kit helps parents store up-to-date identifying information so law enforcement and
-            search teams can act immediately if a child ever goes missing.
-          </p>
-
-          <div class="cta-row" style="margin-top:14px;">
-            <a class="btn btn-accent" href="#csk-form">Get your Child safety kit NOW</a>
-            <a class="btn btn-ghost" href="https://thomaslife.space">Get Protected</a>
-          </div>
-        </div>
+  <!-- CHILD SAFETY KIT SECTION -->
+  <section class="child-safety-section section-alt" id="child-safety">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Child Safety Kit</h2>
+        <p class="section-subtitle">Child safety isn't only about accidents — it's about preparedness when seconds matter. A Child Safety Kit helps parents store up-to-date identifying information so law enforcement and search teams can act immediately if a child ever goes missing.</p>
       </div>
 
-      <div class="split">
+      <div class="csk-grid">
         <!-- VIDEO -->
-        <div class="video-wrap" aria-label="Child Safety Kit Video">
-          <!-- Put childsafe.mp4 in the SAME folder as this HTML file -->
+        <div class="video-container">
           <video controls preload="metadata">
             <source src="childsafe.mp4" type="video/mp4" />
             Your browser does not support the video tag.
@@ -396,149 +658,141 @@
         </div>
 
         <!-- FORM -->
-        <div class="form-card" id="csk-form">
-          <div class="form-head">
-            <div class="title">Request your NO COST Child Safety Kit</div>
-            <div class="sub">Answer a few basics. We'll follow up.</div>
+        <div class="csk-form-card">
+          <div class="csk-form-header">
+            <h3>Request Your FREE Child Safety Kit</h3>
+            <p>Fill out the form below and we'll send your kit right away</p>
           </div>
+          <div class="csk-form-body">
+            <form id="childSafetyForm" autocomplete="on">
+              <input type="hidden" name="importance" value="Child Safety Kit">
 
-          <form id="childSafetyForm" autocomplete="on">
-            <!-- Hidden importance: forced to Child Safety kit (users never see this) -->
-            <input type="hidden" name="importance" id="importance" value="Child Safety kit" />
+              <div class="form-grid">
+                <div class="form-field">
+                  <label class="form-label" for="csk_first_name">First Name</label>
+                  <input class="form-input" id="csk_first_name" name="first_name" type="text" placeholder="John" required>
+                </div>
 
-            <div class="grid">
-              <div class="field">
-                <label for="first_name">First Name</label>
-                <input id="first_name" name="first_name" type="text" placeholder="First Name" required />
+                <div class="form-field">
+                  <label class="form-label" for="csk_last_name">Last Name</label>
+                  <input class="form-input" id="csk_last_name" name="last_name" type="text" placeholder="Doe" required>
+                </div>
+
+                <div class="form-field full">
+                  <label class="form-label" for="csk_phone">Phone Number</label>
+                  <input class="form-input" id="csk_phone" name="phone" type="tel" placeholder="(555) 555-5555" required>
+                </div>
+
+                <div class="form-field full">
+                  <label class="form-label" for="csk_state">State</label>
+                  <select class="form-select" id="csk_state" name="state" required>
+                    <option value="" selected disabled>Select your state</option>
+                    <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="FL">Florida</option>
+                    <option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
+                    <option value="DC">District of Columbia</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="field">
-                <label for="last_name">Last Name</label>
-                <input id="last_name" name="last_name" type="text" placeholder="Last Name" required />
-              </div>
+              <button class="form-submit" type="submit">Get My FREE Child Safety Kit</button>
+              <div id="cskFormStatus" class="form-status"></div>
+            </form>
 
-              <div class="field full">
-                <label for="phone">Phone</label>
-                <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" required />
-              </div>
-
-              <div class="field full">
-                <label for="state">State</label>
-                <select id="state" name="state" required>
-                  <option value="" selected disabled>Select</option>
-                  <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
-                  <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
-                  <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="FL">Florida</option>
-                  <option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option>
-                  <option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option>
-                  <option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option>
-                  <option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option>
-                  <option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option>
-                  <option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option>
-                  <option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option>
-                  <option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option>
-                  <option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option>
-                  <option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option>
-                  <option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option>
-                  <option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option>
-                  <option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option>
-                  <option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
-                  <option value="DC">District of Columbia</option>
-                </select>
-              </div>
+            <div style="margin-top:24px; text-align:center;">
+              <a href="https://thomaslife.space" style="display:inline-block; padding:14px 32px; background:var(--globe-green); color:white; border-radius:var(--radius); font-weight:700; text-decoration:none; transition: all .2s ease;">Apply for Life Insurance Now</a>
             </div>
-
-            <button class="submit" type="submit">Send Message</button>
-            <div id="formStatus" class="status"></div>
-          </form>
+          </div>
         </div>
       </div>
-    </section>
-
-    <div class="footer">
-      © <span id="yr"></span> ThomasLife • Preparedness & Protection
     </div>
-  </main>
+  </section>
 
-  <script>
-    // ====== CONFIG ======
-    // Paste your deployed Google Apps Script Web App URL here.
-    // Example looks like: https://script.google.com/macros/s/XXXXXXX/exec
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHhy98PAClRMXr095OhnvcjVNX9aHyxvfvQHmek7mJAf3-o-H3j7_bF7UXuk5As0Iqjg/exec";
+  <!-- WHAT IT PROTECTS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">What Life Insurance Actually Protects</h2>
+        <p class="section-subtitle">Life insurance isn't about death — it's about continuity. It gives families time, options, and dignity.</p>
+      </div>
 
-    // Smooth scroll for in-page links
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const id = a.getAttribute('href');
-        const target = document.querySelector(id);
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🏠</div>
+          <h3 class="card-title">Income Replacement</h3>
+          <p class="card-text">Replaces lost income so your family can maintain their standard of living and keep the home they love.</p>
+        </div>
 
-    document.getElementById('yr').textContent = new Date().getFullYear();
+        <div class="card">
+          <div class="card-icon">🎓</div>
+          <h3 class="card-title">Children's Education</h3>
+          <p class="card-text">Ensures your children's educational plans aren't derailed by unexpected loss.</p>
+        </div>
 
-    const form = document.getElementById('childSafetyForm');
-    const statusEl = document.getElementById('formStatus');
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3 class="card-title">Outstanding Debts</h3>
+          <p class="card-text">Covers mortgage, car loans, credit cards, and personal debt so your family isn't burdened.</p>
+        </div>
 
-    function setStatus(type, msg){
-      statusEl.className = "status " + (type || "");
-      statusEl.textContent = msg;
-      statusEl.style.display = "block";
-    }
+        <div class="card">
+          <div class="card-icon">⚰️</div>
+          <h3 class="card-title">Final Expenses</h3>
+          <p class="card-text">Handles funeral and burial costs without forcing families into debt at the worst possible moment.</p>
+        </div>
 
-    // Encode as application/x-www-form-urlencoded (works cleanly with e.parameter in Apps Script)
-    function toFormUrlEncoded(obj){
-      return Object.keys(obj)
-        .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(obj[k] ?? ""))
-        .join("&");
-    }
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3 class="card-title">Long-Term Stability</h3>
+          <p class="card-text">Provides ongoing financial security for years, not just immediate assistance.</p>
+        </div>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+        <div class="card">
+          <div class="card-icon">✨</div>
+          <h3 class="card-title">Peace of Mind</h3>
+          <p class="card-text">Replaces uncertainty with clarity and control over your family's future.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE")) {
-        setStatus("err", "Missing Apps Script URL. Paste your Web App URL into APPS_SCRIPT_URL in the script section.");
-        return;
-      }
+  <!-- WHY US -->
+  <section class="section section-alt" id="why-us">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why Non-Forfeiture Financial Is Different</h2>
+        <p class="section-subtitle">We specialize in affordable coverage designed for working-class families, first-time buyers, and military members.</p>
+      </div>
 
-      const payload = {
-        first_name: document.getElementById('first_name').value.trim(),
-        last_name: document.getElementById('last_name').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        state: document.getElementById('state').value,
-        importance: "Child Safety kit" // forced
-      };
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">💵</div>
+          <h3 class="card-title">Discounted Life Insurance</h3>
+          <p class="card-text">Maximum protection at the lowest reasonable cost. Our approach focuses on affordability without sacrificing coverage quality.</p>
+        </div>
 
-      // Basic validation
-      if (!payload.first_name || !payload.last_name || !payload.phone || !payload.state) {
-        setStatus("err", "Fill out First Name, Last Name, Phone, and State.");
-        return;
-      }
+        <div class="card">
+          <div class="card-icon">🎖️</div>
+          <h3 class="card-title">Military & Service Families</h3>
+          <p class="card-text">Specialized support for those who serve, with coverage that travels with you beyond active duty.</p>
+        </div>
 
-      setStatus("", "Sending...");
-
-      try {
-        const res = await fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-          body: toFormUrlEncoded(payload)
-        });
-
-        const text = await res.text();
-
-        if (res.ok && /success/i.test(text)) {
-          setStatus("ok", "✅ Submitted. We’ll follow up shortly.");
-          form.reset();
-          document.getElementById('importance').value = "Child Safety kit";
-        } else {
-          setStatus("err", "Submission failed. Response: " + text);
-        }
-      } catch (err) {
-        setStatus("err", "Network error: " + (err?.message || err));
-      }
-    });
-  </script>
-</body>
-</html>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3 class="card-title">Exclusive Benefits</h3>
+          <p class="card-text">Many policies include accelerated death benefits, conversion options, guaranteed issue programs, and coverage that stays with you even if your job changes.</p>
+        </div>
