@@ -458,10 +458,10 @@
   function getExpires(){ return localStorage.getItem(LS_EXPIRES) || ""; }
 
   async function api(action, payload){
-    const res = await fetch(API_URL, {
+    const res = await fetch(`${API_URL}/${action}`, {
       method: "POST",
       headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ action, ...payload })
+      body: JSON.stringify(payload)
     });
     const text = await res.text();
     let data;
