@@ -833,7 +833,7 @@
             </p>
         </div>
     </footer>
-
+    <script src="config.js"></script>
     <script>
         // Smooth scroll to application form
         function scrollToApplication() {
@@ -847,7 +847,7 @@
         const recruiterRef = urlParams.get('ref') || 'direct';
         
         // API endpoint
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxvwtBSUiy1wTed5iR4hsNLPqhzA9g-FKH9Lfe-ZKA07RBFEFMVY2-E-qCOtdido_V0/exec';
+        const API_URL = APPDB;
         
         async function handleSubmit(event) {
             event.preventDefault();
