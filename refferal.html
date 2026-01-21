@@ -658,17 +658,29 @@
       } catch (e) {}
     }
 
-    function emailToDisplayName(email) {
-      // handle your common format, but don't crash on anything else
-      const base = (email || "").replace(/\.ail@gmail\.com$/i, "").trim();
-      if (!base) return "";
-      return base
-        .replace(/[_\-]+/g, " ")
-        .split(/\s+/)
-        .filter(Boolean)
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(" ");
+    async function api(action, payload) {
+      if (!CLOUD_FLARE_URL) throw new Error("CFWORKER not set in config.js");
+    
+      const base = String(CLOUD_FLARE_URL).replace(/\/+$/, ""); // strip trailing /
+      const url = `${base}/${encodeURIComponent(action)}`;
+    
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload || {}),
+      });
+    
+      const txt = await res.text();
+      let data;
+      try { data = JSON.parse(txt); }
+      catch { throw new Error(txt || `Bad JSON from ${action}`); }
+    
+      if (!data || data.ok !== true) {
+        throw new Error(data?.error || data?.detail || "API error");
+      }
+      return data;
     }
+
 
     // =========================
     // API
@@ -714,18 +726,52 @@
     // =========================
     // AUTH / LOGIN FLOW
     // =========================
+    // tiny DOM helpers (so requireLogin doesn't crash)
+    function $(id) { return document.getElementById(id); }
+    function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
+    
+    function getCachedUsername() {
+      try {
+        return getCookie("cc_username") || localStorage.getItem("cc_username") || "";
+      } catch (e) {
+        return getCookie("cc_username") || "";
+      }
+    }
+    
+    // Convert login email to a nice display name (customize if you want)
+    function emailToDisplayName(email) {
+      if (!email) return "";
+      // remove known suffixes
+      let base = email
+        .replace(/@.*$/i, "")             // strip domain
+        .replace(/\.ail$/i, "")           // just in case
+        .replace(/\./g, " ")              // dots -> spaces
+        .replace(/_/g, " ");              // underscores -> spaces
+    
+      // Title case words
+      base = base
+        .split(" ")
+        .filter(Boolean)
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(" ");
+    
+      return base || "";
+    }
+    
     async function requireLogin() {
       const token = getToken();
       const cachedName = getCachedUsername();
-
+    
       console.log("=== requireLogin() ===");
       console.log("Token:", token ? "YES" : "NO");
       console.log("Token source:", getCookie(LS_TOKEN) ? "COOKIE" : "localStorage/none");
       console.log("Cached username:", cachedName || "(none)");
-
-      // If no token, show message + keep overlay (or hide if you prefer)
+    
+      // No token = not logged in
       if (!token) {
         setText("userDisplay", "Not logged in");
+        updateAuthStatus("No session token");
+    
         const tree = $("familyTree");
         if (tree) {
           tree.innerHTML = `
@@ -736,54 +782,71 @@
             </div>
           `;
         }
-        updateAuthStatus("No session token");
-        // leave overlay visible (better UX). If you want it gone anyway, uncomment:
-        // hideAuthOverlay();
+    
+        // Keep overlay visible (feels secure). If you prefer it gone, call hideAuthOverlay().
         throw new Error("Not logged in");
       }
-
+    
+      // We have a token — verify with backend
       setText("userDisplay", "Verifying login...");
       updateAuthStatus("Verifying session...");
-
+    
       try {
+        // IMPORTANT: api() must be the FIXED version that calls `${CFWORKER}/${action}`
         const me = await api("me", { token });
-        loginEmail = me.loginEmail || "";
-
-        const display = emailToDisplayName(loginEmail) || cachedName || "User";
-        currentUser = display;
-
-        cacheUsername(currentUser);
-
-        setText("userDisplay", currentUser);
-        updateAuthStatus("Access granted");
-        hideAuthOverlay();
-
-        return true;
+    
+        // Worker should return: { ok:true, loginEmail:"..." }
+        const loginEmail = me.loginEmail || "";
+        const displayName = emailToDisplayName(loginEmail) || cachedName || "User";
+    
+        // set globals you already use elsewhere
+        window.loginEmail = loginEmail;
+        window.currentUser = displayName;
+    
+        // cache for offline fallback
+        try {
+          setCookie("cc_username", displayName, 12);
+          localStorage.setItem("cc_username", displayName);
+        } catch (e) {}
+    
+        console.log("✅ Login OK:", { loginEmail, displayName });
+    
+        setText("userDisplay", displayName);
+        updateAuthStatus("Session verified");
+        hideAuthOverlay(); // ✅ hide overlay on success
+        return { loginEmail, displayName };
+    
       } catch (e) {
-        console.warn("Auth API failed:", e.message);
-
-        // Offline fallback: use cached name if we have it
-        currentUser = cachedName || "User";
-        setText("userDisplay", cachedName ? `${cachedName} (offline)` : "User (API offline)");
-
+        console.error("⚠️ Auth API failed:", e);
+    
+        // fallback: keep app usable with cached name
+        const fallback = cachedName || "User";
+        window.currentUser = fallback;
+    
+        setText("userDisplay", fallback + " (offline)");
+        updateAuthStatus("API offline — using cached user");
+    
+        // show warning, but do not block usage
         const tree = $("familyTree");
         if (tree) {
           tree.innerHTML = `
-            <div class="alert alert-info">
-              <strong>⚠️ API Offline</strong><br>
-              Working in offline mode. Some features may be limited.<br>
-              Error: ${e.message}<br><br>
+            <div class="alert alert-error">
+              <strong>⚠️ API Offline / Auth Failed</strong><br>
+              ${String(e.message || e)}<br><br>
               <button class="btn btn-primary" onclick="location.reload()">🔄 Try Again</button>
               <button class="btn btn-primary" onclick="location.href='index.html'">Go to Login</button>
             </div>
           `;
         }
-
-        updateAuthStatus("Offline mode");
-        hideAuthOverlay(); // don't trap them behind overlay
-        return false;
+    
+        // Up to you: keep overlay visible OR hide it so they can still browse offline.
+        // I recommend hiding so the UI isn't stuck:
+        hideAuthOverlay();
+    
+        return { loginEmail: "", displayName: fallback, offline: true };
       }
     }
+
 
     // =========================
     // DATA LOADING
