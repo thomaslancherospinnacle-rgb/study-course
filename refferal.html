@@ -544,7 +544,634 @@
     </div>
   </div>
 <script src="config.js"></script>
+<script>
+  ;(() => {
+    "use strict";
 
+    // =========================
+    // REQUIRED GLOBALS / STATE
+    // =========================
+    let referralData = [];
+    let loginEmail = "";
+    let currentUser = ""; // set after auth/cached name
+
+    // =========================
+    // CONFIG (from config.js)
+    // =========================
+    const GOOGLE_SCRIPT_URL = typeof REFDB !== "undefined" ? REFDB : "";
+    const CLOUD_FLARE_URL   = typeof CFWORKER !== "undefined" ? CFWORKER : "";
+
+    // =========================
+    // AUTH CONSTANTS
+    // =========================
+    const LS_TOKEN   = "cc_token";
+    const LS_EXPIRES = "cc_expires_at";
+    const LS_USER    = "cc_username";
+
+    // =========================
+    // SAFE DOM HELPERS
+    // =========================
+    const $ = (id) => document.getElementById(id);
+
+    function setText(id, text) {
+      const el = $(id);
+      if (el) el.textContent = text;
+    }
+
+    function updateAuthStatus(message) {
+      setText("authStatus", message);
+    }
+
+    function hideAuthOverlay() {
+      const overlay = $("authOverlay");
+      if (!overlay) return;
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity .25s ease";
+      setTimeout(() => (overlay.style.display = "none"), 250);
+    }
+
+    // =========================
+    // COOKIES (iOS FRIENDLY)
+    // =========================
+    function setCookie(name, value, hours) {
+      const expires = new Date(Date.now() + hours * 60 * 60 * 1000).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires};path=/;SameSite=Lax`;
+    }
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift() || "");
+      return "";
+    }
+
+    function deleteCookie(name) {
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Lax`;
+    }
+
+    function logoutLocal() {
+      try {
+        localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_EXPIRES);
+        localStorage.removeItem(LS_USER);
+      } catch (e) {}
+      deleteCookie(LS_TOKEN);
+      deleteCookie(LS_EXPIRES);
+      deleteCookie(LS_USER);
+    }
+
+    // =========================
+    // TOKEN + USERNAME
+    // =========================
+    function getToken() {
+      // cookie first
+      const cookieToken = getCookie(LS_TOKEN);
+      if (cookieToken) return cookieToken;
+
+      // fallback localStorage
+      try {
+        const localToken = localStorage.getItem(LS_TOKEN) || "";
+        if (localToken) {
+          // migrate into cookie
+          setCookie(LS_TOKEN, localToken, 12);
+          return localToken;
+        }
+      } catch (e) {}
+      return "";
+    }
+
+    function getCachedUsername() {
+      const c = getCookie(LS_USER);
+      if (c) return c;
+      try {
+        return localStorage.getItem(LS_USER) || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function cacheUsername(name) {
+      if (!name) return;
+      setCookie(LS_USER, name, 12);
+      try {
+        localStorage.setItem(LS_USER, name);
+      } catch (e) {}
+    }
+
+    function emailToDisplayName(email) {
+      // handle your common format, but don't crash on anything else
+      const base = (email || "").replace(/\.ail@gmail\.com$/i, "").trim();
+      if (!base) return "";
+      return base
+        .replace(/[_\-]+/g, " ")
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(" ");
+    }
+
+    // =========================
+    // API
+    // =========================
+    async function api(action, payload) {
+      if (!CLOUD_FLARE_URL) throw new Error("CFWORKER not set in config.js");
+
+      const res = await fetch(CLOUD_FLARE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, ...payload }),
+      });
+
+      const txt = await res.text();
+      let data;
+      try {
+        data = JSON.parse(txt);
+      } catch {
+        throw new Error(txt || "Bad response");
+      }
+
+      if (!data || data.ok !== true) {
+        const msg =
+          data && (data.error || data.detail)
+            ? String(data.error || "Request failed") + (data.detail ? " — " + data.detail : "")
+            : "Request failed";
+        throw new Error(msg);
+      }
+
+      return data;
+    }
+
+    // =========================
+    // ALERTS
+    // =========================
+    function showAlert(elementId, message, type) {
+      const statusDiv = $(elementId);
+      if (!statusDiv) return;
+      statusDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      if (type === "success") setTimeout(() => (statusDiv.innerHTML = ""), 5000);
+    }
+
+    // =========================
+    // AUTH / LOGIN FLOW
+    // =========================
+    async function requireLogin() {
+      const token = getToken();
+      const cachedName = getCachedUsername();
+
+      console.log("=== requireLogin() ===");
+      console.log("Token:", token ? "YES" : "NO");
+      console.log("Token source:", getCookie(LS_TOKEN) ? "COOKIE" : "localStorage/none");
+      console.log("Cached username:", cachedName || "(none)");
+
+      // If no token, show message + keep overlay (or hide if you prefer)
+      if (!token) {
+        setText("userDisplay", "Not logged in");
+        const tree = $("familyTree");
+        if (tree) {
+          tree.innerHTML = `
+            <div class="alert alert-error">
+              <strong>❌ Not Logged In</strong><br><br>
+              You need to login first.<br><br>
+              <button class="btn btn-primary" onclick="location.href='index.html'">Go to Login</button>
+            </div>
+          `;
+        }
+        updateAuthStatus("No session token");
+        // leave overlay visible (better UX). If you want it gone anyway, uncomment:
+        // hideAuthOverlay();
+        throw new Error("Not logged in");
+      }
+
+      setText("userDisplay", "Verifying login...");
+      updateAuthStatus("Verifying session...");
+
+      try {
+        const me = await api("me", { token });
+        loginEmail = me.loginEmail || "";
+
+        const display = emailToDisplayName(loginEmail) || cachedName || "User";
+        currentUser = display;
+
+        cacheUsername(currentUser);
+
+        setText("userDisplay", currentUser);
+        updateAuthStatus("Access granted");
+        hideAuthOverlay();
+
+        return true;
+      } catch (e) {
+        console.warn("Auth API failed:", e.message);
+
+        // Offline fallback: use cached name if we have it
+        currentUser = cachedName || "User";
+        setText("userDisplay", cachedName ? `${cachedName} (offline)` : "User (API offline)");
+
+        const tree = $("familyTree");
+        if (tree) {
+          tree.innerHTML = `
+            <div class="alert alert-info">
+              <strong>⚠️ API Offline</strong><br>
+              Working in offline mode. Some features may be limited.<br>
+              Error: ${e.message}<br><br>
+              <button class="btn btn-primary" onclick="location.reload()">🔄 Try Again</button>
+              <button class="btn btn-primary" onclick="location.href='index.html'">Go to Login</button>
+            </div>
+          `;
+        }
+
+        updateAuthStatus("Offline mode");
+        hideAuthOverlay(); // don't trap them behind overlay
+        return false;
+      }
+    }
+
+    // =========================
+    // DATA LOADING
+    // =========================
+    async function loadData() {
+      if (!GOOGLE_SCRIPT_URL) {
+        showAlert("familyTree", "❌ REFDB not set in config.js", "error");
+        return;
+      }
+      if (!currentUser) {
+        showAlert("familyTree", "Loading user info...", "info");
+        return;
+      }
+
+      const treeDiv = $("familyTree");
+      if (treeDiv) treeDiv.innerHTML = '<div class="alert alert-info">⏳ Loading your network...</div>';
+
+      try {
+        console.log("=== LOADING DATA ===", { currentUser });
+
+        const url = `${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(currentUser)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!Array.isArray(data)) throw new Error("Invalid data format");
+
+        referralData = data;
+        console.log(`✅ Loaded ${data.length} referrals from tab "${currentUser}"`);
+
+        buildFamilyTree();
+        updateSponsorDropdowns();
+        updateStats();
+      } catch (error) {
+        console.error("Error loading data:", error);
+        if (treeDiv) treeDiv.innerHTML = `<div class="alert alert-error">❌ Error: ${error.message}</div>`;
+      }
+    }
+
+    // =========================
+    // FAMILY TREE BUILDING
+    // =========================
+    function buildFamilyTree() {
+      const treeDiv = $("familyTree");
+      if (!treeDiv) return;
+
+      if (!Array.isArray(referralData) || referralData.length === 0) {
+        treeDiv.innerHTML = '<div class="alert alert-info">📝 No referrals yet. Add a sponsor to get started!</div>';
+        return;
+      }
+
+      const sponsorsFromColumn = [...new Set(referralData.map(r => r.sponsorName).filter(Boolean))];
+      const rootSponsors = referralData
+        .filter(r => !r.sponsorName || String(r.sponsorName).trim() === "")
+        .map(r => r.refName)
+        .filter(Boolean);
+
+      const allSponsors = [...new Set([...sponsorsFromColumn, ...rootSponsors])];
+
+      let html = "";
+      allSponsors.forEach(sponsorName => {
+        const referrals = referralData.filter(r => r.sponsorName === sponsorName);
+        const sponsorInfo = referralData.find(r => r.refName === sponsorName);
+        html += buildSponsorGroupHTML(sponsorName, sponsorInfo, referrals);
+      });
+
+      treeDiv.innerHTML = html || '<div class="alert alert-info">No sponsors found yet.</div>';
+    }
+
+    function safePhone(v) {
+      return String(v || "").replace(/\D/g, "");
+    }
+
+    function esc(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function buildSponsorGroupHTML(sponsorName, sponsorInfo, referrals) {
+      const sponsor = sponsorInfo || {
+        refName: sponsorName,
+        refNumber: referrals[0]?.sponsorNumber || "",
+        leadType: referrals[0]?.leadType || "",
+        sponsorPos: referrals[0]?.sponsorPos || "NO",
+        extension: "",
+      };
+
+      const cleanPhone = safePhone(sponsor.refNumber);
+
+      let html = `
+        <div class="sponsor-group">
+          <div class="sponsor-card">
+            <div class="sponsor-name">⭐ ${esc(sponsorName)}</div>
+            <div class="sponsor-info">
+              ${cleanPhone ? `📞 <a href="tel:${cleanPhone}">${cleanPhone}</a><br>` : ""}
+              ${sponsor.leadType ? `<span class="sponsor-badge">${esc(sponsor.leadType)}</span>` : ""}
+              ${sponsor.sponsorPos === "YES" ? '<span class="sponsor-badge">SPONSOR POS</span>' : ""}
+              ${sponsor.extension ? `<br><br><strong>📝 Why:</strong> ${esc(sponsor.extension)}` : ""}
+            </div>
+          </div>
+      `;
+
+      if (referrals && referrals.length > 0) {
+        html += '<div class="referrals-container">';
+        referrals.forEach(ref => {
+          const cleanRefPhone = safePhone(ref.refNumber);
+          html += `
+            <div class="referral-card">
+              <div class="ref-name">${esc(ref.refName)}</div>
+              ${cleanRefPhone ? `<div class="ref-detail">📞 <a href="tel:${cleanRefPhone}">${cleanRefPhone}</a></div>` : ""}
+              <div class="ref-detail"><strong>Relation:</strong> ${esc(ref.refRelation || "")}</div>
+              <div class="ref-detail">
+                <span class="ref-badge ${ref.leadType === "Hardcard" ? "hardcard" : ""}">${esc(ref.leadType || "")}</span>
+              </div>
+              ${ref.extension ? `<div class="extension-box"><strong>📝 Why:</strong> ${esc(ref.extension)}</div>` : ""}
+              <button class="call-sponsor-btn" data-action="toggle-contact">📞 Call Sponsor</button>
+              <div class="sponsor-contact">
+                <div class="sponsor-contact-title">Contact ${esc(sponsor.refName)}</div>
+                <div class="ref-detail">
+                  ${cleanPhone ? `📞 <a href="tel:${cleanPhone}">${cleanPhone}</a><br>` : ""}
+                  💬 "Hi ${esc(sponsor.refName)}, calling about ${esc(ref.refName)}"
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += "</div>";
+      } else {
+        html += '<div class="alert alert-info">No referrals yet for this sponsor.</div>';
+      }
+
+      html += "</div>";
+      return html;
+    }
+
+    // =========================
+    // SPONSOR DROPDOWNS
+    // =========================
+    function updateSponsorDropdowns() {
+      const select = $("refSponsor");
+      if (!select) return;
+
+      select.innerHTML = '<option value="">Choose a sponsor...</option>';
+
+      const sponsorsFromColumn = [...new Set(referralData.map(r => r.sponsorName).filter(Boolean))];
+      const rootSponsors = referralData
+        .filter(r => !r.sponsorName || String(r.sponsorName).trim() === "")
+        .map(r => r.refName)
+        .filter(Boolean);
+
+      const allSponsors = [...new Set([...sponsorsFromColumn, ...rootSponsors])].sort();
+
+      allSponsors.forEach(sponsorName => {
+        const sponsorData = referralData.find(r => r.refName === sponsorName);
+        const phone = sponsorData ? safePhone(sponsorData.refNumber) : "";
+        const option = document.createElement("option");
+        option.value = sponsorName;
+        option.textContent = phone ? `${sponsorName} (${phone})` : sponsorName;
+        select.appendChild(option);
+      });
+    }
+
+    // =========================
+    // STATS
+    // =========================
+    function updateStats() {
+      const statsBar = $("statsBar");
+      if (!statsBar) return;
+
+      const totalReferrals = referralData.length;
+      const uniqueSponsors = [...new Set(referralData.map(r => r.sponsorName).filter(Boolean))].length;
+      const hardcards = referralData.filter(r => r.leadType === "Hardcard").length;
+
+      setText("totalReferrals", String(totalReferrals));
+      setText("totalSponsors", String(uniqueSponsors));
+      setText("hardcardCount", String(hardcards));
+
+      statsBar.style.display = totalReferrals > 0 ? "grid" : "none";
+    }
+
+    // =========================
+    // ADD REFERRAL / SPONSOR
+    // =========================
+    async function postToSheet(payload) {
+      const res = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const txt = await res.text();
+      let data;
+      try {
+        data = JSON.parse(txt);
+      } catch {
+        throw new Error(txt || "Bad response");
+      }
+      return data;
+    }
+
+    async function addReferral() {
+      const refName = ($("refName")?.value || "").trim();
+      const refNumber = safePhone($("refNumber")?.value || "");
+      const refRelation = ($("refRelation")?.value || "").trim();
+      const sponsorName = $("refSponsor")?.value || "";
+      const leadType = $("refLeadType")?.value || "";
+      const extension = ($("refExtension")?.value || "").trim();
+
+      const refData = {
+        user: currentUser,
+        refName,
+        refNumber,
+        refRelation,
+        sponsorName,
+        sponsorNumber: "",
+        leadType,
+        sponsorPos: "NO",
+        extension,
+      };
+
+      if (!refName || !refNumber || !refRelation || !sponsorName || !extension) {
+        showAlert("addRefStatus", "❌ Please fill in all fields", "error");
+        return;
+      }
+      if (refNumber.length !== 10) {
+        showAlert("addRefStatus", "❌ Phone must be 10 digits", "error");
+        return;
+      }
+
+      const sponsor = referralData.find(r => r.refName === sponsorName);
+      if (sponsor) refData.sponsorNumber = sponsor.refNumber;
+
+      showAlert("addRefStatus", "⏳ Adding...", "info");
+
+      try {
+        const result = await postToSheet({ action: "addReferral", referralData: refData });
+        if (result && result.success) {
+          showAlert("addRefStatus", "✅ Referral added!", "success");
+          ["refName", "refNumber", "refRelation", "refExtension"].forEach(id => { const el = $(id); if (el) el.value = ""; });
+          if ($("refSponsor")) $("refSponsor").value = "";
+          setTimeout(loadData, 600);
+        } else {
+          showAlert("addRefStatus", "❌ " + (result?.message || "Failed"), "error");
+        }
+      } catch (e) {
+        showAlert("addRefStatus", "❌ Error: " + e.message, "error");
+      }
+    }
+
+    async function addSponsor() {
+      const refName = ($("sponsorName")?.value || "").trim();
+      const refNumber = safePhone($("sponsorNumber")?.value || "");
+      const leadType = $("sponsorLeadType")?.value || "";
+      const sponsorPos = $("sponsorPos")?.value || "NO";
+      const extension = ($("sponsorExtension")?.value || "").trim();
+
+      const sponsorData = {
+        user: currentUser,
+        refName,
+        refNumber,
+        refRelation: "Root/Sponsor",
+        sponsorName: "",
+        sponsorNumber: "",
+        leadType,
+        sponsorPos,
+        extension,
+      };
+
+      if (!refName || !refNumber || !extension) {
+        showAlert("addSponsorStatus", "❌ Please fill in all fields", "error");
+        return;
+      }
+      if (refNumber.length !== 10) {
+        showAlert("addSponsorStatus", "❌ Phone must be 10 digits", "error");
+        return;
+      }
+
+      showAlert("addSponsorStatus", "⏳ Adding...", "info");
+
+      try {
+        const result = await postToSheet({ action: "addReferral", referralData: sponsorData });
+        if (result && result.success) {
+          showAlert("addSponsorStatus", "✅ Sponsor added!", "success");
+          ["sponsorName", "sponsorNumber", "sponsorExtension"].forEach(id => { const el = $(id); if (el) el.value = ""; });
+          setTimeout(loadData, 600);
+        } else {
+          showAlert("addSponsorStatus", "❌ " + (result?.message || "Failed"), "error");
+        }
+      } catch (e) {
+        showAlert("addSponsorStatus", "❌ Error: " + e.message, "error");
+      }
+    }
+
+    // =========================
+    // SEARCH & FILTER
+    // =========================
+    function filterTree() {
+      const box = $("searchBox");
+      const searchTerm = (box?.value || "").toLowerCase();
+      const cards = document.querySelectorAll(".referral-card");
+      const groups = document.querySelectorAll(".sponsor-group");
+
+      if (!searchTerm) {
+        cards.forEach(card => (card.style.display = "block"));
+        groups.forEach(group => (group.style.display = "block"));
+        return;
+      }
+
+      cards.forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(searchTerm) ? "block" : "none";
+      });
+
+      groups.forEach(group => {
+        const visibleCards = Array.from(group.querySelectorAll(".referral-card")).filter(c => c.style.display !== "none");
+        const sponsorCard = group.querySelector(".sponsor-card");
+        const sponsorText = sponsorCard ? sponsorCard.textContent.toLowerCase() : "";
+        group.style.display = visibleCards.length > 0 || sponsorText.includes(searchTerm) ? "block" : "none";
+      });
+    }
+
+    // =========================
+    // UI HELPERS
+    // =========================
+    function switchTab(tabName) {
+      document.querySelectorAll(".tab-content").forEach(tc => tc.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+      const panel = $(tabName);
+      if (panel) panel.classList.add("active");
+
+      const tabs = document.querySelectorAll(".tab");
+      if (tabName === "tree" && tabs[0]) tabs[0].classList.add("active");
+      if (tabName === "add-referral" && tabs[1]) tabs[1].classList.add("active");
+      if (tabName === "add-sponsor" && tabs[2]) tabs[2].classList.add("active");
+    }
+
+    // Event delegation: fixes inline onclick + keeps generated HTML clean
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-action]");
+      if (!btn) return;
+
+      const action = btn.getAttribute("data-action");
+      if (action === "toggle-contact") {
+        const contact = btn.nextElementSibling;
+        if (!contact) return;
+        contact.classList.toggle("expanded");
+        btn.textContent = contact.classList.contains("expanded") ? "✖️ Close" : "📞 Call Sponsor";
+      }
+    });
+
+    // Expose functions used by inline HTML attributes
+    window.switchTab = switchTab;
+    window.filterTree = filterTree;
+    window.loadData = loadData;
+    window.addReferral = addReferral;
+    window.addSponsor = addSponsor;
+
+    // =========================
+    // BOOT
+    // =========================
+    async function boot() {
+      console.log("=== BOOT ===", window.location.href);
+
+      // Show overlay status immediately (overlay exists in DOM already)
+      updateAuthStatus("Starting...");
+
+      try {
+        await requireLogin();
+      } catch (e) {
+        // already handled UI; continue
+        console.warn("requireLogin threw:", e.message);
+      }
+
+      // even offline mode: loadData will use currentUser (cached/User)
+      if (!currentUser) currentUser = getCachedUsername() || "User";
+      await loadData();
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", boot, { once: true });
+    } else {
+      boot();
+    }
+  })();
 </script>
+
 </body>
 </html>
