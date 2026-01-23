@@ -480,7 +480,12 @@
                     
                     <!-- All Callers List -->
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold mb-3 text-gray-700">📋 All Callers</h3>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-semibold text-gray-700">📋 All Callers</h3>
+                            <button onclick="syncCallersFromAuth()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-semibold">
+                                🔄 Sync from AUTH
+                            </button>
+                        </div>
                         <div id="callersList" class="flex flex-wrap gap-2">
                             <!-- Populated by loadCallers() -->
                         </div>
@@ -1576,6 +1581,36 @@
             loadCallers().then(() => {
                 loadCallerSources();
             });
+        }
+
+        // Sync callers from AUTH system
+        async function syncCallersFromAuth() {
+            try {
+                showCallerMessage('Syncing callers from AUTH system...', 'info');
+                
+                const response = await fetch(LEADSDB, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'syncCallersFromAuth',
+                        authUrl: API_URL
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showCallerMessage(`✅ ${result.message} (Total: ${result.total}, Added: ${result.added}, Existing: ${result.existing})`, 'success');
+                    // Reload callers
+                    await loadCallers();
+                    loadCallerSources();
+                } else {
+                    showCallerMessage('❌ ' + result.message, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error syncing callers:', error);
+                showCallerMessage('❌ Error: ' + error.message, 'error');
+            }
         }
     </script>
 </body>
