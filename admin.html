@@ -101,6 +101,9 @@
                     <button onclick="showTab('sms')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         Send SMS
                     </button>
+                    <button onclick="showTab('caller')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
+                        📞 Caller Access
+                    </button>
                     <button onclick="showTab('settings')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         Settings
                     </button>
@@ -460,6 +463,47 @@
                 </div>
             </div>
 
+            <!-- Caller Access Tab -->
+            <div id="callerTab" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">Caller Access Management</h2>
+                            <p class="text-gray-600 mt-1">Assign lead sources to callers</p>
+                        </div>
+                        <button onclick="saveCallerPermissions()" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition font-semibold">
+                            💾 Save All Permissions
+                        </button>
+                    </div>
+                    
+                    <div id="callerStatus" class="mb-4"></div>
+                    
+                    <!-- All Callers List -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-700">📋 All Callers</h3>
+                        <div id="callersList" class="flex flex-wrap gap-2">
+                            <!-- Populated by loadCallers() -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSV Lead Sources -->
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">📁 CSV Lead Sources</h3>
+                    <div id="csvSourcesContainer">
+                        <!-- Populated by loadCallerSources() -->
+                    </div>
+                </div>
+
+                <!-- User Referral Sources -->
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">👤 User Referral Databases</h3>
+                    <div id="referralSourcesContainer">
+                        <!-- Populated by loadCallerSources() -->
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <script src="config.js"></script>
@@ -648,6 +692,11 @@
             // Auto-load recruits data when tab is shown
             if (tabName === 'recruits' && allRecruitsData.length === 0) {
                 loadAllRecruits();
+            }
+            
+            // Auto-load caller data when tab is shown
+            if (tabName === 'caller') {
+                initCallerTab();
             }
         }
 
@@ -1291,6 +1340,246 @@
 
         function capitalizeWords(str) {
             return str.replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        // ============================================================
+        // CALLER ACCESS TAB FUNCTIONS
+        // ============================================================
+        let allCallers = [];
+        let csvSources = [];
+        let referralSources = [];
+        let callerPermissions = {};
+
+        // Load all callers from LEADSDB
+        async function loadCallers() {
+            try {
+                const response = await fetch(`${LEADSDB}?action=getCallers`);
+                const data = await response.json();
+                allCallers = data;
+                
+                const container = document.getElementById('callersList');
+                if (allCallers.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">No callers found. Callers are automatically added when users login.</p>';
+                    return;
+                }
+                
+                container.innerHTML = allCallers.map(caller => `
+                    <span class="bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-sm font-semibold">
+                        👤 ${caller.name}
+                    </span>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading callers:', error);
+                showCallerMessage('Error loading callers: ' + error.message, 'error');
+            }
+        }
+
+        // Load all sources (CSV + Referrals)
+        async function loadCallerSources() {
+            try {
+                // Load CSV sources from LEADSDB
+                const csvResponse = await fetch(`${LEADSDB}?action=getSources`);
+                csvSources = await csvResponse.json();
+                
+                // Load referral sources from REFDB
+                const refResponse = await fetch(`${REFDB}?action=listUsers`);
+                referralSources = await refResponse.json();
+                
+                // Load existing permissions
+                await loadExistingPermissions();
+                
+                // Render sources
+                renderSourceCards('csvSourcesContainer', csvSources, 'CSV');
+                renderSourceCards('referralSourcesContainer', referralSources, 'Referrals');
+                
+            } catch (error) {
+                console.error('Error loading sources:', error);
+                showCallerMessage('Error loading sources: ' + error.message, 'error');
+            }
+        }
+
+        // Load existing permissions from LEADSDB
+        async function loadExistingPermissions() {
+            try {
+                callerPermissions = {};
+                
+                for (const caller of allCallers) {
+                    const response = await fetch(`${LEADSDB}?action=getPermissions&caller=${encodeURIComponent(caller.name)}`);
+                    const permissions = await response.json();
+                    
+                    callerPermissions[caller.name] = permissions;
+                }
+            } catch (error) {
+                console.error('Error loading permissions:', error);
+            }
+        }
+
+        // Render source cards with caller checkboxes
+        function renderSourceCards(containerId, sources, sourceType) {
+            const container = document.getElementById(containerId);
+            
+            if (sources.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 p-4">No sources available</p>';
+                return;
+            }
+            
+            container.innerHTML = sources.map(source => {
+                const accessCount = allCallers.filter(caller => 
+                    hasAccess(caller.name, sourceType, source.name)
+                ).length;
+                
+                return `
+                    <div class="border-2 border-gray-200 rounded-lg p-5 mb-4 hover:border-blue-400 transition">
+                        <div class="flex justify-between items-center mb-4 pb-4 border-b-2 border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <span class="text-3xl">${sourceType === 'CSV' ? '📁' : '👤'}</span>
+                                <div>
+                                    <div class="font-bold text-lg text-gray-800">${source.name}</div>
+                                    <div class="text-sm text-gray-500">
+                                        ${sourceType} • ${source.leadCount || source.referralCount || 0} leads
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                                ${accessCount} caller${accessCount !== 1 ? 's' : ''}
+                            </span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            ${allCallers.map(caller => {
+                                const isChecked = hasAccess(caller.name, sourceType, source.name);
+                                return `
+                                    <label class="flex items-center gap-2 p-3 rounded-lg cursor-pointer transition
+                                        ${isChecked ? 'bg-purple-100 border-2 border-purple-400' : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'}">
+                                        <input type="checkbox" 
+                                            ${isChecked ? 'checked' : ''}
+                                            onchange="toggleCallerAccess('${caller.name}', '${sourceType}', '${source.name}', this.checked)"
+                                            class="w-5 h-5 accent-purple-600 cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700">${caller.name}</span>
+                                    </label>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Check if caller has access to a source
+        function hasAccess(callerName, sourceType, sourceName) {
+            if (!callerPermissions[callerName]) return false;
+            
+            return callerPermissions[callerName].some(p => 
+                p.sourceType === sourceType && p.sourceName === sourceName
+            );
+        }
+
+        // Toggle caller access
+        function toggleCallerAccess(callerName, sourceType, sourceName, hasAccessNow) {
+            if (!callerPermissions[callerName]) {
+                callerPermissions[callerName] = [];
+            }
+            
+            if (hasAccessNow) {
+                // Add permission
+                callerPermissions[callerName].push({ sourceType, sourceName });
+            } else {
+                // Remove permission
+                callerPermissions[callerName] = callerPermissions[callerName].filter(p => 
+                    !(p.sourceType === sourceType && p.sourceName === sourceName)
+                );
+            }
+            
+            // Update access count in UI
+            const allSources = [...csvSources, ...referralSources];
+            const source = allSources.find(s => s.name === sourceName);
+            if (source) {
+                const accessCount = allCallers.filter(caller => 
+                    hasAccess(caller.name, sourceType, sourceName)
+                ).length;
+                
+                // Update the counter (find the parent card and update)
+                const cards = document.querySelectorAll('.border-2');
+                cards.forEach(card => {
+                    if (card.textContent.includes(sourceName)) {
+                        const counter = card.querySelector('.bg-blue-600');
+                        if (counter) {
+                            counter.textContent = `${accessCount} caller${accessCount !== 1 ? 's' : ''}`;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Save all caller permissions
+        async function saveCallerPermissions() {
+            try {
+                showCallerMessage('Saving permissions...', 'info');
+                
+                // Build permissions array
+                const permissions = [];
+                
+                for (const callerName in callerPermissions) {
+                    for (const perm of callerPermissions[callerName]) {
+                        permissions.push({
+                            callerName: callerName,
+                            sourceType: perm.sourceType,
+                            sourceName: perm.sourceName,
+                            hasAccess: 'YES'
+                        });
+                    }
+                }
+                
+                const response = await fetch(LEADSDB, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'savePermissions',
+                        permissions: permissions
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showCallerMessage('✅ Permissions saved successfully!', 'success');
+                } else {
+                    showCallerMessage('❌ ' + result.message, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error saving permissions:', error);
+                showCallerMessage('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Show message in caller tab
+        function showCallerMessage(message, type) {
+            const container = document.getElementById('callerStatus');
+            const colors = {
+                success: 'bg-green-100 border-green-400 text-green-700',
+                error: 'bg-red-100 border-red-400 text-red-700',
+                info: 'bg-blue-100 border-blue-400 text-blue-700'
+            };
+            
+            container.innerHTML = `
+                <div class="${colors[type] || colors.info} border-l-4 p-4 rounded">
+                    ${message}
+                </div>
+            `;
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        // Initialize caller tab when shown
+        function initCallerTab() {
+            loadCallers().then(() => {
+                loadCallerSources();
+            });
         }
     </script>
 </body>
