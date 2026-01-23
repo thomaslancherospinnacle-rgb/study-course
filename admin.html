@@ -567,9 +567,10 @@
         // Main API - Should be your Google Apps Script URL that has admin functions
         // This is the AUTH script you just pasted (has sendVerification, verifyCode, etc.)
         // Remove trailing slash if present
-        const API_URL = CFWORKER.replace(/\/$/, '');
-        
-        // Recruiting API (Google Apps Script for recruits tab)
+        const API_URL = (window.API_URL || window.CFWORKER || window.APPDB || '').replace(/\/$/, '');
+const LEADSDB = (window.LEADSDB || (API_URL + '/leadsdb')).replace(/\/$/, '');
+const REFDB = (window.REFDB || '').replace(/\/$/, '');
+// Recruiting API (Google Apps Script for recruits tab)
         const RECRUITING_API_URL = APPDB;
         
         const ADMIN_EMAIL = 'thomaslancheros.ail@gmail.com';
@@ -1406,7 +1407,7 @@
         // Load all callers from LEADSDB
         async function loadCallers() {
             try {
-                const response = await fetch(`${LEADSDB}?action=getCallers`);
+                const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCallers' }) });
                 const data = await response.json();
                 allCallers = data;
                 
@@ -1432,11 +1433,11 @@
         async function loadCallerSources() {
             try {
                 // Load CSV sources from LEADSDB
-                const csvResponse = await fetch(`${LEADSDB}?action=getSources`);
+                const csvResponse = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getSources' }) });
                 csvSources = await csvResponse.json();
                 
                 // Load referral sources from REFDB
-                const refResponse = await fetch(`${REFDB}?action=listUsers`);
+                const refResponse = await fetch(REFDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'listUsers' }) });
                 referralSources = await refResponse.json();
                 
                 // Load existing permissions
@@ -1458,7 +1459,7 @@
                 callerPermissions = {};
                 
                 for (const caller of allCallers) {
-                    const response = await fetch(`${LEADSDB}?action=getPermissions&caller=${encodeURIComponent(caller.name)}`);
+                    const response = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getPermissions', caller: caller.name }) });
                     const permissions = await response.json();
                     
                     callerPermissions[caller.name] = permissions;
@@ -1586,6 +1587,7 @@
                 
                 const response = await fetch(LEADSDB, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'savePermissions',
                         permissions: permissions
@@ -1642,6 +1644,7 @@
                 
                 const response = await fetch(LEADSDB, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'syncCallersFromAuth',
                         authUrl: API_URL
@@ -1675,7 +1678,7 @@
             try {
                 showCallerSettingsMessage('Loading caller settings...', 'info');
                 
-                const callersResponse = await fetch(`${LEADSDB}?action=getCallers`);
+                const callersResponse = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCallers' }) });
                 const callers = await callersResponse.json();
                 
                 const usersResponse = await fetch(API_URL + '/getAllUsersForDropdown', {
@@ -1762,6 +1765,7 @@
                     
                     await fetch(LEADSDB, {
                         method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             action: 'updateCallerSettings',
                             callerName: callerName,
