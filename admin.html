@@ -104,6 +104,9 @@
                     <button onclick="showTab('caller')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         📞 Caller Access
                     </button>
+                    <button onclick="showTab('callerSettings')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
+                        ⚙️ Caller Settings
+                    </button>
                     <button onclick="showTab('settings')" class="tab-btn px-4 py-2 rounded hover:bg-gray-100 whitespace-nowrap">
                         Settings
                     </button>
@@ -392,6 +395,50 @@
                   🌐 Open Google Voice →
                 </a>
               </div>
+            </div>
+
+            <!-- Caller Settings Tab (NEW) -->
+            <div id="callerSettingsTab" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">⚙️ Caller Settings</h2>
+                            <p class="text-gray-600 mt-1">Set "Calling For" assignments and Calendly URLs for each caller</p>
+                        </div>
+                        <button onclick="saveAllCallerSettings()" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition font-semibold">
+                            💾 Save All Settings
+                        </button>
+                    </div>
+                    
+                    <div id="callerSettingsStatus" class="mb-4"></div>
+                    
+                    <!-- Instructions -->
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <h3 class="font-bold text-blue-800 mb-2">📋 How it works:</h3>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• <strong>Calling For</strong>: When this caller dials LEADDB leads, appointments use the selected person's Calendly</li>
+                            <li>• <strong>Calendly URL</strong>: Each user's personal Calendly link (auto-generated but editable)</li>
+                            <li>• For REFDB referrals, the Calendly link is determined by the tab owner (e.g., "Thomas Lancheros" tab → Thomas's Calendly)</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Caller Settings Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-3 text-left font-semibold">Caller Name</th>
+                                    <th class="p-3 text-left font-semibold">Email</th>
+                                    <th class="p-3 text-left font-semibold">Calling For (LEADDB)</th>
+                                    <th class="p-3 text-left font-semibold">Personal Calendly URL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="callerSettingsTableBody">
+                                <!-- Populated by loadCallerSettings() -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- Settings Tab -->
@@ -702,6 +749,11 @@
             // Auto-load caller data when tab is shown
             if (tabName === 'caller') {
                 initCallerTab();
+            }
+            
+            // Auto-load caller settings when tab is shown
+            if (tabName === 'callerSettings') {
+                loadCallerSettings();
             }
         }
 
@@ -1611,6 +1663,133 @@
                 console.error('Error syncing callers:', error);
                 showCallerMessage('❌ Error: ' + error.message, 'error');
             }
+        }
+
+        // ============================================================
+        // CALLER SETTINGS TAB FUNCTIONS (NEW)
+        // ============================================================
+        let allUsersForDropdown = [];
+        let callerSettingsData = {};
+
+        async function loadCallerSettings() {
+            try {
+                showCallerSettingsMessage('Loading caller settings...', 'info');
+                
+                const callersResponse = await fetch(`${LEADSDB}?action=getCallers`);
+                const callers = await callersResponse.json();
+                
+                const usersResponse = await fetch(API_URL + '/getAllUsersForDropdown', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const usersData = await usersResponse.json();
+                
+                if (usersData.success) {
+                    allUsersForDropdown = usersData.users || [];
+                }
+                
+                callerSettingsData = {};
+                callers.forEach(caller => {
+                    callerSettingsData[caller.name] = {
+                        name: caller.name,
+                        email: caller.email,
+                        callingFor: caller.callingFor || '',
+                        calendlyUrl: caller.calendlyUrl || ''
+                    };
+                });
+                
+                renderCallerSettingsTable(callers);
+                showCallerSettingsMessage('', '');
+                
+            } catch (error) {
+                console.error('Error loading caller settings:', error);
+                showCallerSettingsMessage('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function renderCallerSettingsTable(callers) {
+            const tbody = document.getElementById('callerSettingsTableBody');
+            
+            if (callers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-500">No callers found. Sync from AUTH first.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = callers.map(caller => {
+                const dropdownOptions = ['<option value="">-- None --</option>']
+                    .concat(allUsersForDropdown.map(u => 
+                        `<option value="${u.username}" ${caller.callingFor === u.username ? 'selected' : ''}>${u.username}</option>`
+                    )).join('');
+                
+                return `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-3 font-medium">${caller.name}</td>
+                        <td class="p-3 text-gray-600 text-sm">${caller.email}</td>
+                        <td class="p-3">
+                            <select onchange="updateCallerSetting('${caller.name}', 'callingFor', this.value)"
+                                class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none">
+                                ${dropdownOptions}
+                            </select>
+                        </td>
+                        <td class="p-3">
+                            <input type="text" value="${caller.calendlyUrl || ''}"
+                                onchange="updateCallerSetting('${caller.name}', 'calendlyUrl', this.value)"
+                                placeholder="https://calendly.com/..."
+                                class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none text-sm">
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateCallerSetting(callerName, field, value) {
+            if (!callerSettingsData[callerName]) {
+                callerSettingsData[callerName] = { name: callerName };
+            }
+            callerSettingsData[callerName][field] = value;
+            callerSettingsData[callerName].modified = true;
+        }
+
+        async function saveAllCallerSettings() {
+            try {
+                showCallerSettingsMessage('Saving settings...', 'info');
+                let saved = 0;
+                
+                for (const callerName in callerSettingsData) {
+                    const data = callerSettingsData[callerName];
+                    if (!data.modified) continue;
+                    
+                    await fetch(LEADSDB, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'updateCallerSettings',
+                            callerName: callerName,
+                            callingFor: data.callingFor || '',
+                            calendlyUrl: data.calendlyUrl || ''
+                        })
+                    });
+                    saved++;
+                }
+                
+                showCallerSettingsMessage(`✅ Saved ${saved} caller settings!`, 'success');
+                
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                showCallerSettingsMessage('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function showCallerSettingsMessage(message, type) {
+            const container = document.getElementById('callerSettingsStatus');
+            if (!message) { container.innerHTML = ''; return; }
+            const colors = {
+                success: 'bg-green-100 border-green-400 text-green-700',
+                error: 'bg-red-100 border-red-400 text-red-700',
+                info: 'bg-blue-100 border-blue-400 text-blue-700'
+            };
+            container.innerHTML = `<div class="${colors[type] || colors.info} border-l-4 p-4 rounded">${message}</div>`;
+            if (type === 'success') setTimeout(() => container.innerHTML = '', 3000);
         }
     </script>
 </body>
