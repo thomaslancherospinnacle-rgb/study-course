@@ -610,11 +610,43 @@ document.getElementById('dictModal').addEventListener('click', (e) => {
 });
 
 /**********************
- * LOGIN GUARD (token)
+ * LOGIN GUARD (token) - iOS Compatible
  **********************/
 const LS_TOKEN = "cc_token";
 const LS_EXPIRES = "cc_expires_at";
-function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
+
+// Cookie helpers (for iOS compatibility)
+function setCookie(name, value, hours) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+function getToken() {
+  // Check cookie first (iOS-compatible)
+  const cookieToken = getCookie(LS_TOKEN);
+  if (cookieToken) return cookieToken;
+  
+  // Fallback to localStorage
+  try {
+    const localToken = localStorage.getItem(LS_TOKEN);
+    if (localToken) {
+      // Migrate to cookie for iOS compatibility
+      setCookie(LS_TOKEN, localToken, 12);
+      return localToken;
+    }
+  } catch (e) {
+    // localStorage blocked on iOS
+  }
+  return "";
+}
 
 const userBadge = document.getElementById("userBadge");
 const logoutBtn = document.getElementById("logoutBtn");
@@ -656,9 +688,13 @@ async function requireLogin(){
     loginEmail = me.loginEmail || "";
     setBadge("ok", loginEmail ? `Logged in: ${loginEmail}` : "Logged in");
   } catch (e) {
-    // token invalid or expired
-    localStorage.removeItem(LS_TOKEN);
-    localStorage.removeItem(LS_EXPIRES);
+    // token invalid or expired - clear both cookie and localStorage
+    document.cookie = `${LS_TOKEN}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+    document.cookie = `${LS_EXPIRES}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+    try {
+      localStorage.removeItem(LS_TOKEN);
+      localStorage.removeItem(LS_EXPIRES);
+    } catch (e) {}
     window.location.href = "/login.html";
   }
 }
