@@ -1428,15 +1428,38 @@
         }
 
         // Load all sources (CSV + Referrals)
+        // Load all sources (CSV + Referrals)
         async function loadCallerSources() {
             try {
                 // Load CSV sources from LEADSDB
-                const csvResponse = await fetch(LEADSDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getSources' }) });
-                csvSources = await csvResponse.json();
+                const csvResponse = await fetch(LEADSDB, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'getSources' }) 
+                });
+                const csvData = await csvResponse.json();
+                
+                // LEADDB returns array directly
+                csvSources = Array.isArray(csvData) ? csvData : [];
+                console.log('CSV Sources loaded:', csvSources);
                 
                 // Load referral sources from REFDB
-                const refResponse = await fetch(REFDB, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'listUsers' }) });
-                referralSources = await refResponse.json();
+                const refResponse = await fetch(REFDB, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'listUsers' }) 
+                });
+                const refData = await refResponse.json();
+                
+                // REFDB returns { ok: true, users: [...] } - extract the users array
+                referralSources = refData.ok && refData.users ? refData.users : [];
+                
+                // Convert count to referralCount for consistency
+                referralSources = referralSources.map(source => ({
+                    ...source,
+                    referralCount: source.count || 0
+                }));
+                console.log('Referral Sources loaded:', referralSources);
                 
                 // Load existing permissions
                 await loadExistingPermissions();
