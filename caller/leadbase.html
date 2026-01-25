@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <title>Lead Dialer</title>
   <style>
     :root{
@@ -253,43 +253,19 @@ const DISPOSITIONS = [
 ];
 
 // ============================================================
-// AUTH HELPERS (Same as other apps)
+// AUTH HELPERS
 // ============================================================
 function getToken() {
-  return localStorage.getItem('cc_token') || '';
-}
-
-function getExpires() {
-  return localStorage.getItem('cc_expires_at') || '';
-}
-
-function setSession(token, expiresAt) {
-  localStorage.setItem('cc_token', token);
-  localStorage.setItem('cc_expires_at', expiresAt);
+  return document.cookie.split('; ').find(row => row.startsWith('cc_token='))?.split('=')[1] || '';
 }
 
 function clearSession() {
-  localStorage.removeItem('cc_token');
-  localStorage.removeItem('cc_expires_at');
+  document.cookie = 'cc_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  document.cookie = 'cc_expires_at=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
 
 function goLogin() {
-  window.location.href = '../index.html';
-}
-
-// API helper - same pattern as other apps
-async function api(action, payload = {}) {
-  const url = `${CFWORKER}${action}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  const data = await res.json();
-  if (!data.ok) {
-    throw new Error(data.error || 'Request failed');
-  }
-  return data;
+  window.location.href = '../login.html';
 }
 
 // ============================================================
@@ -314,7 +290,10 @@ function updateAuthStatus(msg) {
 (async () => {
   const token = getToken();
   
+  console.log('Token check:', token ? 'Token found' : 'No token');
+  
   if (!token) {
+    console.log('No token, redirecting to login');
     goLogin();
     return;
   }
@@ -322,17 +301,33 @@ function updateAuthStatus(msg) {
   try {
     updateAuthStatus('Verifying session...');
     
-    // Check token via CFWORKER - same as other apps
-    const me = await api('me', { token });
+    // Check token via CFWORKER /me endpoint
+    const meRes = await fetch(CFWORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'me', token: token })
+    });
+    
+    const meData = await meRes.json();
+    console.log('Me response:', meData);
+    
+    if (!meData.ok) {
+      console.error('Token validation failed:', meData.error);
+      clearSession();
+      goLogin();
+      return;
+    }
     
     // Success - user is authenticated
     currentUser = {
-      email: me.loginEmail,
-      username: me.username || me.loginEmail.split('@')[0].replace('.ail', ''),
-      callingFor: me.callingFor || '',
-      calendlyUrl: me.calendlyUrl || '',
-      assignedTabs: me.assignedTabs || []
+      email: meData.loginEmail,
+      username: meData.username || meData.loginEmail.split('@')[0].replace('.ail', ''),
+      callingFor: meData.callingFor || '',
+      calendlyUrl: meData.calendlyUrl || '',
+      assignedTabs: meData.assignedTabs || []
     };
+    
+    console.log('Current user:', currentUser);
     
     // Update UI
     document.getElementById('userName').textContent = currentUser.username;
@@ -355,26 +350,48 @@ function updateAuthStatus(msg) {
 // ============================================================
 async function loadAvailableSources() {
   try {
+    console.log('Loading sources for:', currentUser.username);
+    
     // Get caller's permissions from LEADSDB
-    const permRes = await fetch(`${LEADSDB}?action=getPermissions&caller=${encodeURIComponent(currentUser.username)}`);
+    const permRes = await fetch(LEADSDB, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        action: 'getPermissions', 
+        caller: currentUser.username 
+      })
+    });
     const permissions = await permRes.json();
     
     console.log('User permissions:', permissions);
 
     // Get all CSV sources from LEADSDB
-    const csvRes = await fetch(`${LEADSDB}?action=getSources`);
-    const csvSources = await csvRes.json();
+    const csvRes = await fetch(LEADSDB, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'getSources' })
+    });
+    const csvData = await csvRes.json();
+    console.log('CSV sources:', csvData);
 
     // Get all REFDB tabs
-    const refRes = await fetch(`${REFDB}?action=listUsers`);
-    const refSources = await refRes.json();
+    const refRes = await fetch(REFDB, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'listUsers' })
+    });
+    const refData = await refRes.json();
+    console.log('REF sources:', refData);
 
     availableSources = [];
 
     // Add permitted CSV sources (LEADDB)
-    if (Array.isArray(csvSources)) {
-      csvSources.forEach(src => {
-        const hasAccess = permissions.some(p => p.sourceType === 'CSV' && p.sourceName === src.name);
+    if (Array.isArray(csvData)) {
+      csvData.forEach(src => {
+        const hasAccess = Array.isArray(permissions) && permissions.some(p => 
+          p.sourceType === 'CSV' && p.sourceName === src.name
+        );
+        console.log(`CSV Source "${src.name}": hasAccess=${hasAccess}`);
         if (hasAccess) {
           availableSources.push({
             name: src.name,
@@ -387,20 +404,23 @@ async function loadAvailableSources() {
     }
 
     // Add permitted REFDB sources
-    if (Array.isArray(refSources)) {
-      refSources.forEach(src => {
-        const hasAccess = permissions.some(p => p.sourceType === 'Referrals' && p.sourceName === src.name);
-        if (hasAccess) {
-          availableSources.push({
-            name: src.name,
-            type: 'REFDB',
-            count: src.referralCount || 0,
-            icon: '👤',
-            owner: src.name
-          });
-        }
-      });
-    }
+    const refUsers = (refData && refData.ok && refData.users) ? refData.users : [];
+    refUsers.forEach(src => {
+      const srcName = src.name || src.username;
+      const hasAccess = Array.isArray(permissions) && permissions.some(p => 
+        p.sourceType === 'Referrals' && p.sourceName === srcName
+      );
+      console.log(`REF Source "${srcName}": hasAccess=${hasAccess}`);
+      if (hasAccess) {
+        availableSources.push({
+          name: srcName,
+          type: 'REFDB',
+          count: src.referralCount || src.count || 0,
+          icon: '👤',
+          owner: srcName
+        });
+      }
+    });
 
     console.log('Available sources:', availableSources);
     renderSourceGrid();
@@ -450,22 +470,31 @@ async function loadSelectedSource() {
 
   try {
     if (selectedSource.type === 'LEADDB') {
-      const res = await fetch(`${LEADSDB}?action=getLeads&source=${encodeURIComponent(selectedSource.name)}`);
+      const res = await fetch(LEADSDB, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'getLeads', 
+          source: selectedSource.name 
+        })
+      });
       const data = await res.json();
       leads = Array.isArray(data) ? data : [];
     } else if (selectedSource.type === 'REFDB') {
       const res = await fetch(`${REFDB}?user=${encodeURIComponent(selectedSource.name)}`);
       const data = await res.json();
       leads = Array.isArray(data) ? data.map(ref => ({
-        name: ref.refName,
-        phone: ref.refNumber,
-        relation: ref.refRelation,
-        sponsor: ref.sponsorName,
-        sponsorPhone: ref.sponsorNumber,
+        name: ref.refName || ref.name,
+        phone: ref.refNumber || ref.phone,
+        relation: ref.refRelation || ref.relation,
+        sponsor: ref.sponsorName || ref.sponsor,
+        sponsorPhone: ref.sponsorNumber || ref.sponsorPhone,
         outcome: ref.outcome || 'Not Contacted',
         tabOwner: selectedSource.name
       })) : [];
     }
+
+    console.log('Loaded leads:', leads);
 
     document.getElementById('sourceTitle').textContent = selectedSource.name;
     document.getElementById('leadCount').textContent = `(${leads.length} leads)`;
@@ -613,6 +642,7 @@ async function setDisposition(outcome) {
     if (selectedSource.type === 'LEADDB') {
       await fetch(LEADSDB, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'updateOutcome',
           source: selectedSource.name,
@@ -621,23 +651,8 @@ async function setDisposition(outcome) {
         })
       });
     } else if (selectedSource.type === 'REFDB') {
-      await fetch(REFDB, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'updateReferral',
-          oldName: lead.name,
-          referralData: {
-            user: selectedSource.name,
-            refName: lead.name,
-            refNumber: lead.phone,
-            refRelation: lead.relation || '',
-            sponsorName: lead.sponsor || '',
-            sponsorNumber: lead.sponsorPhone || '',
-            outcome: outcome
-          }
-        })
-      });
+      // For REFDB, we'd need an updateReferral endpoint
+      console.log('REFDB outcome update not yet implemented');
     }
   } catch (err) {
     console.error('Error saving outcome:', err);
