@@ -1540,8 +1540,11 @@
             
             container.innerHTML = sources.map(source => {
                 const accessCount = allCallers.filter(caller => 
-                    hasAccess(caller.name, sourceType, source.name)
+                    hasAccess(caller.name, sourceType, source.name || source.username)
                 ).length;
+                
+                const sourceName = source.name || source.username || 'Unnamed';
+                const leadCount = source.leadCount || source.referralCount || source.count || 0;
                 
                 return `
                     <div class="border-2 border-gray-200 rounded-lg p-5 mb-4 hover:border-blue-400 transition">
@@ -1549,9 +1552,9 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-3xl">${sourceType === 'CSV' ? '📁' : '👤'}</span>
                                 <div>
-                                    <div class="font-bold text-lg text-gray-800">${source.name}</div>
+                                    <div class="font-bold text-lg text-gray-800">${sourceName}</div>
                                     <div class="text-sm text-gray-500">
-                                        ${sourceType} • ${source.leadCount || source.referralCount || 0} leads
+                                        ${sourceType} • ${leadCount} ${sourceType === 'CSV' ? 'leads' : 'referrals'}
                                     </div>
                                 </div>
                             </div>
@@ -1562,13 +1565,13 @@
                         
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             ${allCallers.map(caller => {
-                                const isChecked = hasAccess(caller.name, sourceType, source.name);
+                                const isChecked = hasAccess(caller.name, sourceType, sourceName);
                                 return `
                                     <label class="flex items-center gap-2 p-3 rounded-lg cursor-pointer transition
                                         ${isChecked ? 'bg-purple-100 border-2 border-purple-400' : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'}">
                                         <input type="checkbox" 
                                             ${isChecked ? 'checked' : ''}
-                                            onchange="toggleCallerAccess('${caller.name}', '${sourceType}', '${source.name}', this.checked)"
+                                            onchange="toggleCallerAccess('${caller.name}', '${sourceType}', '${sourceName}', this.checked)"
                                             class="w-5 h-5 accent-purple-600 cursor-pointer">
                                         <span class="text-sm font-medium text-gray-700">${caller.name}</span>
                                     </label>
