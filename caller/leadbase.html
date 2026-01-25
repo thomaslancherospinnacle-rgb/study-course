@@ -331,6 +331,9 @@ function updateAuthStatus(msg) {
     
     const meData = await meRes.json();
     console.log('Me response data:', meData);
+    console.log('Me response keys:', Object.keys(meData));
+    console.log('loginEmail field:', meData.loginEmail);
+    console.log('username field:', meData.username);
     
     if (!meData.ok) {
       console.error('Token validation failed:', meData.error);
@@ -344,11 +347,11 @@ function updateAuthStatus(msg) {
     
     // Success - user is authenticated
     currentUser = {
-      email: meData.loginEmail,
-      username: meData.username || meData.loginEmail.split('@')[0].replace('.ail', ''),
-      callingFor: meData.callingFor || '',
-      calendlyUrl: meData.calendlyUrl || '',
-      assignedTabs: meData.assignedTabs || []
+      email: meData.loginEmail || meData.login_email || '',
+      username: meData.username || (meData.loginEmail || meData.login_email || 'User').split('@')[0].replace('.ail', ''),
+      callingFor: meData.callingFor || meData.calling_for || '',
+      calendlyUrl: meData.calendlyUrl || meData.calendly_url || '',
+      assignedTabs: meData.assignedTabs || meData.assigned_tabs || []
     };
     
     console.log('Current user:', currentUser);
