@@ -547,26 +547,20 @@ async function loadSelectedSource() {
         leads = data.map((row, idx) => {
           console.log(`[LOAD] Processing LEADDB row ${idx}:`, row);
           
-          // Keep ALL fields, just ensure we have name and phone
+          // Keep ALL fields
           const lead = { ...row };
           
-          // Find name from any possible field
-          if (!lead.name) {
-            lead.name = row.Name || row.name || row.firstName || row['First Name'] || 
-                       row.fullName || row['Full Name'] || `Lead ${idx + 1}`;
-          }
+          // Always normalize name field
+          lead.name = row.Name || row.name || row.firstName || row['First Name'] || 
+                     row.fullName || row['Full Name'] || `Lead ${idx + 1}`;
           
-          // Find phone from any possible field
-          if (!lead.phone) {
-            lead.phone = row.Phone || row.phone || row.mobile || row.Mobile || 
-                        row.cellPhone || row['Cell Phone'] || row.phoneNumber || 
-                        row['Phone Number'] || '';
-          }
+          // Always normalize phone field
+          lead.phone = row.Phone || row.phone || row.mobile || row.Mobile || 
+                      row.cellPhone || row['Cell Phone'] || row.phoneNumber || 
+                      row['Phone Number'] || '';
           
-          // Ensure outcome
-          if (!lead.outcome) {
-            lead.outcome = row.outcome || row.Outcome || row.status || row.Status || 'Not Contacted';
-          }
+          // Always normalize outcome
+          lead.outcome = row.outcome || row.Outcome || row.status || row.Status || 'Not Contacted';
           
           return lead;
         });
@@ -582,49 +576,61 @@ async function loadSelectedSource() {
       const data = await res.json();
       console.log('[LOAD] REFDB raw data:', data);
       console.log('[LOAD] REFDB data type:', typeof data, 'Is array:', Array.isArray(data));
-      console.log('[LOAD] REFDB first item:', data[0]);
+      
+      if (data.length > 0) {
+        console.log('[LOAD] REFDB first item:', data[0]);
+        console.log('[LOAD] REFDB keys:', Object.keys(data[0]));
+      }
       
       if (Array.isArray(data)) {
-        leads = data.map((ref, idx) => {
+        // First, filter out sponsors (rows where lead type is "Sponsor" or similar)
+        const nonSponsors = data.filter((ref, idx) => {
+          const leadType = ref['SPONSOR LEAD TYPE'] || ref['Lead Type'] || ref.leadType || '';
+          const isSponsor = String(leadType).toLowerCase().includes('sponsor');
+          
+          if (isSponsor) {
+            console.log(`[LOAD] Skipping sponsor row ${idx}:`, ref);
+          }
+          
+          return !isSponsor;
+        });
+        
+        console.log(`[LOAD] Filtered ${data.length - nonSponsors.length} sponsors, ${nonSponsors.length} refs remaining`);
+        
+        leads = nonSponsors.map((ref, idx) => {
           console.log(`[LOAD] Processing REFDB row ${idx}:`, ref);
           console.log(`[LOAD] REFDB row keys:`, Object.keys(ref));
           
           // Keep ALL fields
           const lead = { ...ref };
           
-          // Normalize essential fields - check ALL possible variations
-          if (!lead.name) {
-            lead.name = ref.refName || ref.RefName || ref['Ref Name'] || 
-                       ref.name || ref.Name || 
-                       ref['NAME'] || `Referral ${idx + 1}`;
-          }
+          // Normalize name - check ALL variations including uppercase with spaces
+          lead.name = ref['REF NAME'] || ref['Ref Name'] || ref.refName || 
+                     ref.RefName || ref['REFNAME'] || 
+                     ref.name || ref.Name || ref['NAME'] || 
+                     `Referral ${idx + 1}`;
           
-          if (!lead.phone) {
-            lead.phone = ref.refNumber || ref.RefNumber || ref['Ref Number'] ||
-                        ref.refPhone || ref.RefPhone || ref['Ref Phone'] ||
-                        ref.phone || ref.Phone || ref['PHONE'] || '';
-          }
+          // Normalize phone - check ALL variations
+          lead.phone = ref['REF NUMBER'] || ref['Ref Number'] || ref.refNumber ||
+                      ref.RefNumber || ref['REFNUMBER'] ||
+                      ref['REF PHONE'] || ref['Ref Phone'] || ref.refPhone ||
+                      ref.phone || ref.Phone || ref['PHONE'] || '';
           
           // Map other common referral fields
-          if (!lead.relation) {
-            lead.relation = ref.refRelation || ref.RefRelation || ref['Ref Relation'] ||
-                           ref.relation || ref.Relation || ref['RELATION'] || '';
-          }
+          lead.relation = ref['REF RELATION'] || ref['Ref Relation'] || ref.refRelation ||
+                         ref.RefRelation || ref['REFRELATION'] ||
+                         ref.relation || ref.Relation || ref['RELATION'] || '';
           
-          if (!lead.sponsor) {
-            lead.sponsor = ref.sponsorName || ref.SponsorName || ref['Sponsor Name'] ||
-                          ref.sponsor || ref.Sponsor || ref['SPONSOR'] || '';
-          }
+          lead.sponsor = ref['SPONSOR NAME'] || ref['Sponsor Name'] || ref.sponsorName ||
+                        ref.SponsorName || ref['SPONSORNAME'] ||
+                        ref.sponsor || ref.Sponsor || ref['SPONSOR'] || '';
           
-          if (!lead.sponsorPhone) {
-            lead.sponsorPhone = ref.sponsorNumber || ref.SponsorNumber || ref['Sponsor Number'] ||
-                               ref.sponsorPhone || ref.SponsorPhone || ref['Sponsor Phone'] ||
-                               ref['SPONSOR PHONE'] || '';
-          }
+          lead.sponsorPhone = ref['SPONSOR POS?'] || ref['SPONSOR NUMBER'] || ref['Sponsor Number'] ||
+                             ref.sponsorNumber || ref.SponsorNumber ||
+                             ref.sponsorPhone || ref.SponsorPhone || ref['Sponsor Phone'] ||
+                             ref['SPONSOR PHONE'] || '';
           
-          if (!lead.outcome) {
-            lead.outcome = ref.outcome || ref.Outcome || ref['OUTCOME'] || 'Not Contacted';
-          }
+          lead.outcome = ref.outcome || ref.Outcome || ref['OUTCOME'] || 'Not Contacted';
           
           lead.tabOwner = selectedSource.name;
           
