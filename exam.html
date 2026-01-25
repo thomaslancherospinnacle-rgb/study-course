@@ -445,13 +445,14 @@
   </div>
 
 <!-- Load shared dictionary -->
+<script src="config.js"></script>
 <script src="dictionary.js"></script>
 
 <script type="module">
 /**********************
  * CONFIG (REPLACE THIS)
  **********************/
-const CLOUD_FLARE_URL = "https://closing-coalition-api.thomaslancheros06.workers.dev"; // <-- replace with your Worker URL or API proxy URL
+const CLOUD_FLARE_URL = typeof CFWORKER !== 'undefined' ? CFWORKER : "https://closing-coalition-api.thomaslancheros06.workers.dev";
 // Expected actions on backend: me, logout, saveExamResult
 
 /**********************
@@ -676,25 +677,32 @@ let loginEmail = "";
 
 async function requireLogin(){
   const token = getToken();
+  console.log('requireLogin: token =', token ? 'exists' : 'missing');
+  
   if (!token){
+    console.log('No token found, redirecting to login');
     window.location.href = "/login.html";
     return;
   }
 
   try {
     updateAuthStatus("Verifying session...");
-      const me = await api("me", { token });
+    console.log('Calling /me endpoint with token...');
+    const me = await api("me", { token });
+    console.log('Session verified:', me);
 
     loginEmail = me.loginEmail || "";
     setBadge("ok", loginEmail ? `Logged in: ${loginEmail}` : "Logged in");
   } catch (e) {
     // token invalid or expired - clear both cookie and localStorage
+    console.error('Session verification failed:', e.message);
     document.cookie = `${LS_TOKEN}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
     document.cookie = `${LS_EXPIRES}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
     try {
       localStorage.removeItem(LS_TOKEN);
       localStorage.removeItem(LS_EXPIRES);
     } catch (e) {}
+    console.log('Redirecting to login...');
     window.location.href = "/login.html";
   }
 }
