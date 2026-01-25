@@ -204,9 +204,9 @@
             <span>💬</span>
             <strong>Send Text</strong>
           </a>
-          <a class="action" id="setAppt" href="#" onclick="setAppointment(event)">
+          <a class="action" id="setAppt" href="#">
             <span>📅</span>
-            <strong>Set Appt</strong>
+            <strong>Schedule Appt</strong>
           </a>
         </div>
         <div style="margin-top:20px">
@@ -526,6 +526,8 @@ async function loadSelectedSource() {
   btn.disabled = true;
 
   try {
+    console.log('[LOAD] Loading source:', selectedSource);
+    
     if (selectedSource.type === 'LEADDB') {
       const res = await fetch(LEADSDB, {
         method: 'POST',
@@ -537,21 +539,31 @@ async function loadSelectedSource() {
       });
       const data = await res.json();
       leads = Array.isArray(data) ? data : [];
+      console.log('[LOAD] LEADDB leads:', leads);
     } else if (selectedSource.type === 'REFDB') {
       const res = await fetch(`${REFDB}?user=${encodeURIComponent(selectedSource.name)}`);
       const data = await res.json();
-      leads = Array.isArray(data) ? data.map(ref => ({
-        name: ref.refName || ref.name,
-        phone: ref.refNumber || ref.phone,
-        relation: ref.refRelation || ref.relation,
-        sponsor: ref.sponsorName || ref.sponsor,
-        sponsorPhone: ref.sponsorNumber || ref.sponsorPhone,
-        outcome: ref.outcome || 'Not Contacted',
-        tabOwner: selectedSource.name
-      })) : [];
+      console.log('[LOAD] REFDB raw data:', data);
+      
+      leads = Array.isArray(data) ? data.map(ref => {
+        // Map REFDB fields to lead format
+        const mapped = {
+          name: ref.refName || ref.name || ref.Name || 'Unknown',
+          phone: ref.refNumber || ref.phone || ref.Phone || ref.refPhone || '',
+          relation: ref.refRelation || ref.relation || ref.Relation || '',
+          sponsor: ref.sponsorName || ref.sponsor || ref.Sponsor || '',
+          sponsorPhone: ref.sponsorNumber || ref.sponsorPhone || ref['Sponsor Phone'] || '',
+          outcome: ref.outcome || ref.Outcome || 'Not Contacted',
+          tabOwner: selectedSource.name,
+          // Store all original fields for debugging
+          _raw: ref
+        };
+        console.log('[LOAD] Mapped lead:', mapped);
+        return mapped;
+      }) : [];
+      
+      console.log('[LOAD] REFDB mapped leads:', leads);
     }
-
-    console.log('Loaded leads:', leads);
 
     document.getElementById('sourceTitle').textContent = selectedSource.name;
     document.getElementById('leadCount').textContent = `(${leads.length} leads)`;
@@ -559,8 +571,8 @@ async function loadSelectedSource() {
     showListView();
     
   } catch (err) {
-    console.error('Error loading leads:', err);
-    toast('Error loading leads');
+    console.error('[LOAD] Error loading leads:', err);
+    toast('Error loading leads: ' + err.message);
   } finally {
     btn.textContent = 'Load Selected Source';
     btn.disabled = false;
@@ -624,8 +636,8 @@ function openLead(index) {
   const homePhone = formatPhone(lead.sponsorPhone || lead.home);
 
   let kvHtml = `
-    <div class="kv"><div class="k">Mobile</div><div class="v">${phone.ok ? `<a href="${phone.tel}">${phone.pretty}</a>` : '—'}</div></div>
-    <div class="kv"><div class="k">Home/Sponsor</div><div class="v">${homePhone.ok ? `<a href="${homePhone.tel}">${homePhone.pretty}</a>` : '—'}</div></div>
+    <div class="kv"><div class="k">Mobile</div><div class="v">${phone.ok ? `<a href="${phone.tel}" style="color:#4fd1c5;text-decoration:none">${phone.pretty}</a>` : '—'}</div></div>
+    <div class="kv"><div class="k">Home/Sponsor</div><div class="v">${homePhone.ok ? `<a href="${homePhone.tel}" style="color:#4fd1c5;text-decoration:none">${homePhone.pretty}</a>` : '—'}</div></div>
   `;
 
   if (lead.relation) kvHtml += `<div class="kv"><div class="k">Relation</div><div class="v">${lead.relation}</div></div>`;
@@ -635,12 +647,60 @@ function openLead(index) {
   document.getElementById('detailKVs').innerHTML = kvHtml;
 
   // Set up action buttons
-  document.getElementById('callMobile').href = phone.ok ? phone.tel : '#';
-  document.getElementById('callMobile').classList.toggle('disabled', !phone.ok);
-  document.getElementById('callHome').href = homePhone.ok ? homePhone.tel : '#';
-  document.getElementById('callHome').classList.toggle('disabled', !homePhone.ok);
-  document.getElementById('sendText').href = phone.ok ? `sms:${phone.digits}` : '#';
-  document.getElementById('sendText').classList.toggle('disabled', !phone.ok);
+  const callMobile = document.getElementById('callMobile');
+  const callHome = document.getElementById('callHome');
+  const sendText = document.getElementById('sendText');
+  const setAppt = document.getElementById('setAppt');
+
+  // Call Mobile button
+  if (phone.ok) {
+    callMobile.href = phone.tel;
+    callMobile.classList.remove('disabled');
+  } else {
+    callMobile.href = '#';
+    callMobile.classList.add('disabled');
+  }
+
+  // Call Home button
+  if (homePhone.ok) {
+    callHome.href = homePhone.tel;
+    callHome.classList.remove('disabled');
+  } else {
+    callHome.href = '#';
+    callHome.classList.add('disabled');
+  }
+
+  // Send Text button
+  if (phone.ok) {
+    sendText.href = `sms:${phone.digits}`;
+    sendText.classList.remove('disabled');
+  } else {
+    sendText.href = '#';
+    sendText.classList.add('disabled');
+  }
+
+  // Schedule Appointment button - only for REFDB (referrals)
+  if (selectedSource.type === 'REFDB') {
+    // For referrals: use tab owner's Calendly
+    const ownerName = selectedSource.name.toLowerCase().replace(/[^a-z]/g, '');
+    const calendlyUrl = `https://calendly.com/${ownerName}-ail/30min`;
+    setAppt.onclick = (e) => {
+      e.preventDefault();
+      const name = encodeURIComponent(lead.name || '');
+      const phoneInfo = encodeURIComponent(phone.pretty || lead.phone || '');
+      const finalUrl = `${calendlyUrl}?name=${name}&a3=${phoneInfo}`;
+      window.open(finalUrl, '_blank');
+      toast('Opening Calendly...');
+    };
+    setAppt.classList.remove('disabled');
+  } else {
+    // For LEADDB: placeholder for future update
+    setAppt.onclick = (e) => {
+      e.preventDefault();
+      toast('Appointment scheduling coming soon for CSV leads');
+    };
+    setAppt.classList.add('disabled');
+  }
 
   renderDispositions();
   renderHistory(lead);
@@ -736,43 +796,8 @@ function closeOverlay() {
 }
 
 // ============================================================
-// CALENDLY APPOINTMENT SETTING
+// CALENDLY APPOINTMENT SETTING - Now handled inline in openLead()
 // ============================================================
-function setAppointment(e) {
-  e.preventDefault();
-  const lead = leads[currentLeadIndex];
-  
-  let calendlyUrl = '';
-  
-  if (selectedSource.type === 'REFDB') {
-    // For REFDB: Use tab owner's Calendly
-    const ownerName = selectedSource.name.toLowerCase().replace(/[^a-z]/g, '');
-    calendlyUrl = `https://calendly.com/${ownerName}-ail/30min`;
-  } else if (selectedSource.type === 'LEADDB') {
-    // For LEADDB: Use "Calling For" person's Calendly
-    if (currentUser.callingFor) {
-      const callingForName = currentUser.callingFor.toLowerCase().replace(/[^a-z]/g, '');
-      calendlyUrl = `https://calendly.com/${callingForName}-ail/30min`;
-    } else {
-      calendlyUrl = currentUser.calendlyUrl || '';
-    }
-  }
-
-  if (!calendlyUrl) {
-    toast('No Calendly URL configured');
-    return;
-  }
-
-  // Build URL with pre-filled info
-  const phone = formatPhone(lead.phone);
-  const name = encodeURIComponent(lead.name || '');
-  const phoneInfo = encodeURIComponent(phone.pretty || lead.phone || '');
-  
-  const finalUrl = `${calendlyUrl}?name=${name}&a3=Phone: ${phoneInfo}`;
-  
-  window.open(finalUrl, '_blank');
-  toast('Opening Calendly...');
-}
 
 // ============================================================
 // UTILITIES
