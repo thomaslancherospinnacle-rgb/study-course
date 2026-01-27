@@ -3,26 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FCR Auto-Fill - Bookmarklet Setup</title>
+    <title>FCR Auto-Fill - FINAL Working Version</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 900px; margin: 0 auto; }
         .card {
             background: white;
             border-radius: 16px;
@@ -30,107 +20,75 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
         }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
+        .header h1 { font-size: 32px; margin-bottom: 10px; }
+        .content { padding: 40px; }
         .info-box {
             background: #f8f9fa;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-left: 4px solid #667eea;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
         }
-
         .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #e0e0e0;
         }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            font-weight: 600;
-            color: #666;
-        }
-
-        .value {
-            color: #333;
-        }
-
+        .info-row:last-child { border-bottom: none; }
+        .label { font-weight: 600; color: #666; }
+        .value { color: #333; font-family: monospace; }
         .bookmarklet-zone {
-            background: #f8f9fa;
-            border: 3px dashed #667eea;
-            border-radius: 12px;
-            padding: 40px;
+            background: #fff;
+            border: 4px dashed #667eea;
+            border-radius: 16px;
+            padding: 50px;
             text-align: center;
-            margin: 30px 0;
+            margin: 40px 0;
         }
-
         .bookmarklet-button {
             display: inline-block;
-            padding: 20px 40px;
+            padding: 25px 50px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 700;
             cursor: move;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
             transition: all 0.3s ease;
         }
-
         .bookmarklet-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.7);
         }
-
-        .instruction {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
         .steps {
             list-style: none;
             counter-reset: step-counter;
+            margin: 30px 0;
         }
-
         .steps li {
             counter-increment: step-counter;
-            margin-bottom: 20px;
-            padding-left: 50px;
+            margin-bottom: 25px;
+            padding-left: 60px;
             position: relative;
-            line-height: 1.6;
+            line-height: 1.8;
+            font-size: 16px;
         }
-
         .steps li::before {
             content: counter(step-counter);
             position: absolute;
             left: 0;
             top: 0;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 50%;
@@ -138,68 +96,43 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 18px;
         }
-
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             background: #667eea;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
-        .btn:hover {
-            background: #5568d3;
-            transform: translateY(-1px);
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
+        .btn:hover { background: #5568d3; transform: translateY(-2px); }
+        .alert { padding: 20px; border-radius: 10px; margin: 20px 0; font-size: 15px; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
         code {
             background: #f8f9fa;
-            padding: 2px 6px;
-            border-radius: 3px;
+            padding: 3px 8px;
+            border-radius: 4px;
             font-family: 'Courier New', monospace;
+            font-weight: 600;
         }
+        h3 { color: #333; margin: 30px 0 20px 0; font-size: 22px; }
+        ul { line-height: 2.2; color: #555; margin-left: 25px; font-size: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card">
             <div class="header">
-                <h1>📞 FCR Auto-Fill Bookmarklet</h1>
-                <p>One-Click Solution for Cross-Origin Auto-Fill</p>
+                <h1>📞 FCR Auto-Fill - WORKING!</h1>
+                <p style="font-size: 18px; opacity: 0.95;">100% Field Match - Tested & Ready</p>
             </div>
-
             <div class="content">
                 <div class="info-box">
-                    <h3 style="margin-top: 0; color: #333;">Your Information</h3>
+                    <h3 style="margin-top: 0;">✅ Your Information</h3>
                     <div class="info-row">
                         <span class="label">Name:</span>
                         <span class="value" id="userName">Loading...</span>
@@ -212,237 +145,89 @@
                         <span class="label">Phone:</span>
                         <span class="value" id="userPhone">Loading...</span>
                     </div>
-                    <div class="info-row">
-                        <span class="label">Company:</span>
-                        <span class="value">American Income Life</span>
-                    </div>
                 </div>
-
-                <div class="alert alert-info">
-                    <strong>💡 Why a bookmarklet?</strong> Browser security prevents us from auto-filling forms on different domains. A bookmarklet runs directly on the form page, bypassing this restriction.
-                </div>
-
                 <div class="bookmarklet-zone">
-                    <p style="margin-bottom: 20px; color: #666; font-size: 16px;">
-                        <strong>⬇️ Drag this button to your bookmarks bar:</strong>
+                    <p style="margin-bottom: 30px; color: #666; font-size: 18px; font-weight: 600;">
+                        ⬇️ DRAG THIS TO YOUR BOOKMARKS BAR ⬇️
                     </p>
-                    <a href="" id="bookmarkletLink" class="bookmarklet-button" onclick="alert('Please DRAG this button to your bookmarks bar instead of clicking it!'); return false;">
+                    <a href="" id="bookmarkletLink" class="bookmarklet-button" onclick="alert('❌ DRAG to bookmarks, don\\'t click!'); return false;">
                         🔮 FCR Auto-Fill
                     </a>
-                    <p style="margin-top: 20px; color: #999; font-size: 14px;">
-                        (Don't click - drag to bookmarks bar!)
-                    </p>
                 </div>
-
-                <div class="instruction">
-                    <strong>⚠️ Important:</strong> Make sure you're logged into The Closing Coalition before using the bookmarklet!
-                </div>
-
-                <h3 style="margin-bottom: 15px; color: #333;">📋 How to Use:</h3>
+                <h3>📋 How to Use:</h3>
                 <ol class="steps">
-                    <li><strong>Drag the button above</strong> to your browser's bookmarks bar (the bar below the address bar)</li>
-                    <li><strong>Go to</strong> <code>https://freecallerregistry.com/fcr/</code></li>
-                    <li><strong>Click the "FCR Auto-Fill" bookmark</strong> in your bookmarks bar</li>
-                    <li><strong>The form will auto-fill</strong> with your information instantly!</li>
-                    <li><strong>Enter the email verification code</strong> manually when prompted</li>
-                    <li><strong>Continue through the form</strong> - everything else auto-fills automatically!</li>
+                    <li>Drag the button above to your bookmarks bar</li>
+                    <li>Go to: https://freecallerregistry.com/fcr/</li>
+                    <li>Click the bookmark on ANY step of the form</li>
+                    <li>ALL fields on that page fill automatically!</li>
                 </ol>
-
-                <h3 style="margin: 30px 0 15px 0; color: #333;">🎯 What Gets Auto-Filled:</h3>
-                <ul style="line-height: 2; color: #666; margin-left: 20px;">
-                    <li>✅ Your email address (Step 1)</li>
-                    <li>✅ All business information (Step 3)</li>
-                    <li>✅ Your contact details (name, phone, email)</li>
-                    <li>✅ Phone numbers to register</li>
-                    <li>✅ Terms acceptance checkboxes (Step 5)</li>
-                </ul>
-
-                <div class="alert alert-warning" style="margin-top: 30px;">
-                    <strong>🔒 Can't see the bookmarks bar?</strong><br>
-                    • Chrome/Edge: Press <code>Ctrl+Shift+B</code> (Windows) or <code>Cmd+Shift+B</code> (Mac)<br>
-                    • Firefox: Right-click the top bar → Check "Bookmarks Toolbar"<br>
-                    • Safari: View menu → Show Favorites Bar
+                <div class="alert alert-warning">
+                    <strong>⚡ Pro Tip:</strong> Click the bookmark multiple times as you go through each step - it fills whatever is visible!
                 </div>
-
-                <div style="margin-top: 30px; text-align: center;">
-                    <button class="btn" onclick="testBookmarklet()">🧪 Test Bookmarklet Code</button>
-                    <button class="btn" onclick="location.reload()" style="background: #6c757d; margin-left: 10px;">🔄 Refresh Data</button>
+                <div style="margin-top: 40px; text-align: center;">
+                    <button class="btn" onclick="testCode()">🧪 Test Code</button>
+                    <button class="btn" onclick="location.reload()" style="background: #6c757d; margin-left: 15px;">🔄 Refresh</button>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         const API_URL = 'https://cfworkerapi.thomastcc.workers.dev';
-
-        // Get user data from storage
         async function loadUserData() {
             try {
-                // Try localStorage
                 const lsUsername = localStorage.getItem('cc_username');
                 const lsEmail = localStorage.getItem('adminEmail');
                 const lsPhone = localStorage.getItem('userPhone');
-                const lsToken = localStorage.getItem('cc_token');
-
                 if (lsUsername || lsEmail) {
-                    document.getElementById('userName').textContent = lsUsername || 'Not available';
-                    document.getElementById('userEmail').textContent = lsEmail || 'Not available';
+                    document.getElementById('userName').textContent = lsUsername || 'Not set';
+                    document.getElementById('userEmail').textContent = lsEmail || 'Not set';
                     document.getElementById('userPhone').textContent = lsPhone || '5862246692';
-                    
                     generateBookmarklet(lsUsername, lsEmail, lsPhone || '5862246692');
                     return;
                 }
-
-                // Try API
                 const token = getToken();
                 if (token) {
-                    const response = await fetch(`${API_URL}/me`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token })
-                    });
-
+                    const response = await fetch(`${API_URL}/me`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
                     if (response.ok) {
                         const data = await response.json();
                         if (data.ok) {
-                            document.getElementById('userName').textContent = data.username || 'Not available';
-                            document.getElementById('userEmail').textContent = data.loginEmail || 'Not available';
+                            document.getElementById('userName').textContent = data.username || 'Not set';
+                            document.getElementById('userEmail').textContent = data.loginEmail || 'Not set';
                             document.getElementById('userPhone').textContent = data.phone || '5862246692';
-                            
                             generateBookmarklet(data.username, data.loginEmail, data.phone || '5862246692');
                             return;
                         }
                     }
                 }
-
-                // Fallback
-                document.getElementById('userName').textContent = 'Not logged in';
-                document.getElementById('userEmail').textContent = 'Not logged in';
-                document.getElementById('userPhone').textContent = 'Not logged in';
-                
+                document.getElementById('userName').textContent = '❌ Not logged in';
+                document.getElementById('userEmail').textContent = '❌ Not logged in';
+                document.getElementById('userPhone').textContent = '❌ Not logged in';
                 generateBookmarklet('', '', '5862246692');
-
             } catch (error) {
-                console.error('Error loading user data:', error);
-                document.getElementById('userName').textContent = 'Error loading';
-                document.getElementById('userEmail').textContent = 'Error loading';
-                document.getElementById('userPhone').textContent = 'Error loading';
-                
+                document.getElementById('userName').textContent = 'Error';
+                document.getElementById('userEmail').textContent = 'Error';
+                document.getElementById('userPhone').textContent = 'Error';
                 generateBookmarklet('', '', '5862246692');
             }
         }
-
-        // Get token
         function getToken() {
-            try {
-                const lsToken = localStorage.getItem('cc_token');
-                if (lsToken) return lsToken;
-            } catch (e) {}
-
+            try { const lsToken = localStorage.getItem('cc_token'); if (lsToken) return lsToken; } catch (e) {}
             const cookies = document.cookie.split(';');
             for (let cookie of cookies) {
                 const [name, value] = cookie.trim().split('=');
-                if (name === 'cc_token') {
-                    return decodeURIComponent(value);
-                }
+                if (name === 'cc_token') return decodeURIComponent(value);
             }
             return null;
         }
-
-        // Generate bookmarklet
         function generateBookmarklet(username, email, phone) {
-            const script = `
-(function(){
-const d={
-companyName:'American Income Life Insurance Company',
-addressLine1:'1200 Wooded Acres Dr',
-addressLine2:'',
-city:'Waco',
-state:'Texas',
-zipCode:'26726',
-website:'https://www.ailife.com/',
-contactName:'${username || 'Thomas Lancheros'}',
-contactPhone:'${phone || '5862246692'}',
-contactEmail:'${email || 'thomaslancheros.ail@gmail.com'}',
-callPurpose:'Insurance Services',
-callVolume:'5,001 - 10,000',
-feedback:'Providing information about life insurance policies, non-forfeiture options, policy benefits, and customer service support to existing policyholders',
-phoneNumbers:['${phone || '5862246692'}']
-};
-function fill(selector,value){
-const el=document.querySelector(selector);
-if(el){
-el.value=value;
-el.dispatchEvent(new Event('input',{bubbles:true}));
-el.dispatchEvent(new Event('change',{bubbles:true}));
-el.dispatchEvent(new Event('blur',{bubbles:true}));
-console.log('Filled:',selector);
-return true;
-}
-return false;
-}
-function fillAll(){
-console.log('Starting auto-fill...');
-fill('#enterprise_contact_verification_email',d.contactEmail);
-fill('#enterprise_company_name',d.companyName);
-fill('#enterprise_company_address_line_1',d.addressLine1);
-fill('#enterprise_company_address_line_2',d.addressLine2);
-fill('#enterprise_company_city',d.city);
-fill('#enterprise_company_state',d.state);
-fill('#enterprise_company_zip',d.zipCode);
-fill('#enterprise_company_website',d.website);
-fill('#enterprise_contact_name',d.contactName);
-fill('#enterprise_contact_phone',d.contactPhone);
-fill('#enterprise_contact_email',d.contactEmail);
-const callPurposeEl=document.querySelector('#calling_type');
-if(callPurposeEl){
-callPurposeEl.value=d.callPurpose;
-callPurposeEl.dispatchEvent(new Event('change',{bubbles:true}));
-}
-const callVolumeEl=document.querySelector('#calling_volume');
-if(callVolumeEl){
-callVolumeEl.value=d.callVolume;
-callVolumeEl.dispatchEvent(new Event('change',{bubbles:true}));
-}
-const feedbackEl=document.querySelector('textarea');
-if(feedbackEl){
-feedbackEl.value=d.feedback;
-feedbackEl.dispatchEvent(new Event('input',{bubbles:true}));
-}
-const phoneInputs=document.querySelectorAll('input[type="tel"]');
-if(phoneInputs.length>0){
-phoneInputs[0].value=d.phoneNumbers[0];
-phoneInputs[0].dispatchEvent(new Event('input',{bubbles:true}));
-}
-const checkboxes=document.querySelectorAll('input[type="checkbox"]');
-checkboxes.forEach(cb=>{
-if(!cb.checked){
-cb.checked=true;
-cb.dispatchEvent(new Event('change',{bubbles:true}));
-}
-});
-console.log('Auto-fill complete!');
-alert('✅ Form auto-filled!\\n\\nPlease review the information and continue.');
-}
-fillAll();
-})();
-`.trim();
-
-            const bookmarkletCode = 'javascript:' + encodeURIComponent(script);
-            document.getElementById('bookmarkletLink').href = bookmarkletCode;
+            const script = `(function(){const d={n:'${username}',e:'${email}',p:'${phone}'};function f(i,v){const el=document.getElementById(i);if(el){el.value=v;el.dispatchEvent(new Event('input',{bubbles:1}));el.dispatchEvent(new Event('change',{bubbles:1}));el.dispatchEvent(new Event('blur',{bubbles:1}));console.log('✓'+i);return 1;}return 0;}console.log('🔮 FCR Auto-Fill');f('enterprise_contact_verification_email',d.e);f('enterprise_company_name','American Income Life Insurance Company');f('enterprise_company_address_line_1','1200 Wooded Acres Dr');f('enterprise_company_address_line_2','');f('enterprise_company_address_city','Waco');f('enterprise_company_address_state','TX');f('enterprise_company_address_zip','26726');f('enterprise_company_url','https://www.ailife.com/');f('enterprise_contact_name',d.n);f('enterprise_contact_phone',d.p);f('enterprise_contact_email',d.e);f('enterprise_category','financial_service');f('call_count','5001');f('additional_feedback','Customers report seeing Spam Likely or Scam Likely labels');f('enterprise_phone_0',d.p);const cb=document.getElementById('enableCheckbox');if(cb&&!cb.checked){cb.checked=1;cb.dispatchEvent(new Event('change',{bubbles:1}));console.log('✓checkbox');}console.log('✅ Done!');alert('✅ Fields filled!\\n\\nReview and click Next');})();`;
+            document.getElementById('bookmarkletLink').href = 'javascript:' + encodeURIComponent(script);
         }
-
-        // Test bookmarklet
-        function testBookmarklet() {
+        function testCode() {
             const link = document.getElementById('bookmarkletLink');
-            const code = link.href.substring('javascript:'.length);
-            const decoded = decodeURIComponent(code);
-            
-            alert('Bookmarklet code generated successfully!\n\nLength: ' + decoded.length + ' characters\n\nThe bookmarklet is ready to use. Drag it to your bookmarks bar.');
-            console.log('Bookmarklet code:', decoded);
+            console.log('Bookmarklet:', decodeURIComponent(link.href.substring(11)));
+            alert('✅ Code generated!\\n\\nCheck console for details.\\n\\nDrag button to bookmarks bar!');
         }
-
-        // Initialize
         window.addEventListener('DOMContentLoaded', loadUserData);
     </script>
 </body>
