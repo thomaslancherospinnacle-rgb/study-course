@@ -1,134 +1,356 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sign Certificate</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign ADB Certificate</title>
 
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
-<style>
-body{font-family:Arial;background:#0b0f1a;color:#fff;margin:0;padding:16px}
-.card{background:#141b2d;padding:16px;border-radius:12px;margin-bottom:16px}
-input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:0}
-button{width:100%;padding:14px;margin-top:10px;border-radius:10px;background:#2b6cff;color:#fff;font-weight:bold}
-canvas{width:100%;height:200px;background:#fff;border-radius:10px}
-.pdfBox{height:500px;overflow:auto;background:#fff;border-radius:10px}
-</style>
+  <style>
+    body{font-family:system-ui,Arial;margin:0;background:#0b0f1a;color:#fff}
+    .wrap{max-width:900px;margin:0 auto;padding:16px}
+    .card{background:#121a2a;border:1px solid #22314f;border-radius:14px;padding:14px;margin:12px 0}
+    input,button{font-size:18px;padding:14px;border-radius:12px;border:1px solid #2a3b60;background:#0e1524;color:#fff;width:100%}
+    button{cursor:pointer;border:none}
+    button.primary{background:#2b6cff;font-weight:900}
+    button:disabled{opacity:.45;cursor:not-allowed}
+    .hint{opacity:.9;line-height:1.35}
+    .pdfBox{height:520px;overflow:auto;border-radius:12px;border:1px solid #2a3b60;background:#0a1020}
+    .sticky{position:sticky;top:0;padding:10px;background:rgba(18,26,42,.92);backdrop-filter:blur(8px);border-bottom:1px solid #22314f;z-index:2}
+    canvas{width:100%;height:240px;background:#fff;border-radius:12px;touch-action:none}
+    .small{font-size:13px;opacity:.8}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > *{flex:1;min-width:220px}
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
 
-<div class="card">
-<h2>Review Your Certificate</h2>
+    <div class="card">
+      <div class="hint"><b>Token:</b> <span id="tokenTxt">…</span></div>
+      <div class="small" style="margin-top:8px">
+        By signing, you consent to electronic signature and agree it is your legal signature.
+      </div>
+    </div>
 
-<div class="pdfBox">
-<object data="/assets/adb-certificate.pdf" width="100%" height="800"></object>
-</div>
-</div>
+    <div class="card">
+      <div class="hint"><b>Step 1:</b> Please review the certificate. <b>Scroll to the bottom</b> to enable signing.</div>
 
-<div class="card">
-<h3>Your Info</h3>
-<input id="name" placeholder="Full Name" required>
-<input id="email" placeholder="Email (for copy)">
-</div>
+      <div class="pdfBox" id="pdfBox" style="margin-top:10px">
+        <div class="sticky" id="scrollMsg">⬇️ PLEASE SCROLL to the bottom to continue…</div>
 
-<div class="card">
-<h3>Sign Below</h3>
-<canvas id="sig"></canvas>
-<button id="clear">Clear</button>
-<button id="submit">Sign & Save</button>
-</div>
+        <object id="pdfObj" data="/assets/adb-certificate.pdf" type="application/pdf" width="100%" height="900">
+          <p style="padding:12px">PDF preview not supported. <a href="/assets/adb-certificate.pdf">Open PDF</a></p>
+        </object>
+
+        <div id="bottomMarker" style="height:40px"></div>
+      </div>
+
+      <button id="enableBtn" class="primary" disabled style="margin-top:12px">PRESS HERE TO SIGN</button>
+    </div>
+
+    <div class="card" id="formCard" style="display:none">
+      <div class="hint"><b>Step 2:</b> Enter your info</div>
+
+      <div class="row" style="margin-top:10px">
+        <input id="clientName" placeholder="Full Name (required)" />
+        <input id="dob" placeholder="Date of Birth (MM/DD/YYYY)" />
+      </div>
+
+      <div class="row">
+        <input id="address" placeholder="Street Address" />
+        <input id="phone" placeholder="Phone" />
+      </div>
+
+      <div class="row">
+        <input id="city" placeholder="City" />
+        <input id="state" placeholder="State" />
+        <input id="zip" placeholder="Zip" />
+      </div>
+
+      <div class="row">
+        <input id="beneficiary" placeholder="Beneficiary" />
+        <input id="relationship" placeholder="Relationship to Insured" />
+      </div>
+
+      <input id="clientEmail" placeholder="Email (recommended so we can send you a copy)" />
+    </div>
+
+    <div class="card" id="sigCard" style="display:none">
+      <div class="hint"><b>Step 3:</b> Sign below (full width)</div>
+      <canvas id="sigCanvas" width="1400" height="320"></canvas>
+
+      <div class="row" style="margin-top:10px">
+        <button id="clearBtn">Clear</button>
+        <button id="submitBtn" class="primary">SUBMIT SIGNATURE</button>
+      </div>
+
+      <div class="small" id="statusLine" style="margin-top:10px"></div>
+
+      <div id="downloadWrap" style="display:none;margin-top:10px">
+        <button id="dlSigBtn">Download Signature Image (camera roll)</button>
+      </div>
+    </div>
+
+  </div>
 
 <script>
-
 /* =========================
- CONFIG
+   CONFIG
 ========================= */
-
-const ADB_GAS_URL =
-"https://script.google.com/macros/s/AKfycbxjxi9kdnGm46-MBzcXHHvHTZYk7TtPOsH6hiEwA93Xe68SWuDnlB5wtvHHnN826BlS/exec";
-
+const WORKER_BASE = "https://YOUR-WORKER-DOMAIN"; // <-- CHANGE THIS
+const ADB_API_URL = `${WORKER_BASE}/adb`;
 const PDF_URL = "/assets/adb-certificate.pdf";
 
 /* =========================
- TOKEN
+   TOKEN
 ========================= */
-
-const token = new URLSearchParams(location.search).get("adb");
+const token = new URLSearchParams(location.search).get("adb") || "";
+document.getElementById("tokenTxt").textContent = token || "(missing)";
 
 /* =========================
- SIGNATURE
+   SCROLL GATE
 ========================= */
+const pdfBox = document.getElementById("pdfBox");
+const enableBtn = document.getElementById("enableBtn");
+const bottomMarker = document.getElementById("bottomMarker");
+const scrollMsg = document.getElementById("scrollMsg");
 
-const canvas=document.getElementById("sig");
-const ctx=canvas.getContext("2d");
-ctx.lineWidth=4;
+const io = new IntersectionObserver((entries)=>{
+  if (entries.some(e=>e.isIntersecting)) {
+    enableBtn.disabled = false;
+    scrollMsg.textContent = "✅ Scroll complete. You can sign now.";
+  }
+},{ root: pdfBox, threshold: 0.8 });
+io.observe(bottomMarker);
 
-let draw=false;
-
-canvas.onpointerdown=e=>{draw=true;ctx.moveTo(e.offsetX,e.offsetY)}
-canvas.onpointermove=e=>{if(draw){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke()}}
-canvas.onpointerup=()=>draw=false;
-
-clear.onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+enableBtn.addEventListener("click", ()=>{
+  document.getElementById("formCard").style.display = "block";
+  document.getElementById("sigCard").style.display = "block";
+  document.getElementById("sigCard").scrollIntoView({ behavior:"smooth" });
+});
 
 /* =========================
- MAIN SIGN FLOW
+   SIGNATURE CANVAS
 ========================= */
+const canvas = document.getElementById("sigCanvas");
+const ctx = canvas.getContext("2d");
+ctx.lineWidth = 6;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
 
-submit.onclick = async ()=>{
+let drawing = false;
+let last = null;
 
-  const sigPng = canvas.toDataURL("image/png");
+function pos(evt) {
+  const r = canvas.getBoundingClientRect();
+  const x = (evt.clientX - r.left) * (canvas.width / r.width);
+  const y = (evt.clientY - r.top)  * (canvas.height / r.height);
+  return {x,y};
+}
+function start(p){ drawing=true; last=p; }
+function move(p){
+  if(!drawing) return;
+  ctx.beginPath();
+  ctx.moveTo(last.x,last.y);
+  ctx.lineTo(p.x,p.y);
+  ctx.stroke();
+  last=p;
+}
+function end(){ drawing=false; last=null; }
 
-  const existingPdf = await fetch(PDF_URL).then(r=>r.arrayBuffer());
+canvas.addEventListener("pointerdown", e=>{ canvas.setPointerCapture(e.pointerId); start(pos(e)); });
+canvas.addEventListener("pointermove", e=>move(pos(e)));
+canvas.addEventListener("pointerup", end);
+canvas.addEventListener("pointercancel", end);
 
-  const pdfDoc = await PDFLib.PDFDocument.load(existingPdf);
-  const png = await pdfDoc.embedPng(sigPng);
+document.getElementById("clearBtn").addEventListener("click", ()=>{
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+});
 
-  const page = pdfDoc.getPages()[0];
+/* =========================
+   PDF COORDS (EASY TO EDIT)
+========================= */
+const FIELD_CORDS = {
+  // adjust these freely
+  NAME_CORDS: { x: 90, y: 430, size: 12 },
+  DOB_CORDS:  { x: 310, y: 430, size: 12 },
 
-  page.drawImage(png,{
-    x:90,
-    y:95,
-    width:200,
-    height:60
-  });
+  ADDRESS_CORDS: { x: 90, y: 400, size: 12 },
+  PHONE_CORDS:   { x: 315, y: 400, size: 12 },
 
-  page.drawText(name.value,{
-    x:90,
-    y:430,
-    size:12
-  });
+  CITY_CORDS:  { x: 90, y: 370, size: 12 },
+  STATE_CORDS: { x: 270, y: 370, size: 12 },
+  ZIP_CORDS:   { x: 330, y: 370, size: 12 },
 
-  const pdfBytes = await pdfDoc.save();
+  BENEFICIARY_CORDS:    { x: 90, y: 340, size: 12 },
+  REL_CORDS:            { x: 90, y: 310, size: 12 },
 
-  const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
-  const pngBase64 = sigPng.split(',')[1];
+  // bottom tear-off
+  INSURED_NAME_2_CORDS: { x: 90, y: 145, size: 12 },
+  INSURED_DOB_2_CORDS:  { x: 430, y: 145, size: 12 },
 
-  await fetch(ADB_GAS_URL,{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      action:"saveSigned",
-      token,
-      clientName:name.value,
-      clientEmail:email.value,
-      userAgent:navigator.userAgent,
-      signedPdfBase64:pdfBase64,
-      signedPngBase64:pngBase64
-    })
-  });
-
-  // download image for camera roll
-  const a=document.createElement("a");
-  a.href=sigPng;
-  a.download="certificate-signature.png";
-  a.click();
-
-  alert("Done. Certificate emailed and saved.");
+  // signature box (insured signature on bottom)
+  INSURED_SIG_BOX: { x: 90, y: 95, w: 210, h: 55 },
 };
 
+/* =========================
+   BUILD SIGNED PDF
+========================= */
+async function fetchPdfBytes(url){
+  const res = await fetch(url, { cache:"no-store" });
+  if(!res.ok) throw new Error("Failed to load PDF");
+  return new Uint8Array(await res.arrayBuffer());
+}
+
+function toBase64FromBytes(bytes){
+  let bin = "";
+  const chunk = 0x8000;
+  for (let i=0;i<bytes.length;i+=chunk){
+    bin += String.fromCharCode(...bytes.subarray(i, i+chunk));
+  }
+  return btoa(bin);
+}
+
+function canvasToPngDataUrl(){
+  return canvas.toDataURL("image/png");
+}
+
+async function buildSignedPdf(data){
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+  const pdfBytes = await fetchPdfBytes(PDF_URL);
+  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const page = pdfDoc.getPages()[0];
+
+  function drawText(cords, text){
+    if(!text) return;
+    page.drawText(String(text), {
+      x: cords.x, y: cords.y, size: cords.size || 12,
+      font, color: rgb(0,0,0)
+    });
+  }
+
+  // text fields
+  drawText(FIELD_CORDS.NAME_CORDS, data.clientName);
+  drawText(FIELD_CORDS.DOB_CORDS, data.dob);
+  drawText(FIELD_CORDS.ADDRESS_CORDS, data.address);
+  drawText(FIELD_CORDS.PHONE_CORDS, data.phone);
+  drawText(FIELD_CORDS.CITY_CORDS, data.city);
+  drawText(FIELD_CORDS.STATE_CORDS, data.state);
+  drawText(FIELD_CORDS.ZIP_CORDS, data.zip);
+  drawText(FIELD_CORDS.BENEFICIARY_CORDS, data.beneficiary);
+  drawText(FIELD_CORDS.REL_CORDS, data.relationship);
+
+  // tear-off
+  drawText(FIELD_CORDS.INSURED_NAME_2_CORDS, data.clientName);
+  drawText(FIELD_CORDS.INSURED_DOB_2_CORDS, data.dob);
+
+  // signature image
+  const sigPngDataUrl = data.signaturePng;
+  const pngBytes = await fetch(sigPngDataUrl).then(r=>r.arrayBuffer());
+  const png = await pdfDoc.embedPng(pngBytes);
+
+  page.drawImage(png, {
+    x: FIELD_CORDS.INSURED_SIG_BOX.x,
+    y: FIELD_CORDS.INSURED_SIG_BOX.y,
+    width: FIELD_CORDS.INSURED_SIG_BOX.w,
+    height: FIELD_CORDS.INSURED_SIG_BOX.h
+  });
+
+  return await pdfDoc.save();
+}
+
+/* =========================
+   POST JSON (to Worker)
+========================= */
+async function postJSON(url, payload){
+  const res = await fetch(url, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  });
+  const json = await res.json().catch(()=>({}));
+  if (!res.ok || json.ok === false) {
+    throw new Error(json.error || `Request failed (${res.status})`);
+  }
+  return json;
+}
+
+/* =========================
+   SUBMIT SIGNATURE
+========================= */
+const statusLine = document.getElementById("statusLine");
+const submitBtn = document.getElementById("submitBtn");
+const dlSigBtn = document.getElementById("dlSigBtn");
+
+document.getElementById("submitBtn").addEventListener("click", async ()=>{
+  try{
+    submitBtn.disabled = true;
+
+    if(!token) throw new Error("Missing token in link");
+    const clientName = document.getElementById("clientName").value.trim();
+    if(!clientName) throw new Error("Full Name is required");
+
+    const data = {
+      clientName,
+      dob: document.getElementById("dob").value.trim(),
+      address: document.getElementById("address").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      city: document.getElementById("city").value.trim(),
+      state: document.getElementById("state").value.trim(),
+      zip: document.getElementById("zip").value.trim(),
+      beneficiary: document.getElementById("beneficiary").value.trim(),
+      relationship: document.getElementById("relationship").value.trim(),
+      clientEmail: document.getElementById("clientEmail").value.trim(),
+      signaturePng: canvasToPngDataUrl(),
+    };
+
+    statusLine.textContent = "Generating signed PDF…";
+    const signedPdfBytes = await buildSignedPdf(data);
+
+    const signedPdfBase64 = toBase64FromBytes(new Uint8Array(signedPdfBytes));
+    const signedPngBase64 = data.signaturePng.split(",")[1];
+
+    statusLine.textContent = "Saving & emailing…";
+
+    await postJSON(ADB_API_URL, {
+      action: "saveSigned",
+      token,
+      clientName: data.clientName,
+      clientEmail: data.clientEmail,
+      dob: data.dob,
+      address: data.address,
+      phone: data.phone,
+      city: data.city,
+      state: data.state,
+      zip: data.zip,
+      beneficiary: data.beneficiary,
+      relationship: data.relationship,
+      userAgent: navigator.userAgent,
+      signedPdfBase64,
+      signedPngBase64
+    });
+
+    statusLine.textContent = "✅ Done. We emailed you a copy (if you entered email).";
+    document.getElementById("downloadWrap").style.display = "block";
+
+    dlSigBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = data.signaturePng;
+      a.download = `ADB_${token}_signature.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+
+  } catch(err){
+    statusLine.textContent = "Error: " + err.message;
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
 </script>
 </body>
 </html>
