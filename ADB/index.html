@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sign Certificate</title>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+
+<style>
+body{font-family:Arial;background:#0b0f1a;color:#fff;margin:0;padding:16px}
+.card{background:#141b2d;padding:16px;border-radius:12px;margin-bottom:16px}
+input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:0}
+button{width:100%;padding:14px;margin-top:10px;border-radius:10px;background:#2b6cff;color:#fff;font-weight:bold}
+canvas{width:100%;height:200px;background:#fff;border-radius:10px}
+.pdfBox{height:500px;overflow:auto;background:#fff;border-radius:10px}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Review Your Certificate</h2>
+
+<div class="pdfBox">
+<object data="/assets/adb-certificate.pdf" width="100%" height="800"></object>
+</div>
+</div>
+
+<div class="card">
+<h3>Your Info</h3>
+<input id="name" placeholder="Full Name" required>
+<input id="email" placeholder="Email (for copy)">
+</div>
+
+<div class="card">
+<h3>Sign Below</h3>
+<canvas id="sig"></canvas>
+<button id="clear">Clear</button>
+<button id="submit">Sign & Save</button>
+</div>
+
+<script>
+
+/* =========================
+ CONFIG
+========================= */
+
+const ADB_GAS_URL =
+"https://script.google.com/macros/s/AKfycbxjxi9kdnGm46-MBzcXHHvHTZYk7TtPOsH6hiEwA93Xe68SWuDnlB5wtvHHnN826BlS/exec";
+
+const PDF_URL = "/assets/adb-certificate.pdf";
+
+/* =========================
+ TOKEN
+========================= */
+
+const token = new URLSearchParams(location.search).get("adb");
+
+/* =========================
+ SIGNATURE
+========================= */
+
+const canvas=document.getElementById("sig");
+const ctx=canvas.getContext("2d");
+ctx.lineWidth=4;
+
+let draw=false;
+
+canvas.onpointerdown=e=>{draw=true;ctx.moveTo(e.offsetX,e.offsetY)}
+canvas.onpointermove=e=>{if(draw){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke()}}
+canvas.onpointerup=()=>draw=false;
+
+clear.onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+
+/* =========================
+ MAIN SIGN FLOW
+========================= */
+
+submit.onclick = async ()=>{
+
+  const sigPng = canvas.toDataURL("image/png");
+
+  const existingPdf = await fetch(PDF_URL).then(r=>r.arrayBuffer());
+
+  const pdfDoc = await PDFLib.PDFDocument.load(existingPdf);
+  const png = await pdfDoc.embedPng(sigPng);
+
+  const page = pdfDoc.getPages()[0];
+
+  page.drawImage(png,{
+    x:90,
+    y:95,
+    width:200,
+    height:60
+  });
+
+  page.drawText(name.value,{
+    x:90,
+    y:430,
+    size:12
+  });
+
+  const pdfBytes = await pdfDoc.save();
+
+  const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
+  const pngBase64 = sigPng.split(',')[1];
+
+  await fetch(ADB_GAS_URL,{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:"saveSigned",
+      token,
+      clientName:name.value,
+      clientEmail:email.value,
+      userAgent:navigator.userAgent,
+      signedPdfBase64:pdfBase64,
+      signedPngBase64:pngBase64
+    })
+  });
+
+  // download image for camera roll
+  const a=document.createElement("a");
+  a.href=sigPng;
+  a.download="certificate-signature.png";
+  a.click();
+
+  alert("Done. Certificate emailed and saved.");
+};
+
+</script>
+</body>
+</html>
