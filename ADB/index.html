@@ -76,26 +76,21 @@ const PDF_URL = "/ADB/ADB.pdf"; // put ADB.pdf at /ADB/ADB.pdf
    EASY COORDS (CHANGE HERE)
 ========================= */
 const FIELD_CORDS = {
-  NAME_CORDS:           { x: 90,  y: 430, size: 12 },
-  DOB_CORDS:            { x: 340, y: 430, size: 12 },
-  PHONE_CORDS:          { x: 520, y: 430, size: 12 },
+  NAME_CORDS:           { x: 58,  y: 455, size: 13 },
+  DOB_CORDS:            { x: 340, y: 455, size: 12 },
+  PHONE_CORDS:          { x: 464, y: 457, size: 12 },
 
-  ADDRESS_CORDS:        { x: 90,  y: 402, size: 12 },
-  CITY_CORDS:           { x: 290, y: 402, size: 12 },
-  STATE_CORDS:          { x: 500, y: 402, size: 12 },
-  ZIP_CORDS:            { x: 585, y: 402, size: 12 },
+  ADDRESS_CORDS:        { x: 57,  y: 421, size: 12 },
+  CITY_CORDS:           { x: 276, y: 420, size: 12 },
+  STATE_CORDS:          { x: 451, y: 421, size: 12 },
+  ZIP_CORDS:            { x: 491, y: 421, size: 12 },
 
-  BENEFICIARY_CORDS:    { x: 90,  y: 373, size: 12 },
-  REL_CORDS:            { x: 350, y: 373, size: 12 },
+  BENEFICIARY_CORDS:    { x: 56,  y: 386, size: 12 },
+  REL_CORDS:            { x: 318, y: 386, size: 12 },
 
-  SPONSOR_NAME_CORDS:   { x: 90,  y: 328, size: 12 },
-  SPONSOR_SIGNAME_CORDS:{ x: 90,  y: 270, size: 12 },
-  AGENCY_NAME_CORDS:    { x: 90,  y: 240, size: 12 },
-  AGENCY_PHONE_CORDS:   { x: 365, y: 240, size: 12 },
-
-  INSURED_NAME_2:       { x: 90,  y: 120, size: 12 },
-  INSURED_DOB_2:        { x: 430, y: 120, size: 12 },
-  AGENT_NAME_2:         { x: 430, y: 70,  size: 12 },
+  INSURED_NAME_2:       { x: 56,  y: 88, size: 12 },
+  INSURED_DOB_2:        { x: 317, y: 90, size: 12 },
+  AGENT_NAME_2:         { x: 317, y: 52, size: 12 },
 
   INSURED_SIG_BOX:      { x: 90,  y: 75, w: 240, h: 55 }, // tweak for your PDF
 };
@@ -144,12 +139,6 @@ async function buildPrefilledPdf(record){
 
   drawText(FIELD_CORDS.BENEFICIARY_CORDS, record.beneficiary);
   drawText(FIELD_CORDS.REL_CORDS, record.relationship);
-
-  // sponsor defaults (stored or fallback)
-  drawText(FIELD_CORDS.SPONSOR_NAME_CORDS, "American Income Life");
-  drawText(FIELD_CORDS.SPONSOR_SIGNAME_CORDS, "Darcy Schrieber");
-  drawText(FIELD_CORDS.AGENCY_NAME_CORDS, record.agencyName || "Darcy Schrieber");
-  drawText(FIELD_CORDS.AGENCY_PHONE_CORDS, record.agencyPhone || "(844) 832-2412");
 
   drawText(FIELD_CORDS.INSURED_NAME_2, record.clientName);
   drawText(FIELD_CORDS.INSURED_DOB_2, record.dob);
